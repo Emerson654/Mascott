@@ -1,0 +1,110 @@
+{
+  "_meta": {
+    "written": "2026-10-13",
+    "by": "founder-marketing (marketing director)",
+    "beachhead": "Small B2B SaaS teams (2-20 people) with a self-serve trial/freemium and an existing chat widget",
+    "status_note": "Every value is an ESTIMATE for planning/simulation, not measured data. 'value' is the central (p50) guess; 'low'/'high' a plausible p10-p90 range. Budget/team/cash in idea.md are ASSUMED. Keyword volumes are unknown (no keyword tool data).",
+    "week1_start": "2026-10-19",
+    "m3_deadline": "2027-01-10"
+  },
+  "weeks_until_first_organic_signups": {
+    "value": 8, "low": 5, "high": 14, "unit": "weeks after first pages go live",
+    "status": "estimate",
+    "source": "New domain, low-KD long-tail (alternatives for small tools, 'AI onboarding agent', programmatic pages) usually index and get first clicks in 4-10 weeks; Google sandbox for new domains ~8-16 weeks before meaningful traffic (sim/SPEC.md); brand searches after PH launch (W7) may bring earlier 'organic' signups."
+  },
+  "organic_visitors_per_month_m3": {
+    "value": 300, "low": 100, "high": 700, "unit": "visitors/month",
+    "status": "estimate",
+    "source": "~36 pages at ~3/week, near-zero domain authority, mostly low-KD long-tail plus brand traffic after Product Hunt; typical new-domain B2B curves are flat for the first 3 months."
+  },
+  "organic_visitors_per_month_m6": {
+    "value": 1500, "low": 600, "high": 3500, "unit": "visitors/month",
+    "status": "estimate",
+    "source": "~75 pages, 15-30 referring domains from directories, study and free tools; alternatives/comparison pages for smaller tools (UserGuiding, Product Fruits, Tandem) start ranking page 1; generator brings low-intent visits."
+  },
+  "organic_visitors_per_month_m12": {
+    "value": 5000, "low": 2000, "high": 12000, "unit": "visitors/month",
+    "status": "estimate",
+    "source": "~150 pages incl. programmatic, authority growing log-like; upside depends on the free mascot generator and benchmark earning links; high-KD terms (Intercom alternatives, trial-to-paid) still mostly out of reach."
+  },
+  "visitor_to_signup_rate": {
+    "value": 0.02, "low": 0.01, "high": 0.035, "unit": "share of organic visitors who create a free account",
+    "status": "estimate",
+    "source": "Blended B2B SaaS site with a free plan: bottom-funnel comparison pages convert ~4-8%, info/blog and generator pages <1%; mix weighted toward info pages early."
+  },
+  "signup_to_paid_rate": {
+    "value": 0.04, "low": 0.025, "high": 0.08, "unit": "share of free signups paying within 60 days",
+    "status": "estimate",
+    "source": "founder/competitors.md planning number 3-5% (First Page Sage 3.7% freemium avg; ChartMogul/ProductLed 2026 median 8% free-to-paid for B2B); panel v2: 2/20 would pay in month 1, rest 'free plan first'."
+  },
+  "cold_outreach_reply_rate": {
+    "value": 0.07, "low": 0.04, "high": 0.12, "unit": "replies / new prospects (3-touch sequence, email + LinkedIn)",
+    "status": "estimate",
+    "source": "Instantly 2026 benchmark avg 3.43%, top quartile 5.5%; lists <50 recipients avg 5.8% vs 2.1% large sends; SMB SaaS outbound 10-18% (Autobound, vendor). Uplift assumed from hyper-personalised Loom/screenshot of the prospect's own signup flow."
+  },
+  "reply_to_demo_rate": {
+    "value": 0.6, "low": 0.4, "high": 0.75, "unit": "demos booked / replies",
+    "status": "estimate",
+    "source": "Replies to a personalised 'here is the guide on your app' message are mostly qualified; some replies are 'not now'."
+  },
+  "demo_to_paid_rate": {
+    "value": 0.3, "low": 0.15, "high": 0.45, "unit": "paid (incl. prepaid) within 14 days / demos",
+    "status": "estimate",
+    "source": "Panel v2: 2/6 small-SaaS buyers (33%, thin, simulated) would pay month 1 with done-for-you setup + A/B report + refund guarantee; demo on their own app removes the top 'show me on my site' objection."
+  },
+  "product_hunt_launch_signups": {
+    "value": 100, "low": 20, "high": 300, "unit": "free signups in launch week",
+    "status": "estimate",
+    "source": "Lenny's Newsletter: average B2B launch 50-300 signups; vendor guide: outside top 10 of the day <20 signups, top 3 ~100-400. Launch planned Tue 2026-12-01."
+  },
+  "product_hunt_signup_to_paid_rate": {
+    "value": 0.03, "low": 0.01, "high": 0.05, "unit": "share paying within 60 days",
+    "status": "estimate",
+    "source": "PH audience skews to 'AI tool collectors' who keep ~1 tool in 10 (panel P001, P008, P019); below site-wide signup->paid."
+  },
+  "geo_citation_referral_visitors_per_month_m6": {
+    "value": 100, "low": 20, "high": 400, "unit": "visitors/month from ChatGPT, Perplexity, Gemini, Claude, Copilot, AI Overviews links",
+    "status": "estimate",
+    "source": "SE Ranking: AI platforms = 0.24% (2025) to 0.32% (2026) of all web traffic, ChatGPT ~75% of it; SaaS-tool research over-indexes (assumed 3-10% of a small B2B SaaS site's traffic) applied to ~1,500 organic visitors at M6, plus citations from comparison pages/benchmark."
+  },
+  "geo_citation_share_m6": {
+    "value": 0.3, "low": 0.1, "high": 0.5, "unit": "share of 125 weekly prompt-runs (25 prompts x 5 engines) citing Mascott",
+    "status": "estimate",
+    "source": "Niche, new category ('AI onboarding guide'); few competitors publish structured comparison tables; depends on directory/'best of' inclusions and G2/Capterra reviews."
+  },
+  "geo_referral_visitor_to_signup_rate": {
+    "value": 0.05, "low": 0.02, "high": 0.1, "unit": "signups / AI-referral visitors",
+    "status": "estimate",
+    "source": "AI-referred visitors arrive pre-qualified by the answer (often a 'best tool for X' query); commonly reported to convert above organic."
+  },
+  "blended_arpa_eur": {
+    "value": 45, "low": 35, "high": 49, "unit": "EUR/month",
+    "status": "estimate",
+    "source": "pitch-v2 prices (Starter 19 / Growth 49 / Agency 149); both v2 buyers chose Growth; Van Westendorp v2 acceptable range $9-79."
+  },
+  "monthly_churn": {
+    "value": 0.05, "low": 0.03, "high": 0.08, "unit": "share of paying accounts lost per month",
+    "status": "estimate",
+    "source": "Given by the founder brief (~5%/month); refunds under the lift guarantee counted separately."
+  },
+  "gross_margin": {
+    "value": 0.72, "low": 0.6, "high": 0.8, "unit": "share of revenue after LLM/hosting",
+    "status": "estimate",
+    "source": "Board target >70%; LLM cost per conversation not yet measured (run /founder-cfo)."
+  },
+  "max_cash_cac_eur_m1_m3": {
+    "value": 100, "low": 74, "high": 110, "unit": "EUR cash per paying customer",
+    "status": "estimate",
+    "source": "3-month payback cap = 3 x ARPA x gross margin = 3 x 35 x 0.70 = 74 to 3 x 49 x 0.75 = 110; LTV:CAC 3:1 would allow 163-245 but cash and the M3 rule bind."
+  },
+  "guarantee_refund_rate": {
+    "value": 0.15, "low": 0.05, "high": 0.3, "unit": "share of new paid accounts refunded month 1",
+    "status": "estimate",
+    "source": "Refund if no measured lift in 30 days; small-traffic pilots may fail to reach significance (P010: '100 free conversations may be too few to show a lift')."
+  },
+  "agency_partner_accounts_by_w12": {
+    "value": 1, "low": 0, "high": 2, "unit": "Agency plan accounts (149 EUR)",
+    "status": "estimate",
+    "source": "Panel v2 agencies (P005, P013, P014) 0/2-3 buy month 1 but would move with white-label + proof; one agency deal plausible after pilot case studies (W8+)."
+  }
+}
