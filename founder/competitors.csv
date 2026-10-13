@@ -1,0 +1,19 @@
+name,type,url,location_or_channel,price_of_comparable_item,what_it_sells,positioning_line,rating,review_count,source_date
+Mascotbot,direct,https://alternativeto.net/software/mascotbot/about,online,"$200-$3490/month (third-party, unverified)","Rive-based animated mascot avatars with lip-sync API for AI agents; custom characters by in-house animators","dynamic mascot avatars for AI agents (AlternativeTo description)",,,2026-10-13
+Mascofast,direct,https://chatgate.ai/post/mascofast,online,"credit-based monthly plans, ~12 credits per flow","Text/image to animated mascot (transparent GIF); no chat or agent","text to animated mascot in minutes",,,2026-10-13
+Anam,direct,https://www.toolify.ai/tool/anam,online,"Free 30 min; $12 Starter (50 min); $49 Explorer (250 min, no watermark)","Real-time photoreal talking avatars, embeddable widget","Add a face to your [agent] (anam.ai integration page)",,,2026-10-13
+Famulor AI Avatar,direct,https://www.famulor.io/feature/ai-avatar,online,"per talk-minute + avatar surcharge","120+ ready-made faces in a voice/chat web widget","AI Avatar for the Web Widget",,,2026-10-13
+Sentifyd,direct,https://ai.g2.com/marketplace/tools/sentifyd-ai-3d-avatars,online + WordPress plugin,"Free / pay-as-you-go / Enterprise (amounts unpublished)","3D AI avatars for websites","Sentifyd AI 3D Avatars",,,2026-10-13
+Pickaxe Agent Page Control,direct,https://pickaxe.co/learn/changelog/agent-page-control,online,not retrieved,"Embedded agent that reads the host page, clicks buttons/links, scrolls, runs multi-step sequences (not in iframe embeds)","Agent Page Control: Give Your Embeds Page Superpowers",,,2026-10-13
+Tandem,direct,https://usetandem.ai/pricing,online (B2B SaaS),"sales-led, no public price","In-app agent that clicks, fills forms, navigates, calls APIs; $3.8M seed","Pricing that fits how your team actually works",,,2026-10-13
+Intercom Fin,indirect,https://www.ringly.io/blog/intercom-pricing,online,"$29-39/seat/month + $0.99 per AI resolution","Helpdesk + Fin AI agent","(not retrieved)",4.5 (G2 per secondary source),3500+,2026-10-13
+Tidio Lyro,indirect,https://www.dragapp.com/blog/tidio-pricing/,online + Shopify App Store,"Starter $29/month; Lyro from $39/month for 50 AI conversations","Live chat + Lyro AI agent + Flows","(not retrieved)",4.7 (Shopify),~1137-1181 (Shopify),2026-10-13
+Crisp,indirect,https://www.featurebase.app/blog/crisp-pricing,online,"Free; Mini $45; Essentials $95 per workspace","Chat inbox + Hugo AI agent (credits)","(not retrieved)",,,2026-10-13
+Chatbase,indirect,https://chatarmin.com/en/blog/chatbase-pricing,online,"Hobby ~$40/month (500 credits, 5 AI actions)","RAG chatbot widget with AI actions","(not retrieved)",4.3 (Capterra),73,2026-10-13
+CustomGPT.ai,indirect,https://www.capterra.com/p/10004844/CustomGPT-ai/pricing/,online,"$99/month Standard","RAG chatbot on your content","(not retrieved)",,,2026-10-13
+Botpress,indirect,https://www.voiceflow.com/blog/botpress,online,"Plus $89/month + AI spend (legacy) or $150/month annual (new)","Agent builder platform","(not retrieved)",,,2026-10-13
+Voiceflow,indirect,https://tinycommand.com/ai-agents/botpress-vs-voiceflow,online,"Pro $60/month (10k credits)","Agent builder platform","(not retrieved)",,,2026-10-13
+Shopify Inbox,substitute,https://apps.shopify.com/chat,Shopify App Store,free,"Native chat with optional AI agent using catalog/policies/Knowledge Base","(not retrieved)",,5464,2026-10-13
+CopilotKit,substitute,https://docs.copilotkit.ai/integrations/agno/premium/overview,developers,"open source; cloud Developer tier free","Framework to build in-app copilots with actions","(not retrieved)",,,2026-10-13
+DIY GPT wrapper,substitute,,developers,LLM API cost + dev time,"Custom-built chat widget","",,,2026-10-13
+Nothing / FAQ,substitute,,,0,"FAQ page, contact form, email","",,,2026-10-13
