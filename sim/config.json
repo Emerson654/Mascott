@@ -10,25 +10,25 @@
     "seeds_iteration": 400,
     "max_iterations": 30,
     "survival_target": 0.6,
-    "search_strategies": 300,
-    "search_generations": 3,
-    "seeds_search": 150,
+    "search_strategies": 800,
+    "search_generations": 5,
+    "seeds_search": 200,
     "search_top_k": 10,
-    "seeds_search_top": 1000,
-    "seeds_sensitivity": 200,
+    "seeds_search_top": 2000,
+    "seeds_sensitivity": 600,
     "sensitivity_delta": 0.3,
-    "seeds_timeseries": 400,
+    "seeds_timeseries": 1000,
     "quick": {
-      "seeds_iteration": 60,
-      "max_iterations": 8,
-      "search_strategies": 36,
+      "seeds_iteration": 100,
+      "max_iterations": 12,
+      "search_strategies": 60,
       "search_generations": 2,
-      "seeds_search": 30,
+      "seeds_search": 40,
       "search_top_k": 3,
-      "seeds_search_top": 120,
-      "seeds_sensitivity": 40,
+      "seeds_search_top": 200,
+      "seeds_sensitivity": 60,
       "sensitivity_max_params": 8,
-      "seeds_timeseries": 60
+      "seeds_timeseries": 100
     },
     "_source": {
       "weeks_per_month": "52/12",
@@ -37,8 +37,8 @@
       "seeds_iteration": "SPEC default 400",
       "max_iterations": "SPEC default 30",
       "survival_target": "SPEC default 60%",
-      "search_strategies": "SPEC: 300 strategies x 150 seeds, top 10 re-run at 1,000 seeds",
-      "seeds_sensitivity": "estimate: 200 seeds gives ~+/-3.5pp standard error on a 50% survival rate",
+      "search_strategies": "SPEC suggests 300 x 150 then top 10 x 1,000; raised to 800 x 200 (5 generations) and top 10 x 2,000 fresh seeds because a full run still takes ~6-10 min on 2 vCPU",
+      "seeds_sensitivity": "600 seeds gives ~+/-2pp standard error on a 50% survival rate (common random numbers make +/- comparisons tighter)",
       "quick": "smoke-test sizes; results are noisy and only for checking the pipeline"
     }
   },
@@ -103,7 +103,7 @@
     "pro_style_factor": 0.15,
     "build_overrun_sigma": 0.3,
     "asr_narrow_start": 0.72,
-    "asr_breadth_penalty": 0.06,
+    "asr_breadth_penalty": 0.05,
     "asr_floor": 0.25,
     "asr_max": 0.93,
     "asr_hours_scale": 250,
@@ -118,9 +118,9 @@
     "setup_minutes_base": 8,
     "setup_minutes_per_extra_platform": 6,
     "setup_minutes_per_action": 3,
-    "setup_friction_per_10min": 0.05,
+    "setup_friction_per_10min": 0.03,
     "unsupported_platform_fit": 0.35,
-    "action_fail_conv_penalty": 0.8,
+    "action_fail_conv_penalty": 0.7,
     "action_fail_churn_penalty": 1.2,
     "_source": {
       "base_build_weeks": "estimate: one platform + one action MVP (widget, dashboard, mascot generator, billing) with AI coding tools, 2 founders full-time",
@@ -129,13 +129,13 @@
       "pro_style_factor": "estimate: a second 'pro/sober' art direction for the animation set",
       "build_overrun_sigma": "estimate: lognormal schedule overrun (median 1.0, p90 ~1.5x) - software estimates slip",
       "asr_narrow_start": "estimate (board Product lens: nobody has numbers): success rate of on-site actions on never-seen sites at launch, narrow scope",
-      "asr_breadth_penalty": "estimate: each extra platform/2 actions lowers launch success rate by 6pp",
+      "asr_breadth_penalty": "estimate: each extra platform/2 actions lowers launch success rate by 5pp",
       "asr_hours_scale": "estimate: engineering hours to close ~63% of the gap to asr_max (scaled up by breadth)",
       "maintenance_hours_base": "estimate: weekly hours just to keep the product running (bugs, LLM API changes)",
       "incident_prob_per_week": "estimate: chance per week of a visible incident (widget breaks a site, bad answer screenshot), x(1+0.5*breadth), x3 if maintenance under-staffed",
       "incident_churn_mult": "estimate: churn multiplier during a month with an incident",
       "feature_hours_scale": "estimate: hours to ship ~63% of the 'obvious next features' (analytics, integrations)",
-      "setup_friction_per_10min": "estimate: each 10 minutes of setup before the first useful answer costs ~5% of trial conversions",
+      "setup_friction_per_10min": "estimate: each 10 minutes of setup before the first useful answer costs ~3% of trial conversions",
       "unsupported_platform_fit": "estimate: a segment whose platform is not supported can still paste a script tag but gets chat-only, fit x0.35",
       "action_fail_conv_penalty": "estimate: conversion multiplier = 1 - need_actions*(1-asr)*penalty (board Product lens risk #1)",
       "action_fail_churn_penalty": "estimate: churn multiplier = 1 + need_actions*(1-asr)*penalty"
@@ -143,14 +143,14 @@
   },
 
   "marketing": {
-    "focus_conv_bonus": 0.25,
-    "dilution_per_extra_segment": 0.07,
+    "focus_conv_bonus": 0.2,
+    "dilution_per_extra_segment": 0.05,
     "non_target_conv_mult": 0.6,
     "non_target_traffic_share": 0.15,
     "seo": {
       "hours_per_page": 3.0,
-      "visits_per_page_mature": 4.0,
-      "page_exponent": 0.85,
+      "visits_per_page_mature": 3.0,
+      "page_exponent": 0.8,
       "page_ramp_weeks": 8,
       "sandbox_weeks": [8, 16],
       "sandbox_width_weeks": 2.5,
@@ -158,6 +158,9 @@
       "backlinks_per_page": 0.03,
       "authority_ref_backlinks": 60,
       "authority_floor": 0.35,
+      "authority_cap": 1.5,
+      "demand_ref_share": 0.1667,
+      "demand_exponent": 0.5,
       "focus_seo_bonus": 0.3,
       "yield_sigma": 0.5,
       "_source": {
@@ -169,6 +172,8 @@
         "sandbox_floor": "estimate: share of mature traffic during the sandbox (brand + ultra-long-tail)",
         "backlinks_per_page": "estimate: natural links earned per page published",
         "authority_ref_backlinks": "estimate: referring domains for authority multiplier ~1",
+        "authority_cap": "estimate: a 1-year-old domain does not out-rank established players",
+        "demand_ref_share": "traffic potential x (sum of targeted segments search_share (SEO) / ai_share (GEO) / ref)^exponent: a niche with half the search demand of an average segment gets ~70% of its traffic",
         "focus_seo_bonus": "SPEC: one-segment focus gives an SEO bonus (topical authority)",
         "yield_sigma": "estimate: per-run lognormal uncertainty on SEO yield"
       }
@@ -180,14 +185,14 @@
       "citation_k_pages": 0.02,
       "citation_k_mentions": 0.025,
       "citation_p_max": 0.5,
-      "max_referrals_per_week": 120,
+      "max_referrals_per_week": 80,
       "signup_mult": 1.8,
       "yield_sigma": 0.6,
       "_source": {
         "mentions_per_hour": "estimate: directory listings, Reddit/IH answers, review requests per hour",
         "index_lag_weeks": "estimate: AI assistants/AI Overviews pick up new sources with a lag of weeks",
         "citation_p_max": "estimate: even a well-known niche tool is cited in at most ~half of relevant AI answers",
-        "max_referrals_per_week": "estimate: AI-referral visitors/week across all segments at p=1; AI referral traffic is small but high-intent",
+        "max_referrals_per_week": "estimate (deliberately conservative, very uncertain): AI-referral visitors/week for an average segment at citation p=1, scaled by the targeted segments' ai_share; AI referral traffic is small but high-intent",
         "signup_mult": "public benchmark style: AI-referred visitors convert ~1.5-2x organic"
       }
     },
@@ -209,9 +214,31 @@
       }
     },
     "badge_visitors_per_active_free_user": 0.25,
+    "viral": {
+      "weekly_prob": 0.012,
+      "prob_per_customer": 0.0002,
+      "visitors_median": 2500,
+      "visitors_sigma": 1.0,
+      "signup_mult": 0.5,
+      "_source": {
+        "weekly_prob": "estimate: ~1 in 80 weeks a post/thread/newsletter mention takes off (fat upper tail); counted as launch traffic",
+        "visitors_median": "estimate: lognormal spike size, p90 ~9k visitors",
+        "signup_mult": "estimate: viral visitors are curious, low intent"
+      }
+    },
+    "referral": {
+      "network_launch_visitors": [100, 600],
+      "visitors_per_customer_per_week": 0.3,
+      "signup_mult": 1.5,
+      "_source": {
+        "network_launch_visitors": "estimate: founders' own X/LinkedIn/IH/newsletter audience on launch week (uniform per run; spread like a launch)",
+        "visitors_per_customer_per_week": "estimate: word of mouth / 'what is that mascot?' clicks per paying customer site",
+        "signup_mult": "estimate: referred visitors convert better than cold search"
+      }
+    },
     "_source": {
-      "focus_conv_bonus": "SPEC: one-segment focus gets a conversion/positioning bonus (+25% estimate)",
-      "dilution_per_extra_segment": "SPEC: many segments dilute positioning (estimate -7% per extra segment)",
+      "focus_conv_bonus": "SPEC: one-segment focus gets a conversion/positioning bonus (+20% estimate)",
+      "dilution_per_extra_segment": "SPEC: many segments dilute positioning (estimate -5% per extra segment)",
       "non_target_conv_mult": "estimate: visitors from a segment the site is not written for convert at 60%",
       "non_target_traffic_share": "estimate: share of SEO/GEO traffic that still comes from non-target segments",
       "launches": "estimate: Product Hunt top-5 day 1-3k visitors, a typical launch 200-400; Show HN front page 2-5k, usually it sinks; directories trickle + backlinks",
@@ -225,14 +252,20 @@
       "contacts_per_hour": 7,
       "positive_reply_share": 0.35,
       "demo_hours": 1.0,
-      "trial_quality_mult": 1.5,
+      "trial_quality_mult": 1.3,
       "focus_reply_bonus": 0.2,
       "waitlist_to_trial": 0.5,
+      "presell_fit_mult": 0.6,
+      "presell_discount": 0.2,
+      "presell_prepay_weeks": 13,
       "_source": {
+        "presell_fit_mult": "estimate: paying for a pilot before trying converts at ~60% of a trial (board Offers lens: presell 5-10 pilots)",
+        "presell_discount": "estimate: pilot price -20% for paying 3 months upfront",
+        "presell_prepay_weeks": "estimate: pilots prepay 3 months (cannot churn during the pilot)",
         "contacts_per_hour": "estimate: personalised cold email/LinkedIn DM with a short Loom or screenshot, ~8 min each",
         "positive_reply_share": "public benchmark style: ~30-40% of replies are interested (rest: no/unsubscribe/later)",
         "demo_hours": "estimate: demo call + follow-up per interested reply",
-        "trial_quality_mult": "estimate: founder-led demo trials convert ~1.5x self-serve",
+        "trial_quality_mult": "estimate: founder-led demo trials convert ~1.3x self-serve",
         "focus_reply_bonus": "estimate: one-segment copy is more relevant, +20% replies",
         "waitlist_to_trial": "estimate: share of pre-launch interested replies that actually start a trial at launch"
       }
@@ -255,6 +288,7 @@
         "listing_hours": "estimate: listing, screenshots, compliance (Shopify review checklist, WP plugin guidelines)",
         "review_weeks": "public benchmark style: Shopify app review takes ~1-6 weeks incl. resubmissions",
         "base_installs_per_week": "estimate: a new, unreviewed app in a crowded 'chat/AI assistant' category; rank grows with reviews",
+        "store_segments": "which segments install from each store (WordPress directory: WooCommerce shops, showcase sites, agencies) - estimate",
         "review_k": "estimate: installs multiplier = sqrt(1 + reviews/review_k)",
         "install_to_trial": "estimate: share of installs that complete onboarding into a real trial"
       }
@@ -298,13 +332,13 @@
     "dfy_setup_hours": 2.0,
     "cs_cap_share": 0.5,
     "onboarding_min": 0.85,
-    "onboarding_max": 1.15,
+    "onboarding_max": 1.1,
     "shortfall_churn_mult": 0.8,
-    "dfy_conv_mult": 1.25,
+    "dfy_conv_mult": 1.15,
     "dfy_churn_mult": 0.85,
     "guarantee_trust_boost": 0.4,
     "guarantee_refund_rate": 0.08,
-    "early_tenure_churn_mult": 1.5,
+    "early_tenure_churn_mult": 1.3,
     "capped_usage_churn_mult": 1.3,
     "outreach_churn_mult": 0.9,
     "_source": {
@@ -317,7 +351,7 @@
       "dfy_conv_mult": "estimate (board Offers lens): done-for-you removes setup effort",
       "guarantee_trust_boost": "estimate: guarantee closes 40% of the 'no proof yet' gap",
       "guarantee_refund_rate": "estimate: share of new customers who claim the 'lift or refund' guarantee",
-      "early_tenure_churn_mult": "public benchmark style: first 2 months churn ~1.5x steady-state",
+      "early_tenure_churn_mult": "public benchmark style: first 2 months churn ~1.3x steady-state",
       "capped_usage_churn_mult": "estimate: customers hitting a hard quota with no overage are frustrated"
     }
   },
@@ -363,8 +397,8 @@
       }
     },
     "proof_k": 12,
-    "competition_conv_effect": 0.35,
-    "competition_churn_effect": 0.25,
+    "competition_conv_effect": 0.25,
+    "competition_churn_effect": 0.15,
     "_source": {
       "proof_k": "estimate: proof multiplier = (1-s) + s*(1-exp(-(happy + 2*reviews)/proof_k)); ~12 happy customers closes 63% of the gap",
       "competition_conv_effect": "estimate: conversion x(1 - pressure*effect); Tidio/Crisp/Intercom Fin/Shopify Inbox are a click away",
@@ -374,15 +408,15 @@
 
   "segments": {
     "Indie hacker / solo SaaS founder": {
-      "search_share": 0.25, "ai_share": 0.3, "visitor_to_signup": 0.04, "trial_to_paid": 0.32,
+      "search_share": 0.25, "ai_share": 0.3, "visitor_to_signup": 0.025, "trial_to_paid": 0.38,
       "wtp_median": 22, "wtp_sigma": 0.8, "pro_need": 0.15, "style_appeal": 0.85, "pro_style_appeal": 0.85,
       "need_actions": 0.35, "platforms": ["js_saas"], "churn_monthly": 0.08,
       "conv_per_month_median": 120, "conv_per_month_sigma": 1.2, "proof_sensitivity": 0.3,
       "competition_pressure": 0.6, "reply_rate": [0.03, 0.08], "cpc": 2.5, "reachable_pool": 60000,
       "_source": {
         "search_share": "estimate: share of relevant search demand ('AI chatbot for SaaS', 'mascot widget')",
-        "visitor_to_signup": "public benchmark style: SaaS site visitor->signup 2-5%",
-        "trial_to_paid": "estimate: trial->paid for a MATURE product with proof, among trialists whose WTP >= price; effective early rate ends ~10-20% after proof/fit/actions",
+        "visitor_to_signup": "public benchmark style: SaaS landing pages convert 2-5% of visitors to signups, blog/comparison content 0.5-1.5%; blended content-led site ~1-2.5%",
+        "trial_to_paid": "estimate: trial->paid for a MATURE product with proof, among trialists whose WTP >= price; effective rate ends ~5-25% after WTP, proof, fit, actions and competition multipliers",
         "wtp_median": "panel (partial, 20/100 answers: median 'expensive' ~49 across segments); indie hackers lowest - estimate",
         "style_appeal": "board Product lens: cute style suits consumer/indie better than B2B - estimate",
         "need_actions": "estimate: share of value that depends on on-site actions working",
@@ -394,7 +428,7 @@
       }
     },
     "Small SaaS startup team": {
-      "search_share": 0.18, "ai_share": 0.25, "visitor_to_signup": 0.03, "trial_to_paid": 0.3,
+      "search_share": 0.18, "ai_share": 0.25, "visitor_to_signup": 0.02, "trial_to_paid": 0.36,
       "wtp_median": 60, "wtp_sigma": 0.9, "pro_need": 0.5, "style_appeal": 0.55, "pro_style_appeal": 0.85,
       "need_actions": 0.7, "platforms": ["js_saas"], "churn_monthly": 0.05,
       "conv_per_month_median": 400, "conv_per_month_sigma": 1.3, "proof_sensitivity": 0.5,
@@ -409,7 +443,7 @@
       }
     },
     "E-commerce store owner (Shopify / WooCommerce)": {
-      "search_share": 0.25, "ai_share": 0.2, "visitor_to_signup": 0.025, "trial_to_paid": 0.3,
+      "search_share": 0.25, "ai_share": 0.2, "visitor_to_signup": 0.015, "trial_to_paid": 0.36,
       "wtp_median": 40, "wtp_sigma": 0.9, "pro_need": 0.45, "style_appeal": 0.7, "pro_style_appeal": 0.85,
       "need_actions": 0.8, "platforms": ["shopify", "wordpress"], "churn_monthly": 0.06,
       "conv_per_month_median": 500, "conv_per_month_sigma": 1.4, "proof_sensitivity": 0.6,
@@ -423,7 +457,7 @@
       }
     },
     "Web agency or freelancer": {
-      "search_share": 0.12, "ai_share": 0.1, "visitor_to_signup": 0.03, "trial_to_paid": 0.28,
+      "search_share": 0.12, "ai_share": 0.1, "visitor_to_signup": 0.02, "trial_to_paid": 0.34,
       "wtp_median": 35, "wtp_sigma": 0.8, "pro_need": 0.35, "style_appeal": 0.55, "pro_style_appeal": 0.8,
       "need_actions": 0.5, "platforms": ["webflow_wix", "wordpress"], "churn_monthly": 0.05,
       "conv_per_month_median": 200, "conv_per_month_sigma": 1.2, "proof_sensitivity": 0.5,
@@ -434,7 +468,7 @@
       }
     },
     "Small business / showcase site": {
-      "search_share": 0.12, "ai_share": 0.1, "visitor_to_signup": 0.02, "trial_to_paid": 0.25,
+      "search_share": 0.12, "ai_share": 0.1, "visitor_to_signup": 0.012, "trial_to_paid": 0.3,
       "wtp_median": 18, "wtp_sigma": 0.8, "pro_need": 0.1, "style_appeal": 0.6, "pro_style_appeal": 0.8,
       "need_actions": 0.3, "platforms": ["wordpress", "webflow_wix"], "churn_monthly": 0.07,
       "conv_per_month_median": 60, "conv_per_month_sigma": 1.1, "proof_sensitivity": 0.4,
@@ -445,8 +479,8 @@
       }
     },
     "Edtech, kids or consumer-app team": {
-      "search_share": 0.08, "ai_share": 0.05, "visitor_to_signup": 0.03, "trial_to_paid": 0.28,
-      "wtp_median": 50, "wtp_sigma": 1.0, "pro_need": 0.5, "style_appeal": 0.95, "pro_style_appeal": 0.95,
+      "search_share": 0.08, "ai_share": 0.05, "visitor_to_signup": 0.02, "trial_to_paid": 0.3,
+      "wtp_median": 45, "wtp_sigma": 1.0, "pro_need": 0.5, "style_appeal": 0.9, "pro_style_appeal": 0.9,
       "need_actions": 0.5, "platforms": ["js_saas"], "churn_monthly": 0.05,
       "conv_per_month_median": 700, "conv_per_month_sigma": 1.4, "proof_sensitivity": 0.4,
       "competition_pressure": 0.4, "reply_rate": [0.02, 0.06], "cpc": 2.2, "reachable_pool": 15000,
@@ -466,6 +500,7 @@
       "review_week": 6,
       "min_trials": 6,
       "shift_share": 0.5,
+      "launch_share": 0.12,
       "cs_shortfall_trigger": 0.8,
       "cs_shift": 0.05
     },
@@ -479,7 +514,7 @@
     "_source": {
       "exploration_prob": "SPEC: deterministic playbook + small random exploration",
       "revert_if_drop": "estimate: revert a change that lowered survival by more than 4pp (above Monte Carlo noise)",
-      "in_run": "SPEC: e.g. shift hours from SEO to outreach if no trials by week 6",
+      "in_run": "SPEC: e.g. shift hours from SEO to outreach if no trials by week 6 (here: fewer than min_trials OR MRR behind the linear pace to the M3 bar); estimate: part of the moved hours (up to launch_share) go to cheap one-shot launches (PH, directories) if none were done",
       "diagnosis": "thresholds used to classify a death cause; benchmark trial->paid 20% (public SaaS benchmark mid-range)"
     }
   },

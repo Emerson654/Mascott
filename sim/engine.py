@@ -15,16 +15,16 @@ Randomness: two streams per seed.
 import math
 import random
 
-CHANNELS = ("seo", "geo", "launch", "ads", "badge", "outreach", "app_store",
+CHANNELS = ("seo", "geo", "launch", "ads", "badge", "referral", "outreach", "app_store",
             "agency", "free_plan")
-WEB_CHANNELS = ("seo", "geo", "launch", "ads", "badge")
+WEB_CHANNELS = ("seo", "geo", "launch", "ads", "badge", "referral")
 PLATFORMS = ("shopify", "wordpress", "webflow_wix", "js_saas")
 HOUR_KEYS = ("engineering", "seo", "geo", "outreach", "app_store", "agency", "launches")
 CAUSES = ("no_traffic", "low_conversion", "price_too_high", "price_too_low", "churn",
           "cash_burn", "llm_costs", "build_too_long")
 TS_KEYS = ("mrr", "cash", "customers", "free_users", "trials", "vis_seo", "vis_geo",
-           "vis_launch", "vis_ads", "vis_badge", "outreach_contacts", "app_installs",
-           "agency_sites")
+           "vis_launch", "vis_ads", "vis_badge", "vis_referral", "outreach_contacts",
+           "app_installs", "agency_sites")
 
 SQRT2 = math.sqrt(2.0)
 
@@ -92,10 +92,10 @@ def percentile(sorted_vals, q):
     return float(sorted_vals[lo] * (1 - frac) + sorted_vals[hi] * frac)
 
 
-def pcts(vals):
+def pcts(vals, nd=1):
     s = sorted(vals)
-    return {"p10": round(percentile(s, 0.1), 1), "p50": round(percentile(s, 0.5), 1),
-            "p90": round(percentile(s, 0.9), 1)}
+    return {"p10": round(percentile(s, 0.1), nd), "p50": round(percentile(s, 0.5), nd),
+            "p90": round(percentile(s, 0.9), nd)}
 
 
 # --------------------------------------------------------------------------- market
@@ -131,6 +131,8 @@ class MarketDraw:
         self.agency_rate = rng.uniform(*cfg["sales"]["agency"]["partner_signup_rate"])
         ltd = cfg["sales"]["ltd"]
         self.ltd_units = rng.lognormvariate(math.log(ltd["units_median"]), ltd["units_sigma"])
+        ref = cfg["marketing"]["referral"]
+        self.network_visitors = rng.uniform(*ref["network_launch_visitors"])
         # launch outcomes are part of the world too
         self.launch_visitors = []
         for ev in cfg["marketing"]["launches"]:
@@ -177,14 +179,15 @@ class Company:
         self.alive = True
         self.cause = None
         self.death_wsl = None
-        self.ledger_in = {"subscriptions": 0.0, "annual_prepay": 0.0, "ltd": 0.0}
+        self.ledger_in = {"subscriptions": 0.0, "prepaid": 0.0, "ltd": 0.0}
         self.ledger_out = {"llm": 0.0, "payment_fees": 0.0, "hosting": 0.0, "tools": 0.0,
                            "admin": 0.0, "ads": 0.0, "salary": 0.0, "refunds": 0.0}
         self.cum_revenue = 0.0
         self.cum_revenue_m3 = 0.0
 
         # customers: list of lists
-        # [seg, plan, mrr, conv_billed, channel, annual, week_acq, capped, appstore, refund_checked]
+        # [seg, plan, mrr, conv_billed, channel, prepaid_until_wsl, wsl_acq, capped, appstore,
+        #  refund_checked, billing_on]   (prepaid = annual plan or presold pilot, paid upfront)
         self.customers = []
         self.mrr = 0.0
         self.mrr_monthly_stripe = 0.0
@@ -209,7 +212,7 @@ class Company:
         self.d_churned = 0
         self.d_cust_months = 0.0
         self.d_signups = 0
-        self.seg_stats = [[0, 0, 0, 0, 0.0] for _ in range(self.nseg)]  # trials, fit_lost, price_lost, paid, mrr_end
+        self.seg_stats = [[0, 0, 0, 0, 0.0] for _ in range(self.nseg)]  # trials, fit_pass, price_lost, paid, mrr_end
         self.ch_paid = {c: 0 for c in CHANNELS}
         self.ch_hours = {c: 0.0 for c in CHANNELS}
         self.ch_cash = {c: 0.0 for c in CHANNELS}
@@ -330,7 +333,7 @@ class Company:
             ov = p.get("overage_per_100", 0.0)
             if ov > 0:
                 extra = (conv - quota) / 100.0 * ov
-                if price + extra <= wtp * pb["overage_tolerance"] or price + extra <= price * 1.5:
+                if price + extra <= max(wtp * pb["overage_tolerance"], price * 1.25):
                     price += extra
                 else:
                     billed, capped = quota, True
@@ -338,43 +341,51 @@ class Company:
                 billed, capped = quota, True
         return (plan, price, billed, capped)
 
-    def add_customer(self, i, ch, plan_tuple):
+    def add_customer(self, i, ch, plan_tuple, prepay_weeks=0):
         plan, price, billed, capped = plan_tuple
         p = self.s["pricing"]
         pb = self.cfg["pricing_behaviour"]
-        annual = False
         ad = p.get("annual_discount", 0.0)
-        if ad > 0 and plan != "usage" and self.rng.random() < pb["annual_uptake_per_10pct_discount"] * ad * 10:
-            annual = True
+        if (prepay_weeks == 0 and ad > 0 and plan != "usage"
+                and self.rng.random() < pb["annual_uptake_per_10pct_discount"] * ad * 10):
+            prepay_weeks = 52
             price *= (1.0 - ad)
         appstore = ch == "app_store"
-        c = [i, plan, price, billed, ch, annual, self.wsl, capped, appstore, False]
+        wsl = max(0, self.wsl)
+        c = [i, plan, price, billed, ch, wsl + prepay_weeks if prepay_weeks else -1, wsl, capped,
+             appstore, False, prepay_weeks == 0]
         self.customers.append(c)
         self.mrr += price
         self.conv_paid += billed
-        if annual:
-            cash = 12.0 * price
-            fee = cash * (self.cfg["costs"]["app_store_rev_share"] if appstore
-                          else self.cfg["costs"]["stripe_pct"]) + (0 if appstore else self.cfg["costs"]["stripe_fixed"])
+        if prepay_weeks:
+            cash = price * prepay_weeks / self.wpm
+            costs = self.cfg["costs"]
+            fee = cash * (costs["app_store_rev_share"] if appstore else costs["stripe_pct"]) \
+                + (0 if appstore else costs["stripe_fixed"])
             self.cash += cash - fee
-            self.ledger_in["annual_prepay"] += cash
+            self.ledger_in["prepaid"] += cash
             self.ledger_out["payment_fees"] += fee
             self.cum_revenue += cash
-        elif appstore:
-            self.mrr_appstore += price
         else:
-            self.mrr_monthly_stripe += price
-            self.n_monthly_stripe += 1
+            self._billing_on(c)
         self.d_paid += 1
         self.seg_stats[i][3] += 1
         self.ch_paid[ch] += 1
         self.new_customers_week += 1
 
+    def _billing_on(self, c):
+        c[10] = True
+        if c[8]:
+            self.mrr_appstore += c[2]
+        else:
+            self.mrr_monthly_stripe += c[2]
+            self.n_monthly_stripe += 1
+
     def remove_customer(self, idx):
         c = self.customers[idx]
         self.mrr -= c[2]
         self.conv_paid -= c[3]
-        if not c[5]:
+        if c[10]:
             if c[8]:
                 self.mrr_appstore -= c[2]
             else:
@@ -425,7 +436,7 @@ class Company:
             n_fit = binomial(rng, n, p_fit)
             lost_fit = n - n_fit
             self.d_fit_lost += lost_fit
-            self.seg_stats[i][1] += lost_fit
+            self.seg_stats[i][1] += n_fit
             self.d_fit_pass += n_fit
             lost_price = 0
             for _ in range(n_fit):
@@ -449,7 +460,9 @@ class Company:
             if n <= 0:
                 continue
             active = n * pb["free_active_share"]
-            hz = pb["free_upgrade_hazard"] * min(1.5, self.fit_dynamic(i) * 1.2)
+            # upgrade hazard scales with how well the product fits this segment (same multipliers as trials)
+            rel = self.fit_static[i] * self.fit_dynamic(i) / max(1e-9, self.S[i]["trial_to_paid"])
+            hz = pb["free_upgrade_hazard"] * min(1.5, rel)
             k = poisson(rng, active * hz)
             k = min(k, n)
             for _ in range(k):
@@ -479,17 +492,19 @@ class Company:
         while idx >= 0:
             c = self.customers[idx]
             i = c[0]
+            if not c[10] and self.wsl >= c[5]:
+                self._billing_on(c)          # prepaid period over: back to monthly billing
             if refund_rate > 0 and not c[9]:
                 c[9] = True
                 if rng.random() < refund_rate:
-                    amt = c[2] if not c[5] else 12.0 * c[2]
+                    amt = c[2]               # 'the month is refunded'
                     self.cash -= amt
                     self.ledger_out["refunds"] += amt
                     self.remove_customer(idx)
                     idx -= 1
                     continue
             tenure = self.wsl - c[6]
-            if c[5] and tenure < 52:
+            if self.wsl < c[5]:              # prepaid: cannot churn before the term ends
                 idx -= 1
                 continue
             p = self.churn_static[i] * base_mult
@@ -533,9 +548,10 @@ class Company:
         else:
             list_arpa = 0.7 * p["starter_price"] + 0.3 * (p.get("pro_price") or p["starter_price"])
         need = self.cfg["viability"]["m3_min_mrr"]
-        if self.d_trials * d["benchmark_trial_to_paid"] * list_arpa < need:
+        resolved = max(0, self.d_trials - self.trials_active)
+        if resolved * d["benchmark_trial_to_paid"] * list_arpa < need:
             return "no_traffic"
-        conv = self.d_paid / max(1, self.d_trials)
+        conv = self.d_paid / max(1, resolved)
         if conv < d["benchmark_trial_to_paid"] * 0.75:
             if self.d_price_lost > d["price_lost_share_trigger"] * max(1, self.d_fit_pass):
                 return "price_too_high"
@@ -545,7 +561,9 @@ class Company:
         n = len(self.customers)
         if n > 0 and self.mrr / n < d["low_arpa_ratio"] * list_arpa:
             return "price_too_low"
-        return "low_conversion"
+        # enough trials, fine conversion/churn/ARPA, still short: traction came too late for the
+        # M3 MRR / cumulative-revenue bar -> the fix is earlier demand (presell, outreach, launches)
+        return "no_traffic"
 
     # ---------------------------------------------------------------- main loop
     def run(self):
@@ -575,9 +593,7 @@ class Company:
                     break
                 continue
             self.wsl = self.week - self.launch_week
-            month_tick = (int((self.wsl + 1) / self.wpm) != int(self.wsl / self.wpm)) if self.wsl > 0 else False
-            if self.wsl > 0 and month_tick is False:
-                month_tick = False
+            month_tick = int((self.wsl + 1) / self.wpm) > int(self.wsl / self.wpm)
             self.new_customers_week = 0
             self.product.live_week(hours["engineering"])
             self.marketing.content_week(hours)
@@ -630,27 +646,21 @@ class Company:
         ts["agency_sites"].append(self._wk.get("agency_sites", 0))
 
     def _pad_record(self):
+        # weeks after death (or never launched): company closed, cash frozen
         n = len(self.ts["mrr"])
         for _ in range(n, self.horizon):
             for k in TS_KEYS:
-                self.ts[k].append(self.cash if k == "cash" and self.alive else
-                                  (round(self.cash, 1) if k == "cash" else 0))
+                self.ts[k].append(round(self.cash, 1) if k == "cash" else 0)
 
     def result(self):
         for i in range(self.nseg):
             self.seg_stats[i][4] = 0.0
         for c in self.customers:
             self.seg_stats[c[0]][4] += c[2]
-        if not self.alive:
-            for k in (3, 6, 12):
-                self.mrr_m.setdefault(k, 0.0)
-                self.cust_m.setdefault(k, 0)
-            if self.cause != "build_too_long" or self.launched:
-                # company is dead: nothing after death
-                for k in (6, 12):
-                    if self.death_wsl is None or self.death_wsl < (25 if k == 6 else self.horizon - 1):
-                        self.mrr_m[k] = 0.0
-                        self.cust_m[k] = 0
+        # milestones after death stay at 0 (the company is closed)
+        for k in (3, 6, 12):
+            self.mrr_m.setdefault(k, 0.0)
+            self.cust_m.setdefault(k, 0)
         rev = self.cum_revenue
         direct = self.ledger_out["llm"] + self.ledger_out["payment_fees"] + self.ledger_out["refunds"]
         months = max(1.0, (self.wsl + 1) / self.wpm) if self.launched else 1.0
@@ -743,9 +753,9 @@ class CEO:
             alloc["app_store"] = cap
         if spare > 0:
             sink = ("engineering", "seo", "outreach", "geo")
-            tot = sum(self.shares[k] for k in sink) or 1.0
+            tot = sum(self.shares[k] for k in sink)
             for k in sink:
-                alloc[k] += spare * (self.shares[k] / tot if sum(self.shares[k] for k in sink) > 0 else 0.25)
+                alloc[k] += spare * (self.shares[k] / tot if tot > 0 else 1.0 / len(sink))
         out.update(alloc)
         return out
 
@@ -754,15 +764,22 @@ class CEO:
         ir = co.cfg["ceo"]["in_run"]
         if not ir["enabled"] or not co.s.get("in_run_adjust", True):
             return
+        via = co.cfg["viability"]
+        behind_pace = co.mrr < via["m3_min_mrr"] * co.wsl / via["m3_week"]
         if (not self.adjusted_traffic and co.wsl >= ir["review_week"]
-                and co.d_trials < ir["min_trials"]):
+                and (co.d_trials < ir["min_trials"] or behind_pace)):
             moved = (self.shares["seo"] + self.shares["geo"]) * ir["shift_share"]
             if moved > 0.01:
                 self.shares["seo"] *= (1 - ir["shift_share"])
                 self.shares["geo"] *= (1 - ir["shift_share"])
-                self.shares["outreach"] += moved
-                co.in_run_adjustments.append("w%d: %d trials -> moved %.0f%% of hours from SEO/GEO to outreach"
-                                             % (co.wsl, co.d_trials, moved * 100))
+                to_launch = 0.0
+                if self.shares["launches"] < ir["launch_share"] and co.marketing.launch_hours_cap() > 0:
+                    to_launch = min(moved, ir["launch_share"] - self.shares["launches"])
+                    self.shares["launches"] += to_launch
+                self.shares["outreach"] += moved - to_launch
+                co.in_run_adjustments.append("w%d: %d trials, behind M3 pace -> moved %.0f%% of hours from SEO/GEO to outreach%s"
+                                             % (co.wsl, co.d_trials, moved * 100,
+                                                " and launches" if to_launch else ""))
             self.adjusted_traffic = True
         if co.cs.month_ratio < ir["cs_shortfall_trigger"] and self.cs_min < 0.45:
             self.cs_min += ir["cs_shift"]
@@ -845,9 +862,18 @@ class Marketing:
                     for i in range(n)]
         self.seo_split = split("search_share")
         self.geo_split = split("ai_share")
+        # traffic potential scales with the search / AI-query demand of the targeted segments
+        seo = mk["seo"]
+
+        def demand(key):
+            d = sum(co.S[i][key] for i in range(n) if tg[i]) + spill * sum(co.S[i][key] for i in range(n) if not tg[i])
+            return (max(d, 1e-6) / seo["demand_ref_share"]) ** seo["demand_exponent"]
+        self.seo_demand = demand("search_share")
+        self.geo_demand = demand("ai_share")
         nt = co.n_targets
+        self.viral_mix = {co.segs[i]: co.S[i]["search_share"] for i in range(n)}
+        self.virals = 0
         self.focus_seo = (1 + mk["seo"]["focus_seo_bonus"]) if nt == 1 else 1.0 / (1 + mk["dilution_per_extra_segment"] * (nt - 1))
-        self.signup_mult = [1.0 if tg[i] else 1.0 for i in range(n)]
 
     def launch_hours_cap(self):
         evs = self.co.cfg["marketing"]["launches"]
@@ -901,8 +927,10 @@ class Marketing:
         if self.first_content_week is not None:
             age = co.week - self.first_content_week
             sb = seo["sandbox_floor"] + (1 - seo["sandbox_floor"]) / (1 + math.exp(-(age - md.sandbox_weeks) / seo["sandbox_width_weeks"]))
-            auth = seo["authority_floor"] + math.log1p(self.backlinks) / math.log1p(seo["authority_ref_backlinks"])
-            v = (self.pages_eff ** seo["page_exponent"]) * seo["visits_per_page_mature"] * sb * auth * md.seo_yield * self.focus_seo
+            auth = min(seo["authority_cap"],
+                       seo["authority_floor"] + math.log1p(self.backlinks) / math.log1p(seo["authority_ref_backlinks"]))
+            v = ((self.pages_eff ** seo["page_exponent"]) * seo["visits_per_page_mature"] * sb * auth
+                 * md.seo_yield * self.focus_seo * self.seo_demand)
         else:
             v = 0.0
         out["seo"] = v
@@ -910,7 +938,7 @@ class Marketing:
         lam = (geo["citation_k_pages"] * self.comp_eff + geo["citation_k_mentions"] * self.mentions_eff)
         lam *= 0.6 + 0.4 * min(2.0, math.log1p(self.backlinks) / math.log1p(seo["authority_ref_backlinks"]))
         pc = geo["citation_p_max"] * (1 - math.exp(-lam))
-        g = pc * geo["max_referrals_per_week"] * md.geo_yield * self.focus_seo
+        g = pc * geo["max_referrals_per_week"] * md.geo_yield * self.focus_seo * self.geo_demand
         out["geo"] = g
         for i in range(co.nseg):
             if v > 0:
@@ -958,6 +986,22 @@ class Marketing:
                     bv += b
                     co.web_signups(i, "badge", b, 1.0)
         out["badge"] = bv
+        # --- referral: founders' own network at launch + customer word of mouth
+        ref = mk["referral"]
+        rv = 0.0
+        if co.wsl < len(split):
+            rv += md.network_visitors * split[co.wsl]
+        rv += len(co.customers) * ref["visitors_per_customer_per_week"]
+        if rv > 0:
+            for i in range(co.nseg):
+                co.web_signups(i, "referral", rv * self.seo_split[i], ref["signup_mult"])
+        # --- rare viral moment (a tweet/Reddit thread/newsletter feature takes off)
+        vr = mk["viral"]
+        if co.rng.random() < vr["weekly_prob"] + vr["prob_per_customer"] * len(co.customers):
+            vv = co.rng.lognormvariate(math.log(vr["visitors_median"]), vr["visitors_sigma"])
+            self.launch_pending.append([0, vv, {"segment_mix": self.viral_mix, "signup_mult": vr["signup_mult"]}])
+            self.virals += 1
+        out["referral"] = rv
         for k, val in out.items():
             co.vis_total[k] += val
         return out
@@ -980,6 +1024,7 @@ class Sales:
         self.ltd_done = False
         self.ltd_prep = 0.0
         self.contacted = [0] * co.nseg
+        self.presold = 0
 
     def app_store_hours_cap(self):
         if not self.stores:
@@ -1025,14 +1070,37 @@ class Sales:
         self._agency(hours["agency"], False)
 
     def on_launch(self):
+        """Waitlist from pre-launch outreach: presold pilots pay upfront, the rest start trials."""
         co = self.co
         o = co.cfg["sales"]["outreach"]
+        presell = co.s["offer"].get("presell")
+        rng = co.rng
         for i in range(co.nseg):
-            n = binomial(co.rng, self.waitlist[i], o["waitlist_to_trial"])
+            n = binomial(rng, self.waitlist[i], o["waitlist_to_trial"])
             self.waitlist[i] = 0
-            if n > 0:
-                co.week_save = co.week
-                co.enqueue_trials(i, "outreach", n)
+            if n <= 0:
+                continue
+            if presell:
+                # paying before trying: fit check without the trial, upfront prepay
+                p_fit = clamp(co.fit_static[i] * co.fit_dynamic(i) * o["trial_quality_mult"]
+                              * o["presell_fit_mult"], 0.0, 0.95)
+                k = binomial(rng, n, p_fit)
+                bought = 0
+                for _ in range(k):
+                    plan = co.choose_plan(i, "outreach", rng)
+                    if plan is not None:
+                        plan = (plan[0], plan[1] * (1 - o["presell_discount"]), plan[2], plan[3])
+                        co.add_customer(i, "outreach", plan, prepay_weeks=o["presell_prepay_weeks"])
+                        bought += 1
+                n -= bought
+                co.d_trials += bought
+                co.d_fit_pass += k
+                co.seg_stats[i][0] += bought
+                co.seg_stats[i][1] += k
+                co.d_price_lost += k - bought
+                co.seg_stats[i][2] += k - bought
+                self.presold += bought
+            co.enqueue_trials(i, "outreach", n)
 
     def _listing(self, h):
         co = self.co
@@ -1102,8 +1170,7 @@ class Sales:
                 co.ltd_active = int(units * cfg_l["active_share"])
                 co.reviews += units * 0.03
                 co.ch_hours["launch"] += cfg_l["prep_hours"]
-                self.demo_debt += 0  # prep is charged below as CS/eng time
-                co.cs.extra_need += cfg_l["prep_hours"]
+                co.cs.extra_need += cfg_l["prep_hours"]  # deal page, codes, buyer support spike
 
 
 class CustomerSuccess:
@@ -1140,7 +1207,6 @@ class CustomerSuccess:
         self.onboarding_mult = c["onboarding_min"] + (c["onboarding_max"] - c["onboarding_min"]) * r
         self.month_hours += h
         self.month_need += need
-        co.ch_hours.setdefault("cs", 0.0)
 
     def month_reset(self):
         self.month_ratio = self.month_hours / self.month_need if self.month_need > 0 else 1.5
@@ -1235,12 +1301,12 @@ def summarize(results, cfg):
                 seg_tot[i][j] += row[j]
     seg_out = {}
     for i, name in enumerate(segs):
-        t, fl, pl, paid, mrr = seg_tot[i]
+        t, fp, pl, paid, mrr = seg_tot[i]
         seg_out[name] = {
             "trials_per_run": round(t / n, 2),
             "paid_per_run": round(paid / n, 2),
             "trial_to_paid": round(paid / t, 4) if t else 0.0,
-            "price_lost_share": round(pl / max(1, t - fl), 4),
+            "price_lost_share": round(pl / fp, 4) if fp else 0.0,
             "mrr_end_per_run": round(mrr / n, 1),
         }
     channels = {}
@@ -1272,8 +1338,8 @@ def summarize(results, cfg):
         "cum_revenue": pcts([r["cum_revenue"] for r in results]),
         "cash_min": pcts([r["cash_min"] for r in results]),
         "build_weeks": pcts([r["build_weeks"] for r in results]),
-        "gross_margin": pcts(gm) if gm else None,
-        "churn_monthly": pcts(ch) if ch else None,
+        "gross_margin": pcts(gm, 3) if gm else None,
+        "churn_monthly": pcts(ch, 4) if ch else None,
         "llm_cost": pcts([r["llm_cost"] for r in results]),
         "trials": pcts([r["trials"] for r in results]),
         "trial_to_paid": round(paid / trials, 4) if trials else 0.0,
