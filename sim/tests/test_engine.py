@@ -41,6 +41,9 @@ def great_market(c):
     c["marketing"]["seo"]["visits_per_page_mature"] = 30
     c["marketing"]["referral"]["network_launch_visitors"] = [3000, 4000]
     c["costs"]["llm_cost_per_conv"] = [0.001, 0.002, 0.003]
+    # the naive plan's broad scope takes longer to build than the CEO's 20-week cap;
+    # this test is about the market, so give the build all the time it needs
+    c["viability"]["max_build_weeks"] = 40
     return c
 
 

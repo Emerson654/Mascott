@@ -1,6 +1,5 @@
 {
   "_about": "Every market/cost assumption used by sim/engine.py. Each block has a `_source` map: key -> where the number comes from (panel, competitor page, public benchmark, or 'estimate'). Numbers marked 'estimate' are placeholders for the CEO to recalibrate from founder/panel and the competitor map. Money in EUR; rates are per week unless the key says _monthly / per_month.",
-
   "simulation": {
     "weeks_per_month": 4.33,
     "horizon_weeks_after_launch": 52,
@@ -19,14 +18,14 @@
     "sensitivity_delta": 0.3,
     "seeds_timeseries": 1000,
     "quick": {
-      "seeds_iteration": 100,
-      "max_iterations": 12,
-      "search_strategies": 60,
-      "search_generations": 2,
-      "seeds_search": 40,
+      "seeds_iteration": 150,
+      "max_iterations": 30,
+      "search_strategies": 150,
+      "search_generations": 3,
+      "seeds_search": 60,
       "search_top_k": 3,
-      "seeds_search_top": 200,
-      "seeds_sensitivity": 60,
+      "seeds_search_top": 300,
+      "seeds_sensitivity": 100,
       "sensitivity_max_params": 8,
       "seeds_timeseries": 100
     },
@@ -42,22 +41,20 @@
       "quick": "smoke-test sizes; results are noisy and only for checking the pipeline"
     }
   },
-
   "viability": {
     "starting_cash": 5000,
     "m3_week": 13,
     "m3_min_mrr": 500,
     "m3_min_cum_revenue": 1000,
-    "max_build_weeks": 30,
+    "max_build_weeks": 20,
     "_source": {
       "starting_cash": "idea.md (ASSUMED by CEO): about 5,000 EUR bootstrapped",
       "m3_week": "SPEC: month 3 = end of week 13 after launch",
       "m3_min_mrr": "SPEC viability.m3_min_mrr",
       "m3_min_cum_revenue": "SPEC viability.m3_min_cum_revenue (cash-basis gross billings incl. annual prepay and LTD payouts)",
-      "max_build_weeks": "estimate: two unpaid founders do not keep building for more than ~7 months without launching; beyond this the run counts as build_too_long"
+      "max_build_weeks": "CEO decision: the founder wants to be on the market fast; more than ~5 months of building without launching counts as build_too_long"
     }
   },
-
   "team": {
     "hours_per_week": 90,
     "admin_overhead_share": 0.08,
@@ -70,7 +67,6 @@
       "hour_value_eur": "estimate: only used to express hour-based CAC in EUR in reports, never paid"
     }
   },
-
   "costs": {
     "tools_per_month": 110,
     "hosting_base_per_month": 25,
@@ -79,7 +75,11 @@
     "stripe_pct": 0.029,
     "stripe_fixed": 0.25,
     "app_store_rev_share": 0.0,
-    "llm_cost_per_conv": [0.005, 0.012, 0.03],
+    "llm_cost_per_conv": [
+      0.005,
+      0.012,
+      0.03
+    ],
     "llm_action_multiplier": 1.4,
     "llm_price_decline_per_year": 0.25,
     "_source": {
@@ -95,7 +95,6 @@
       "llm_price_decline_per_year": "estimate: per-token API prices have fallen 20-50%/yr; conservative 25%"
     }
   },
-
   "product": {
     "base_build_weeks": 6,
     "per_extra_platform": 0.35,
@@ -141,7 +140,6 @@
       "action_fail_churn_penalty": "estimate: churn multiplier = 1 + need_actions*(1-asr)*penalty"
     }
   },
-
   "marketing": {
     "focus_conv_bonus": 0.2,
     "dilution_per_extra_segment": 0.05,
@@ -152,7 +150,10 @@
       "visits_per_page_mature": 3.0,
       "page_exponent": 0.8,
       "page_ramp_weeks": 8,
-      "sandbox_weeks": [8, 16],
+      "sandbox_weeks": [
+        8,
+        16
+      ],
       "sandbox_width_weeks": 2.5,
       "sandbox_floor": 0.04,
       "backlinks_per_page": 0.03,
@@ -197,14 +198,69 @@
       }
     },
     "launches": [
-      {"name": "Product Hunt", "prep_hours": 25, "success_prob": 0.35, "visitors_median": 1500, "visitors_sigma": 0.8, "fail_visitors": 250, "signup_mult": 0.6, "backlinks": 8, "mentions": 6,
-       "segment_mix": {"Indie hacker / solo SaaS founder": 0.45, "Small SaaS startup team": 0.25, "E-commerce store owner (Shopify / WooCommerce)": 0.08, "Web agency or freelancer": 0.12, "Small business / showcase site": 0.04, "Edtech, kids or consumer-app team": 0.06}},
-      {"name": "Show HN", "prep_hours": 8, "success_prob": 0.15, "visitors_median": 3000, "visitors_sigma": 0.9, "fail_visitors": 60, "signup_mult": 0.35, "backlinks": 10, "mentions": 4,
-       "segment_mix": {"Indie hacker / solo SaaS founder": 0.5, "Small SaaS startup team": 0.35, "E-commerce store owner (Shopify / WooCommerce)": 0.03, "Web agency or freelancer": 0.07, "Small business / showcase site": 0.0, "Edtech, kids or consumer-app team": 0.05}},
-      {"name": "Directories batch (30 AI/SaaS directories)", "prep_hours": 15, "success_prob": 1.0, "visitors_median": 300, "visitors_sigma": 0.5, "fail_visitors": 0, "signup_mult": 0.7, "backlinks": 20, "mentions": 25,
-       "segment_mix": {"Indie hacker / solo SaaS founder": 0.3, "Small SaaS startup team": 0.2, "E-commerce store owner (Shopify / WooCommerce)": 0.15, "Web agency or freelancer": 0.15, "Small business / showcase site": 0.12, "Edtech, kids or consumer-app team": 0.08}}
+      {
+        "name": "Product Hunt",
+        "prep_hours": 25,
+        "success_prob": 0.35,
+        "visitors_median": 1500,
+        "visitors_sigma": 0.8,
+        "fail_visitors": 250,
+        "signup_mult": 0.6,
+        "backlinks": 8,
+        "mentions": 6,
+        "segment_mix": {
+          "Indie hacker / solo SaaS founder": 0.45,
+          "Small SaaS startup team": 0.25,
+          "E-commerce store owner (Shopify / WooCommerce)": 0.08,
+          "Web agency or freelancer": 0.12,
+          "Small business / showcase site": 0.04,
+          "Edtech, kids or consumer-app team": 0.06
+        }
+      },
+      {
+        "name": "Show HN",
+        "prep_hours": 8,
+        "success_prob": 0.15,
+        "visitors_median": 3000,
+        "visitors_sigma": 0.9,
+        "fail_visitors": 60,
+        "signup_mult": 0.35,
+        "backlinks": 10,
+        "mentions": 4,
+        "segment_mix": {
+          "Indie hacker / solo SaaS founder": 0.5,
+          "Small SaaS startup team": 0.35,
+          "E-commerce store owner (Shopify / WooCommerce)": 0.03,
+          "Web agency or freelancer": 0.07,
+          "Small business / showcase site": 0.0,
+          "Edtech, kids or consumer-app team": 0.05
+        }
+      },
+      {
+        "name": "Directories batch (30 AI/SaaS directories)",
+        "prep_hours": 15,
+        "success_prob": 1.0,
+        "visitors_median": 300,
+        "visitors_sigma": 0.5,
+        "fail_visitors": 0,
+        "signup_mult": 0.7,
+        "backlinks": 20,
+        "mentions": 25,
+        "segment_mix": {
+          "Indie hacker / solo SaaS founder": 0.3,
+          "Small SaaS startup team": 0.2,
+          "E-commerce store owner (Shopify / WooCommerce)": 0.15,
+          "Web agency or freelancer": 0.15,
+          "Small business / showcase site": 0.12,
+          "Edtech, kids or consumer-app team": 0.08
+        }
+      }
     ],
-    "launch_week_split": [0.65, 0.25, 0.1],
+    "launch_week_split": [
+      0.65,
+      0.25,
+      0.1
+    ],
     "ads": {
       "signup_mult": 0.7,
       "management_hours_per_week": 2,
@@ -227,7 +283,10 @@
       }
     },
     "referral": {
-      "network_launch_visitors": [100, 600],
+      "network_launch_visitors": [
+        100,
+        600
+      ],
       "visitors_per_customer_per_week": 0.3,
       "signup_mult": 1.5,
       "_source": {
@@ -246,7 +305,6 @@
       "badge_visitors_per_active_free_user": "estimate: 'Powered by Mascott' badge clicks per active free site per week"
     }
   },
-
   "sales": {
     "outreach": {
       "contacts_per_hour": 7,
@@ -272,11 +330,23 @@
     },
     "app_store": {
       "listing_hours": 30,
-      "review_weeks": [2, 6],
-      "base_installs_per_week": {"shopify": 3.0, "wordpress": 2.0},
+      "review_weeks": [
+        2,
+        6
+      ],
+      "base_installs_per_week": {
+        "shopify": 3.0,
+        "wordpress": 2.0
+      },
       "store_segments": {
-        "shopify": {"E-commerce store owner (Shopify / WooCommerce)": 1.0},
-        "wordpress": {"Small business / showcase site": 0.5, "E-commerce store owner (Shopify / WooCommerce)": 0.3, "Web agency or freelancer": 0.2}
+        "shopify": {
+          "E-commerce store owner (Shopify / WooCommerce)": 1.0
+        },
+        "wordpress": {
+          "Small business / showcase site": 0.5,
+          "E-commerce store owner (Shopify / WooCommerce)": 0.3,
+          "Web agency or freelancer": 0.2
+        }
       },
       "review_k": 15,
       "review_rate_per_happy_customer": 0.15,
@@ -295,7 +365,10 @@
     },
     "agency": {
       "contacts_per_hour": 5,
-      "partner_signup_rate": [0.008, 0.03],
+      "partner_signup_rate": [
+        0.008,
+        0.03
+      ],
       "client_sites_per_partner_month": 0.5,
       "partner_churn_monthly": 0.06,
       "client_quality_mult": 1.3,
@@ -323,7 +396,6 @@
       }
     }
   },
-
   "customer_success": {
     "hours_per_paid_customer_per_week": 0.15,
     "hours_per_free_user_per_week": 0.01,
@@ -355,7 +427,6 @@
       "capped_usage_churn_mult": "estimate: customers hitting a hard quota with no overage are frustrated"
     }
   },
-
   "pricing_behaviour": {
     "free_direct_share": 0.6,
     "free_after_trial": 0.35,
@@ -379,7 +450,6 @@
       "resolution_rate": "public benchmark style: share of conversations counted as 'resolutions' for per-resolution billing (Intercom Fin style)"
     }
   },
-
   "market": {
     "uncertainty": {
       "market_luck_sigma": 0.25,
@@ -405,19 +475,37 @@
       "competition_churn_effect": "estimate: churn x(1 + pressure*effect)"
     }
   },
-
   "segments": {
     "Indie hacker / solo SaaS founder": {
-      "search_share": 0.25, "ai_share": 0.3, "visitor_to_signup": 0.025, "trial_to_paid": 0.38,
-      "wtp_median": 22, "wtp_sigma": 0.8, "pro_need": 0.15, "style_appeal": 0.85, "pro_style_appeal": 0.85,
-      "need_actions": 0.35, "platforms": ["js_saas"], "churn_monthly": 0.08,
-      "conv_per_month_median": 120, "conv_per_month_sigma": 1.2, "proof_sensitivity": 0.3,
-      "competition_pressure": 0.6, "reply_rate": [0.03, 0.08], "cpc": 2.5, "reachable_pool": 60000,
+      "search_share": 0.25,
+      "ai_share": 0.3,
+      "visitor_to_signup": 0.025,
+      "trial_to_paid": 0.38,
+      "wtp_median": 25,
+      "wtp_sigma": 0.8,
+      "pro_need": 0.15,
+      "style_appeal": 0.85,
+      "pro_style_appeal": 0.85,
+      "need_actions": 0.35,
+      "platforms": [
+        "js_saas"
+      ],
+      "churn_monthly": 0.08,
+      "conv_per_month_median": 120,
+      "conv_per_month_sigma": 1.2,
+      "proof_sensitivity": 0.3,
+      "competition_pressure": 0.6,
+      "reply_rate": [
+        0.03,
+        0.08
+      ],
+      "cpc": 2.5,
+      "reachable_pool": 60000,
       "_source": {
         "search_share": "estimate: share of relevant search demand ('AI chatbot for SaaS', 'mascot widget')",
         "visitor_to_signup": "public benchmark style: SaaS landing pages convert 2-5% of visitors to signups, blog/comparison content 0.5-1.5%; blended content-led site ~1-2.5%",
         "trial_to_paid": "estimate: trial->paid for a MATURE product with proof, among trialists whose WTP >= price; effective rate ends ~5-25% after WTP, proof, fit, actions and competition multipliers",
-        "wtp_median": "panel (partial, 20/100 answers: median 'expensive' ~49 across segments); indie hackers lowest - estimate",
+        "wtp_median": "CEO calibration 2026-10-13: median 'getting expensive' answer across buyer panels v1+v2 (founder/panel*, 40 simulated answers), rounded down because LLM panels lean agreeable",
         "style_appeal": "board Product lens: cute style suits consumer/indie better than B2B - estimate",
         "need_actions": "estimate: share of value that depends on on-site actions working",
         "churn_monthly": "SPEC/public benchmark: small-SaaS churn 4-8%/month; indie hackers at the top",
@@ -428,13 +516,32 @@
       }
     },
     "Small SaaS startup team": {
-      "search_share": 0.18, "ai_share": 0.25, "visitor_to_signup": 0.02, "trial_to_paid": 0.36,
-      "wtp_median": 60, "wtp_sigma": 0.9, "pro_need": 0.5, "style_appeal": 0.55, "pro_style_appeal": 0.85,
-      "need_actions": 0.7, "platforms": ["js_saas"], "churn_monthly": 0.05,
-      "conv_per_month_median": 400, "conv_per_month_sigma": 1.3, "proof_sensitivity": 0.5,
-      "competition_pressure": 0.7, "reply_rate": [0.02, 0.06], "cpc": 3.5, "reachable_pool": 40000,
+      "search_share": 0.18,
+      "ai_share": 0.25,
+      "visitor_to_signup": 0.02,
+      "trial_to_paid": 0.36,
+      "wtp_median": 75,
+      "wtp_sigma": 0.9,
+      "pro_need": 0.5,
+      "style_appeal": 0.55,
+      "pro_style_appeal": 0.85,
+      "need_actions": 0.7,
+      "platforms": [
+        "js_saas"
+      ],
+      "churn_monthly": 0.05,
+      "conv_per_month_median": 400,
+      "conv_per_month_sigma": 1.3,
+      "proof_sensitivity": 0.5,
+      "competition_pressure": 0.7,
+      "reply_rate": [
+        0.02,
+        0.06
+      ],
+      "cpc": 3.5,
+      "reachable_pool": 40000,
       "_source": {
-        "wtp_median": "panel (partial): SaaS answers cluster 49-99 'expensive' - estimate",
+        "wtp_median": "CEO calibration 2026-10-13: median 'getting expensive' answer across buyer panels v1+v2 (founder/panel*, 40 simulated answers), rounded down because LLM panels lean agreeable",
         "style_appeal": "board Product lens: 'does a cocooning style work for B2B SaaS?' - estimate",
         "need_actions": "board Offers lens: onboarding/activation is the outcome; needs in-app actions",
         "churn_monthly": "public benchmark: SMB SaaS 3-7%/month",
@@ -443,55 +550,136 @@
       }
     },
     "E-commerce store owner (Shopify / WooCommerce)": {
-      "search_share": 0.25, "ai_share": 0.2, "visitor_to_signup": 0.015, "trial_to_paid": 0.36,
-      "wtp_median": 40, "wtp_sigma": 0.9, "pro_need": 0.45, "style_appeal": 0.7, "pro_style_appeal": 0.85,
-      "need_actions": 0.8, "platforms": ["shopify", "wordpress"], "churn_monthly": 0.06,
-      "conv_per_month_median": 500, "conv_per_month_sigma": 1.4, "proof_sensitivity": 0.6,
-      "competition_pressure": 0.8, "reply_rate": [0.02, 0.05], "cpc": 2.0, "reachable_pool": 200000,
+      "search_share": 0.25,
+      "ai_share": 0.2,
+      "visitor_to_signup": 0.015,
+      "trial_to_paid": 0.36,
+      "wtp_median": 50,
+      "wtp_sigma": 0.9,
+      "pro_need": 0.45,
+      "style_appeal": 0.6,
+      "pro_style_appeal": 0.85,
+      "need_actions": 0.8,
+      "platforms": [
+        "shopify",
+        "wordpress"
+      ],
+      "churn_monthly": 0.06,
+      "conv_per_month_median": 500,
+      "conv_per_month_sigma": 1.4,
+      "proof_sensitivity": 0.6,
+      "competition_pressure": 0.8,
+      "reply_rate": [
+        0.02,
+        0.05
+      ],
+      "cpc": 2.0,
+      "reachable_pool": 200000,
       "_source": {
         "trial_to_paid": "estimate; Shopify apps with trials typically 10-30%",
         "need_actions": "board Offers/Product lens: find product, add to cart, start checkout",
         "competition_pressure": "Tidio, Gorgias, Shopify Inbox (free), Rep AI - estimate",
         "churn_monthly": "public benchmark: Shopify app churn 5-10%/month",
-        "other": "estimate"
+        "other": "estimate",
+        "wtp_median": "CEO calibration 2026-10-13: median 'getting expensive' answer across buyer panels v1+v2 (founder/panel*, 40 simulated answers), rounded down because LLM panels lean agreeable"
       }
     },
     "Web agency or freelancer": {
-      "search_share": 0.12, "ai_share": 0.1, "visitor_to_signup": 0.02, "trial_to_paid": 0.34,
-      "wtp_median": 35, "wtp_sigma": 0.8, "pro_need": 0.35, "style_appeal": 0.55, "pro_style_appeal": 0.8,
-      "need_actions": 0.5, "platforms": ["webflow_wix", "wordpress"], "churn_monthly": 0.05,
-      "conv_per_month_median": 200, "conv_per_month_sigma": 1.2, "proof_sensitivity": 0.5,
-      "competition_pressure": 0.5, "reply_rate": [0.03, 0.07], "cpc": 2.5, "reachable_pool": 50000,
+      "search_share": 0.12,
+      "ai_share": 0.1,
+      "visitor_to_signup": 0.02,
+      "trial_to_paid": 0.34,
+      "wtp_median": 45,
+      "wtp_sigma": 0.8,
+      "pro_need": 0.35,
+      "style_appeal": 0.55,
+      "pro_style_appeal": 0.8,
+      "need_actions": 0.5,
+      "platforms": [
+        "webflow_wix",
+        "wordpress"
+      ],
+      "churn_monthly": 0.05,
+      "conv_per_month_median": 200,
+      "conv_per_month_sigma": 1.2,
+      "proof_sensitivity": 0.5,
+      "competition_pressure": 0.5,
+      "reply_rate": [
+        0.03,
+        0.07
+      ],
+      "cpc": 2.5,
+      "reachable_pool": 50000,
       "_source": {
-        "wtp_median": "estimate: per client site; board Offers lens: agencies resell, they don't buy",
+        "wtp_median": "CEO calibration 2026-10-13: median 'getting expensive' answer across buyer panels v1+v2 (founder/panel*, 40 simulated answers), rounded down because LLM panels lean agreeable",
         "other": "estimate"
       }
     },
     "Small business / showcase site": {
-      "search_share": 0.12, "ai_share": 0.1, "visitor_to_signup": 0.012, "trial_to_paid": 0.3,
-      "wtp_median": 18, "wtp_sigma": 0.8, "pro_need": 0.1, "style_appeal": 0.6, "pro_style_appeal": 0.8,
-      "need_actions": 0.3, "platforms": ["wordpress", "webflow_wix"], "churn_monthly": 0.07,
-      "conv_per_month_median": 60, "conv_per_month_sigma": 1.1, "proof_sensitivity": 0.4,
-      "competition_pressure": 0.6, "reply_rate": [0.015, 0.04], "cpc": 1.8, "reachable_pool": 300000,
+      "search_share": 0.12,
+      "ai_share": 0.1,
+      "visitor_to_signup": 0.012,
+      "trial_to_paid": 0.3,
+      "wtp_median": 35,
+      "wtp_sigma": 0.8,
+      "pro_need": 0.1,
+      "style_appeal": 0.6,
+      "pro_style_appeal": 0.8,
+      "need_actions": 0.3,
+      "platforms": [
+        "wordpress",
+        "webflow_wix"
+      ],
+      "churn_monthly": 0.07,
+      "conv_per_month_median": 60,
+      "conv_per_month_sigma": 1.1,
+      "proof_sensitivity": 0.4,
+      "competition_pressure": 0.6,
+      "reply_rate": [
+        0.015,
+        0.04
+      ],
+      "cpc": 1.8,
+      "reachable_pool": 300000,
       "_source": {
         "trial_to_paid": "board Offers lens: showcase sites have no measurable pain - estimate",
-        "other": "estimate"
+        "other": "estimate",
+        "wtp_median": "CEO calibration 2026-10-13: median 'getting expensive' answer across buyer panels v1+v2 (founder/panel*, 40 simulated answers), rounded down because LLM panels lean agreeable"
       }
     },
     "Edtech, kids or consumer-app team": {
-      "search_share": 0.08, "ai_share": 0.05, "visitor_to_signup": 0.02, "trial_to_paid": 0.3,
-      "wtp_median": 45, "wtp_sigma": 1.0, "pro_need": 0.5, "style_appeal": 0.9, "pro_style_appeal": 0.9,
-      "need_actions": 0.5, "platforms": ["js_saas"], "churn_monthly": 0.05,
-      "conv_per_month_median": 700, "conv_per_month_sigma": 1.4, "proof_sensitivity": 0.4,
-      "competition_pressure": 0.4, "reply_rate": [0.02, 0.06], "cpc": 2.2, "reachable_pool": 15000,
+      "search_share": 0.08,
+      "ai_share": 0.05,
+      "visitor_to_signup": 0.02,
+      "trial_to_paid": 0.3,
+      "wtp_median": 60,
+      "wtp_sigma": 1.0,
+      "pro_need": 0.5,
+      "style_appeal": 0.9,
+      "pro_style_appeal": 0.9,
+      "need_actions": 0.5,
+      "platforms": [
+        "js_saas"
+      ],
+      "churn_monthly": 0.05,
+      "conv_per_month_median": 700,
+      "conv_per_month_sigma": 1.4,
+      "proof_sensitivity": 0.4,
+      "competition_pressure": 0.4,
+      "reply_rate": [
+        0.02,
+        0.06
+      ],
+      "cpc": 2.2,
+      "reachable_pool": 15000,
       "_source": {
         "style_appeal": "estimate: the cute house style fits kids/consumer apps best",
         "conv_per_month_median": "estimate: consumer apps chat a lot - heavy LLM usage",
-        "other": "estimate"
+        "other": "estimate",
+        "wtp_median": "CEO calibration 2026-10-13: median 'getting expensive' answer across buyer panels v1+v2 (founder/panel*, 40 simulated answers), rounded down because LLM panels lean agreeable"
       }
     }
   },
-
   "ceo": {
     "exploration_prob": 0.2,
     "revert_if_drop": 0.04,
@@ -518,7 +706,6 @@
       "diagnosis": "thresholds used to classify a death cause; benchmark trial->paid 20% (public SaaS benchmark mid-range)"
     }
   },
-
   "sensitivity": {
     "params": [
       "segments.*.visitor_to_signup",

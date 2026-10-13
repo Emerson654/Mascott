@@ -8,8 +8,8 @@ alongside. Spec: `sim/SPEC.md`. Python 3.9+ standard library only (developed on 
 ## Run it
 
 ```bash
-python3 sim/run.py --quick                 # smoke test, ~10-20 s on 4 cores (must stay < 2 min)
-python3 sim/run.py --full                  # default sizes, ~4.5 min on 2 workers (see timing below)
+python3 sim/run.py --quick                 # smoke test, ~20 s on 2 workers (must stay < 2 min)
+python3 sim/run.py --full                  # default sizes, ~4 min on 2 workers (see timing below)
 python3 sim/run.py --full --workers 2 --out sim/results
 python3 sim/run.py --seeds 1000            # more seeds per relaunch iteration
 python3 sim/run.py --skip-search --skip-sensitivity   # relaunch loop only, a few seconds
@@ -20,7 +20,7 @@ Options: `--quick` / `--full` (sizes come from `config.json` -> `simulation` and
 `--seeds N` (seeds per iteration), `--workers N` (default: CPU count), `--out DIR` (default
 `sim/results`), `--config PATH`, `--max-iterations N`.
 
-**Timing (measured).** `--full` = ~224k simulated companies. It takes 4.4 min with 2 workers on this
+**Timing (measured).** `--full` = ~224k simulated companies. It takes ~4 min (3m50s-4m25s measured) with 2 workers on this
 dev container. Budget 1.5-2x that for a slower 2-vCPU GitHub runner, so ~7-9 min, well under the
 40-minute limit. Most of the time goes to the search (800 strategies x 200 seeds, then the top 10
 re-run at 2,000 fresh seeds) and the sensitivity analysis (22 inputs x 2 x 600 seeds). To trade time

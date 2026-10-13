@@ -1,0 +1,52 @@
+name: Company simulation
+
+# Runs the Mascott company simulator on a GitHub runner (no LLM, no Claude tokens)
+# and commits the results back to the branch that triggered it.
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "quick or full"
+        default: "full"
+  push:
+    paths:
+      - "sim/**"
+      - "!sim/results/**"
+      - ".github/workflows/simulate.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: simulate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  simulate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Unit tests
+        run: python -m unittest discover -s sim/tests -v
+      - name: Run simulation
+        run: |
+          MODE="${{ github.event.inputs.mode || 'full' }}"
+          python sim/run.py --$MODE --workers "$(nproc)" --out sim/results
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: simulation-results
+          path: sim/results
+      - name: Commit results
+        run: |
+          git config user.name "mascott-sim-bot"
+          git config user.email "mascott-sim-bot@users.noreply.github.com"
+          git add sim/results
+          git diff --cached --quiet && exit 0
+          git commit -m "Simulation results for ${GITHUB_SHA::7}"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
