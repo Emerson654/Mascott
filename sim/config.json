@@ -533,7 +533,7 @@
       "conv_per_month_median": 400,
       "conv_per_month_sigma": 1.3,
       "proof_sensitivity": 0.5,
-      "competition_pressure": 0.7,
+      "competition_pressure": 0.6,
       "reply_rate": [
         0.02,
         0.06
@@ -545,7 +545,7 @@
         "style_appeal": "board Product lens: 'does a cocooning style work for B2B SaaS?' - estimate",
         "need_actions": "board Offers lens: onboarding/activation is the outcome; needs in-app actions",
         "churn_monthly": "public benchmark: SMB SaaS 3-7%/month",
-        "competition_pressure": "board Monopoly lens: Intercom Fin, Pickaxe, Anam - estimate",
+        "competition_pressure": "CEO calibration run 2: panel v2 buyers chose it because it sits ON TOP of Intercom/Crisp (complement, not replacement); 2/6 small-SaaS answers bought",
         "other": "estimate"
       }
     },
@@ -651,11 +651,11 @@
       "search_share": 0.08,
       "ai_share": 0.05,
       "visitor_to_signup": 0.02,
-      "trial_to_paid": 0.3,
+      "trial_to_paid": 0.22,
       "wtp_median": 60,
       "wtp_sigma": 1.0,
       "pro_need": 0.5,
-      "style_appeal": 0.9,
+      "style_appeal": 0.7,
       "pro_style_appeal": 0.9,
       "need_actions": 0.5,
       "platforms": [
@@ -673,10 +673,11 @@
       "cpc": 2.2,
       "reachable_pool": 15000,
       "_source": {
-        "style_appeal": "estimate: the cute house style fits kids/consumer apps best",
+        "style_appeal": "CEO calibration run 2: panel v1+v2 edtech buyers (4 answers, 0 buy) called the cute mascot 'gimmicky'/'childish' and raised child-data safety; lowered from 0.9 estimate",
         "conv_per_month_median": "estimate: consumer apps chat a lot - heavy LLM usage",
         "other": "estimate",
-        "wtp_median": "CEO calibration 2026-10-13: median 'getting expensive' answer across buyer panels v1+v2 (founder/panel*, 40 simulated answers), rounded down because LLM panels lean agreeable"
+        "wtp_median": "CEO calibration 2026-10-13: median 'getting expensive' answer across buyer panels v1+v2 (founder/panel*, 40 simulated answers), rounded down because LLM panels lean agreeable",
+        "trial_to_paid": "CEO calibration run 2: child-data (GDPR-K/COPPA) due diligence slows paying; 0/4 panel buyers; lowered from 0.30 estimate"
       }
     }
   },

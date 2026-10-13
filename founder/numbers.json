@@ -1,0 +1,33 @@
+{
+  "business": "Mascott (AI guide with a face for small B2B SaaS; all amounts in EUR, the tool prints a $ sign)",
+  "unit": "paying client-month",
+  "price": 45.00,
+  "variable": [
+    {"label": "LLM inference: 1,500 conversations x ~0.006 EUR (cheap model, actions on) - ESTIMATE, range 2.20-16.80", "cost": 9.00},
+    {"label": "Free-plan inference carried per paying account (~8 free accounts x ~30 conv x 0.006) - ESTIMATE", "cost": 1.50},
+    {"label": "Stripe: ~2.2% blended card fee + 0.25 EUR + 0.7% Billing, on 45 EUR", "cost": 1.56},
+    {"label": "Hosting share per active site (storage, logs, widget bandwidth) - ESTIMATE", "cost": 0.30}
+  ],
+  "fixed_monthly": [
+    {"label": "Tools: AI coding seats, email, analytics, error tracking (ASSUMED)", "cost": 110},
+    {"label": "Hosting base: server/serverless, DB, CDN (ASSUMED)", "cost": 25},
+    {"label": "Accountant + bank fees, French SASU low tier (ASSUMED)", "cost": 45},
+    {"label": "Legal/insurance: RC Pro + DPA upkeep (ASSUMED)", "cost": 35},
+    {"label": "Domains: main + outreach domain, ~50 EUR/yr (ASSUMED)", "cost": 4}
+  ],
+  "startup": [
+    {"label": "Outreach stack: sending domain, 2 mailboxes, warm-up, contact data", "cost": 350},
+    {"label": "SEO keyword/backlink tool, 1-2 months", "cost": 250},
+    {"label": "Free mascot generator + grader inference (hard cap)", "cost": 400},
+    {"label": "Product Hunt and HN assets", "cost": 150},
+    {"label": "GEO tracking + directory fees", "cost": 250},
+    {"label": "Review requests (disclosed thank-you gifts)", "cost": 150},
+    {"label": "Paid retargeting test W8-W12 (killed if CAC > 100)", "cost": 400},
+    {"label": "Marketing contingency", "cost": 200},
+    {"label": "Legal and trust: DPA/privacy review, EU hosting extras", "cost": 350},
+    {"label": "Refund reserve for the lift guarantee", "cost": 300}
+  ],
+  "days_per_month": 1,
+  "plan_per_day": 30,
+  "ramp_per_day": [2, 7, 12, 15, 17, 19, 21, 23, 25, 27, 29, 31]
+}
