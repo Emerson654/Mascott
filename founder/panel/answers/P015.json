@@ -1,0 +1,13 @@
+{
+  "id": "P015",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "The mascot idea is charming, but I'd try the free plan and see whether visitors even click it. I'm not paying for a chat widget until I've seen it earn its keep on my own site.",
+  "objection": "Another monthly subscription for something visitors might ignore. I don't know if the animation looks truly on-brand or like a generic widget, and I don't trust an AI answering and acting on my site without seeing it handle real traffic.",
+  "would_change_my_mind": "A live demo on a site like mine showing visitors engaging with it, real conversion numbers from a comparable SaaS, and enough design control to make the mascot clearly mine and not a template.",
+  "price_too_cheap": 5,
+  "price_cheap": 19,
+  "price_expensive": 59,
+  "price_too_expensive": 129
+}

@@ -1,0 +1,13 @@
+{
+  "id": "P018",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "I'd sign up for the free plan at most, and probably not even that until I know what it does to my page speed. I run a real store, and a chat widget that slows things down or clashes with my theme costs me more than $29 ever would.",
+  "objection": "Will it slow down my site or clash with my design? And will the AI make stuff up to my customers or mess with checkout? Mascots sound cute, but I need proof it won't hurt my conversion rate.",
+  "would_change_my_mind": "Seeing a live Shopify store using it with a real page-speed score, plus proof it measurably lifted sales or cut support tickets. I'd also need to hit the 50-conversation limit on the free plan first.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 49,
+  "price_too_expensive": 100
+}

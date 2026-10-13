@@ -1,0 +1,13 @@
+{
+  "id": "P007",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "I don't pay for anything that can't show me a lift in a metric, and a cute animated mascot reads as brand decoration, not conversion. There's no proof here that it raises signups or checkout completion, so I'd at most test the free plan, not pay in month one.",
+  "objection": "Will it slow down my site or clash with my design? And where is the A/B evidence that a mascot agent beats a plain chat widget on conversion?",
+  "would_change_my_mind": "A published A/B test or case study from a comparable SaaS showing a measurable lift in trial signups or activation, plus proof the script adds negligible load time (Lighthouse/Core Web Vitals numbers).",
+  "price_too_cheap": 9,
+  "price_cheap": 29,
+  "price_expensive": 99,
+  "price_too_expensive": 249
+}

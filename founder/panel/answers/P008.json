@@ -1,0 +1,13 @@
+{
+  "id": "P008",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "values",
+  "reason": "I'd probably poke at the free plan because I try everything, but a cartoon mascot on my brand looks childish to me, and I keep maybe one tool in ten. I wouldn't pay within a month.",
+  "objection": "A cute cartoon mascot makes my brand look unprofessional, and I have no proof an animated face gets more conversions than a plain chat widget.",
+  "would_change_my_mind": "A/B test data from a real site like mine showing the mascot raises conversions or bookings, plus a way to make the character look polished and non-childish.",
+  "price_too_cheap": 9,
+  "price_cheap": 19,
+  "price_expensive": 59,
+  "price_too_expensive": 120
+}

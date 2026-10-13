@@ -1,0 +1,13 @@
+{
+  "id": "P017",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "I could wire an LLM API to our docs in a weekend, and I do not want a bot giving wrong answers to our customers under our brand. A cute mascot does not fix hallucinations, and it can make a wrong answer look worse. I might try the free plan, but I would not start paying in the first month.",
+  "objection": "Wrong answers in front of my customers, and an agent clicking around and filling forms on my site that I cannot fully control or audit. I would also rather own this than depend on a third-party widget.",
+  "would_change_my_mind": "Published accuracy numbers on content like mine, a way to restrict answers to my docs with a hard refuse-when-unsure mode, full conversation logs and approval controls for on-site actions, plus a few G2 reviews from SaaS teams like mine.",
+  "price_too_cheap": 9,
+  "price_cheap": 19,
+  "price_expensive": 79,
+  "price_too_expensive": 149
+}

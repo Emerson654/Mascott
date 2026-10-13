@@ -1,0 +1,13 @@
+{
+  "id": "P012",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "I'd rather wire an LLM API into my own site than pay 29 EUR a month for a widget. A cute mascot doesn't solve a problem I can't solve myself in a weekend.",
+  "objection": "Another monthly subscription for something visitors might ignore. I have no proof a mascot lifts conversions, and on-site actions are locked behind the 79 EUR Pro plan.",
+  "would_change_my_mind": "Hard data from comparable small sites that the mascot raises conversions, plus on-site actions on the Starter plan at around 15 EUR.",
+  "price_too_cheap": 5,
+  "price_cheap": 12,
+  "price_expensive": 29,
+  "price_too_expensive": 59
+}

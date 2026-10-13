@@ -1,0 +1,13 @@
+{
+  "id": "P014",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "I'd maybe try the free plan on one client site, but I don't pay for anything until I've seen a lift in numbers, and the A/B report that would show it sits behind the 49 EUR plan. An AI that acts on a client's site is a liability to me before it's a feature.",
+  "objection": "If the AI does something wrong in front of a client's customers, that's my name on it. Confirmation and logs help, but I haven't seen it hold up on a real site, and I'm not putting it on a paying client's site on faith.",
+  "would_change_my_mind": "A real case study with a measured conversion lift on a site like my clients' (not a demo), plus being able to run the A/B on the free plan for a month before paying anything.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 40,
+  "price_too_expensive": 90
+}

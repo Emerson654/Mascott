@@ -1,0 +1,13 @@
+{
+  "id": "P013",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "I'd maybe try the free plan on one client site, but paying inside a month? No. An AI that clicks and fills forms on a client's site could mess up in front of their customers, and that lands on me, not you. My clients are happy enough with the chat they already have.",
+  "objection": "If the AI does something wrong on a client's site, like a wrong booking or a wrong add-to-cart, I'm the one who gets the angry email. The confirm step and the logs help, but I'd need to see it hold up on real traffic first.",
+  "would_change_my_mind": "A live demo on a real site like my clients' with a track record of no bad actions, plus a client actually asking me for it. Then I'd go to Agency.",
+  "price_too_cheap": 5,
+  "price_cheap": 19,
+  "price_expensive": 49,
+  "price_too_expensive": 99
+}

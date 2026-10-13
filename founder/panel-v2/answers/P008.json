@@ -1,0 +1,13 @@
+{
+  "id": "P008",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "need",
+  "reason": "I would probably try the free plan like every other AI tool I find, but I keep about one in ten and I already have a chat widget. I have no proof yet that a mascot would lift my sign-ups rather than just look cute.",
+  "objection": "A cartoon mascot could look childish or unprofessional for my brand, and a bot that talks to visitors who may be kids raises child-privacy questions that a GDPR data agreement does not settle. I also have not seen a real lift number from a site like mine.",
+  "would_change_my_mind": "A case study from a comparable consumer or edtech app showing a measured sign-up lift, plus the sober pro look working on my own site during the free trial.",
+  "price_too_cheap": 5,
+  "price_cheap": 19,
+  "price_expensive": 79,
+  "price_too_expensive": 199
+}

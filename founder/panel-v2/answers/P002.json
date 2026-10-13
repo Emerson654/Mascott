@@ -1,0 +1,13 @@
+{
+  "id": "P002",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "We already pay for a chatbot and it's fine, and an AI that clicks and fills forms on our site in front of customers is a risk I don't need this month. I might try the free plan, but I wouldn't start paying within a month.",
+  "objection": "If the agent does something wrong on our site in front of a customer (wrong item in cart, a form filled badly), it's my brand that takes the hit, and a log after the fact doesn't undo that.",
+  "would_change_my_mind": "A few real SaaS case studies showing a measured sign-up lift with zero bad actions, plus a read-only mode (answers and pointing only, no actions) that I could run on top of Intercom for a month and check in the A/B report first.",
+  "price_too_cheap": 5,
+  "price_cheap": 19,
+  "price_expensive": 79,
+  "price_too_expensive": 199
+}

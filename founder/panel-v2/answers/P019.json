@@ -1,0 +1,13 @@
+{
+  "id": "P019",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "I'd install the free plan because I try every new AI tool, but I keep about one in ten and paying inside a month is a stretch. An AI that clicks and fills things on my site in front of customers is a risk until I've watched it behave for a while.",
+  "objection": "An AI that acts on my site could do something wrong in front of my customers, and the confirm step and logs only help after the fact. I also have no G2 or Capterra reviews to check it against.",
+  "would_change_my_mind": "Independent reviews on G2 or Capterra, plus a month on the free plan with no bad actions and a visible lift in the A/B report.",
+  "price_too_cheap": 5,
+  "price_cheap": 19,
+  "price_expensive": 79,
+  "price_too_expensive": 200
+}

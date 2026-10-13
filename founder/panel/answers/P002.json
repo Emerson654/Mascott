@@ -1,0 +1,13 @@
+{
+  "id": "P002",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "I already pay for a chatbot and it's fine, so I have no reason to redo the setup. The part that would actually be new is the AI filling forms and starting checkout on my site, and that's the part I don't trust in front of my customers.",
+  "objection": "An AI that clicks and acts on my site could do something wrong in front of my customers, like a wrong booking or a half-started checkout. On top of that, switching from Intercom/Crisp/Tidio means migration work for a mascot that is mostly cosmetic.",
+  "would_change_my_mind": "Proof that the on-site actions are safe, meaning a hard allow-list of actions, a confirm step before anything that spends money or books something, and a full log I can review. It would also have to work alongside my current chat inbox so I don't have to migrate anything.",
+  "price_too_cheap": 9,
+  "price_cheap": 19,
+  "price_expensive": 59,
+  "price_too_expensive": 120
+}

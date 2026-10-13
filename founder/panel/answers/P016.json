@@ -1,0 +1,13 @@
+{
+  "id": "P016",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "I already pay for a chatbot and it's fine. Switching means migrating my setup and re-testing everything, and a cute mascot isn't enough reason to do that in a busy week.",
+  "objection": "What about GDPR, data privacy and the cost if conversations explode? I don't see where the data is stored or what happens when I go over 1,000 or 5,000 conversations. Nothing on the page says.",
+  "would_change_my_mind": "A clear GDPR/DPA page with EU data hosting, a hard cap or predictable overage pricing, and a G2/Capterra listing with real reviews showing it beats my current tool on conversion.",
+  "price_too_cheap": 9,
+  "price_cheap": 29,
+  "price_expensive": 99,
+  "price_too_expensive": 249
+}

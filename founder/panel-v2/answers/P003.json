@@ -1,0 +1,13 @@
+{
+  "id": "P003",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "I'd sign up for the free 100 conversations and sit on it for months. I only pay when a limit forces me, and I'd want to read G2 or Capterra reviews first, which a new product probably doesn't have yet.",
+  "objection": "Another monthly subscription for something visitors might ignore. I have no proof yet that a mascot lifts sign-ups on a kids' app, and the price is trivial next to the time it takes me to vet it and the brand and child-safety risk of an AI talking to kids.",
+  "would_change_my_mind": "Free-tier A/B data on my own site showing a clear sign-up lift, plus a handful of independent reviews on G2 or Capterra from edtech or kids' products, and a clear statement of how it handles minors' data.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 60,
+  "price_too_expensive": 150
+}

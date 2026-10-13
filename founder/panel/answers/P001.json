@@ -1,0 +1,13 @@
+{
+  "id": "P001",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "I'd sign up for the free plan and poke at it because I try every new AI tool, but I already have a chatbot and I only keep about one in ten. A cute mascot doesn't solve a problem I'd pay for within a month.",
+  "objection": "I already have a chatbot, so why add or switch? A mascot is a skin on something I can already do, and I don't see what it adds that moves signups or support numbers.",
+  "would_change_my_mind": "Proof, with real numbers from a similar SaaS, that the mascot lifts onboarding or trial conversion over a plain chat widget, plus on-site actions that work on my app without custom engineering during the trial.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 59,
+  "price_too_expensive": 129
+}

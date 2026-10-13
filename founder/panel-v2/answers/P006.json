@@ -1,0 +1,13 @@
+{
+  "id": "P006",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "need",
+  "reason": "I'd rather wire an LLM API into my own site than pay a SaaS, and I'm not convinced a mascot is a real driver of sign-ups. I might try the free plan, but paying within the first month is unlikely.",
+  "objection": "Will it actually increase sales or sign-ups, or is it a gimmick? I can build a RAG chat with actions myself, and a cute character feels like decoration until I see measured lift.",
+  "would_change_my_mind": "A real A/B result from a comparable site showing a clear lift in sign-ups, after I've tested the free plan on my own traffic and the lift shows up in my numbers.",
+  "price_too_cheap": 5,
+  "price_cheap": 12,
+  "price_expensive": 35,
+  "price_too_expensive": 70
+}

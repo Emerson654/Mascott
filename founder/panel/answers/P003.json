@@ -1,0 +1,13 @@
+{
+  "id": "P003",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "I would try the free plan at most, and 50 conversations with a badge is enough to test it. I would not pay inside a month without reviews on G2 or Capterra and proof that visitors use it instead of ignoring it.",
+  "objection": "Another monthly subscription for something visitors might ignore. No proof it lifts conversions, and a cute mascot on a kids app could feel gimmicky or raise safety and data questions.",
+  "would_change_my_mind": "Independent G2/Capterra reviews plus a case study showing a measurable lift in activation or conversion, and a clear answer on child data safety, with the free plan hitting its limit because it is actually being used.",
+  "price_too_cheap": 9,
+  "price_cheap": 19,
+  "price_expensive": 49,
+  "price_too_expensive": 99
+}

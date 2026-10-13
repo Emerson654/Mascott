@@ -1,0 +1,13 @@
+{
+  "id": "P014",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "I'd try the free plan at most. An agent that clicks and fills forms on my clients' sites could do something wrong in front of their customers, and I'm not paying 79 EUR a month on a promise with no numbers behind it.",
+  "objection": "Nothing here shows it moves a metric. No conversion lift, no case study, no A/B result. And an AI taking actions on a client's site, like checkout, is a liability if it gets it wrong.",
+  "would_change_my_mind": "A/B test data from real sites showing a measurable lift in conversion or bookings, plus hard guardrails and a log of every action it takes so it can't do anything off-script in front of customers.",
+  "price_too_cheap": 9,
+  "price_cheap": 19,
+  "price_expensive": 49,
+  "price_too_expensive": 99
+}

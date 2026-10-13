@@ -1,0 +1,13 @@
+{
+  "id": "P011",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "My current bot is meh, but a cute mascot doesn't fix the real problem, which is whether it answers well. I'd try the free plan at most. I'm not paying in month one before I know where the data goes.",
+  "objection": "What about GDPR and data privacy, who stores my visitors' conversations, and what happens to my bill if conversations explode past the 1,000 or 5,000 cap?",
+  "would_change_my_mind": "A clear GDPR/DPA page with EU data hosting, plus a hard cap or predictable overage pricing, and a trial where it answers my own docs accurately.",
+  "price_too_cheap": 9,
+  "price_cheap": 25,
+  "price_expensive": 85,
+  "price_too_expensive": 150
+}

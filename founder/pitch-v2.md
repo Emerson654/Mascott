@@ -1,0 +1,6 @@
+Mascott: an AI guide with a face for your website or app. It answers visitors from your own content and does things for them (finds a product and points at it, adds to cart, fills a form, books a slot, walks a new user through your app).
+Works alone OR on top of the chat you already have (Intercom, Crisp, Tidio): no migration. Two looks: cute mascot, or a sober "pro" character. Script under 30 KB, loads after your page.
+You stay in control: you choose which actions are allowed, the visitor confirms before anything is submitted or bought, every action is logged, one-click off switch. EU hosting, GDPR data agreement included.
+Done-for-you setup: send your URL, within 24 hours we deliver your mascot trained on your site. Built-in A/B test report shows the lift in sign-ups or sales versus no mascot.
+Free: 100 conversations/month. Starter 19 EUR/month (1,000 conversations). Growth 49 EUR/month (5,000 conversations, all actions, no badge, A/B report). Agency 149 EUR/month (10 client sites, white-label). Hard caps, no surprise bills. Guarantee: no measured lift after 30 days, that month is refunded.
+Panel note: "buys" means you would start PAYING (Starter, Growth or Agency) within your first month, not just use the free plan. Give all four price answers in EUR per month, for the plan you would most likely use.

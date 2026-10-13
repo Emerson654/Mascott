@@ -1,0 +1,13 @@
+{
+  "id": "P009",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "I already pay for a chatbot and it does the job. A cartoon mascot on my site feels childish for my brand, and switching means migration work for a gain I can't see.",
+  "objection": "A cute cartoon character would make my site look unprofessional, and I'm not redoing my chatbot setup for a gimmick.",
+  "would_change_my_mind": "A serious, non-cartoon avatar style that fits a professional brand, plus a one-click import of my current chatbot's content and proof it converts better than what I have.",
+  "price_too_cheap": 9,
+  "price_cheap": 19,
+  "price_expensive": 49,
+  "price_too_expensive": 99
+}

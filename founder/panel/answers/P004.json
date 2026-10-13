@@ -1,0 +1,13 @@
+{
+  "id": "P004",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "I'd sign up for the free plan, maybe, but 50 conversations a month is nothing and I'd rather live with the badge than pay. My site is a showcase site, a chat mascot is a nice-to-have, not something I'd pay 29 a month for.",
+  "objection": "I could build this myself with an LLM API and a weekend, and a cute animated face isn't worth 29 EUR a month when there are free chatbot widgets. I'd check G2 and Capterra first and probably pick a free one.",
+  "would_change_my_mind": "A free plan with several hundred conversations and no badge, or a one-time price under 10 EUR, with clear proof it lifts leads on a site like mine.",
+  "price_too_cheap": 3,
+  "price_cheap": 9,
+  "price_expensive": 19,
+  "price_too_expensive": 35
+}

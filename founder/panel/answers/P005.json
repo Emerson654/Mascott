@@ -1,0 +1,13 @@
+{
+  "id": "P005",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "I build client sites in Webflow and Framer, and a chat widget wired to an LLM API is a weekend job for me. I'd rather own the code than rent a mascot per month.",
+  "objection": "I can build this myself with an LLM API and a weekend, and then I don't pay per-conversation limits or carry a 'Powered by' badge on client sites.",
+  "would_change_my_mind": "A white-label or agency plan with a flat price across many client sites, unlimited conversations, and the mascot and animation set exportable so I can resell it as my own add-on.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 45,
+  "price_too_expensive": 100
+}

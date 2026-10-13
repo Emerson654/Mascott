@@ -1,0 +1,13 @@
+{
+  "id": "P015",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "quality",
+  "reason": "I'd poke at the free plan, but I won't pay in month one. A cute mascot on my site risks looking like exactly the generic widget I hate, and I'd need proof it lifts sign-ups before adding another subscription.",
+  "objection": "Will it match my brand and design, or will it feel like a bolted-on widget that visitors ignore while I pay monthly for it?",
+  "would_change_my_mind": "Seeing the mascot fully restyled to my brand on my own site (not a stock character), plus a real A/B result from a comparable SaaS showing measurable sign-up lift.",
+  "price_too_cheap": 5,
+  "price_cheap": 19,
+  "price_expensive": 79,
+  "price_too_expensive": 150
+}

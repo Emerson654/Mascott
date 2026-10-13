@@ -1,0 +1,126 @@
+{
+ "n": 100,
+ "seed": 7,
+ "customer": {
+  "business": "Mascott (working name): customisable cute animated AI mascot agents that chat with visitors and act on a website or SaaS",
+  "target": "People who build or run a website or a SaaS and would consider adding an AI chat assistant to it (the 'income' figure is the yearly revenue of the business or activity you run)",
+  "where": "Online, worldwide, mostly Europe and North America, English and French",
+  "age": [
+   22,
+   52
+  ],
+  "segments": [
+   {
+    "name": "Indie hacker / solo SaaS founder",
+    "share": 0.2,
+    "income": [
+     0,
+     120000
+    ]
+   },
+   {
+    "name": "Small SaaS startup team (2-20 people), founder or PM",
+    "share": 0.17,
+    "income": [
+     150000,
+     3000000
+    ]
+   },
+   {
+    "name": "E-commerce store owner (Shopify / WooCommerce)",
+    "share": 0.22,
+    "income": [
+     40000,
+     2000000
+    ]
+   },
+   {
+    "name": "Web agency or freelancer building sites for clients",
+    "share": 0.17,
+    "income": [
+     30000,
+     600000
+    ]
+   },
+   {
+    "name": "Small business / showcase site owner (Wix, WordPress, Webflow)",
+    "share": 0.14,
+    "income": [
+     50000,
+     800000
+    ]
+   },
+   {
+    "name": "Edtech, kids or consumer-app team",
+    "share": 0.1,
+    "income": [
+     50000,
+     2000000
+    ]
+   }
+  ],
+  "behaviours": [
+   {
+    "name": "Already pays for a chatbot and is OK with it",
+    "share": 0.14,
+    "how": "Has Intercom, Crisp or Tidio installed; switching means migration work."
+   },
+   {
+    "name": "Frustrated with their current chatbot",
+    "share": 0.12,
+    "how": "Pays for a bot visitors ignore or that answers badly; open to replacing it."
+   },
+   {
+    "name": "AI tool collector",
+    "share": 0.14,
+    "how": "Tries every new AI tool on Product Hunt, keeps maybe one in ten."
+   },
+   {
+    "name": "Free-tier first",
+    "share": 0.18,
+    "how": "Uses free plans as long as possible, upgrades only when forced by a limit."
+   },
+   {
+    "name": "Conversion optimiser",
+    "share": 0.14,
+    "how": "Only pays for things that move a metric; wants proof, A/B tests everything."
+   },
+   {
+    "name": "Brand and design obsessed",
+    "share": 0.1,
+    "how": "Cares a lot about how the site looks and feels; hates generic widgets."
+   },
+   {
+    "name": "Builds it themselves",
+    "share": 0.1,
+    "how": "Developer at heart; would rather wire an LLM API than pay for a SaaS."
+   },
+   {
+    "name": "AI sceptic",
+    "share": 0.08,
+    "how": "Had bad experiences with bots; worries about wrong answers in front of customers."
+   }
+  ],
+  "objections": [
+   "A cute cartoon mascot would look childish or unprofessional for my brand",
+   "An AI that clicks and acts on my site could do something wrong in front of my customers",
+   "I already have a chatbot, why add or switch?",
+   "Another monthly subscription for something visitors might ignore",
+   "I could build this myself with an LLM API and a weekend",
+   "Will it actually increase sales or sign-ups, or is it a gimmick?",
+   "Will it slow down my site or clash with my design?",
+   "What about GDPR, data privacy and the cost if conversations explode?"
+  ],
+  "habits": [
+   "you check your analytics dashboard every morning",
+   "you hang out on Indie Hackers, X/Twitter or Reddit to discover tools",
+   "you mostly discover new tools by asking ChatGPT or Perplexity for recommendations",
+   "you compare tools on G2 or Capterra before paying",
+   "you install apps from the Shopify App Store or WordPress plugin directory",
+   "you answer customer messages yourself late in the evening",
+   "you build client sites in Webflow or Framer and resell add-ons to clients",
+   "you watch YouTube tutorials about growing an online business"
+  ]
+ },
+ "pitch": "Mascott: an AI guide with a face for your website or app. It answers visitors from your own content and does things for them (finds a product and points at it, adds to cart, fills a form, books a slot, walks a new user through your app).\nWorks alone OR on top of the chat you already have (Intercom, Crisp, Tidio): no migration. Two looks: cute mascot, or a sober \"pro\" character. Script under 30 KB, loads after your page.\nYou stay in control: you choose which actions are allowed, the visitor confirms before anything is submitted or bought, every action is logged, one-click off switch. EU hosting, GDPR data agreement included.\nDone-for-you setup: send your URL, within 24 hours we deliver your mascot trained on your site. Built-in A/B test report shows the lift in sign-ups or sales versus no mascot.\nFree: 100 conversations/month. Starter 19 EUR/month (1,000 conversations). Growth 49 EUR/month (5,000 conversations, all actions, no badge, A/B report). Agency 149 EUR/month (10 client sites, white-label). Hard caps, no surprise bills. Guarantee: no measured lift after 30 days, that month is refunded.\nPanel note: \"buys\" means you would start PAYING (Starter, Growth or Agency) within your first month, not just use the free plan. Give all four price answers in EUR per month, for the plan you would most likely use."
+}

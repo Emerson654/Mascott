@@ -1,0 +1,13 @@
+{
+  "id": "P011",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "Our current chatbot gets ignored and answers badly, and this sits on top of it with no migration, so I can test it without ripping anything out. Growth at 49 EUR is nothing next to our revenue, and the refund if there's no lift makes it low risk.",
+  "objection": "GDPR and what the bot does with our visitors' data, plus whether a bot taking actions on our site can go wrong or blow up the conversation count. The DPA and hard caps help, but I'd still read them before going live.",
+  "would_change_my_mind": "A clear sub-processor list and DPA I can read before signing, and a quick look at a live demo trained on a real SaaS site. If the A/B report looked fake or the trial answers were wrong, I'd drop it.",
+  "price_too_cheap": 9,
+  "price_cheap": 29,
+  "price_expensive": 99,
+  "price_too_expensive": 249
+}
