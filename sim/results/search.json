@@ -1,0 +1,2272 @@
+{
+ "seeds": {
+  "base_seed": 20261013,
+  "offsets": {
+   "iterations": 0,
+   "search": 0,
+   "search_top": 100000,
+   "sensitivity": 200000,
+   "stress": 200000,
+   "timeseries": 300000
+  },
+  "screen": [
+   0,
+   200
+  ],
+  "top": [
+   100000,
+   102000
+  ]
+ },
+ "screened": 791,
+ "top": [
+  {
+   "strategy": {
+    "name": "search",
+    "targets": [
+     "Edtech, kids or consumer-app team"
+    ],
+    "pricing": {
+     "model": "tiered",
+     "free_plan": false,
+     "free_quota": 50,
+     "starter_price": 31.0,
+     "starter_quota": 1000,
+     "pro_price": 76.0,
+     "pro_quota": 5000,
+     "overage_per_100": 2.0,
+     "annual_discount": 0.15,
+     "launch_discount": 0.0,
+     "agency_plan_price": null,
+     "platform_fee": 0.0,
+     "per_resolution_price": 0.0
+    },
+    "hours": {
+     "engineering": 0.353,
+     "seo": 0.076,
+     "geo": 0.03,
+     "outreach": 0.454,
+     "app_store": 0.0,
+     "agency": 0.0,
+     "launches": 0.087
+    },
+    "cs_min_share": 0.15,
+    "prelaunch_marketing_share": 0.4,
+    "paid_ads_per_month": 300.0,
+    "scope": {
+     "platforms": [
+      "js_saas"
+     ],
+     "actions": 2
+    },
+    "style": "cute",
+    "offer": {
+     "done_for_you": true,
+     "guarantee": true,
+     "presell": true
+    },
+    "ltd": {
+     "enabled": false,
+     "price": 59,
+     "week_after_launch": 4
+    },
+    "in_run_adjust": true
+   },
+   "description": "targets=edtech | price=31/76 +overage 2.0/100 annual-15% | hours: engineering 35%, seo 7%, geo 3%, outreach 45%, launches 8% | scope=js_saas/2 actions | DFY setup, guarantee, presell pilots, ads 300/mo, prelaunch mkt 40%",
+   "screen_kpis": {
+    "survival": 0.745,
+    "n": 200
+   },
+   "kpis": {
+    "n": 2000,
+    "survival": 0.757,
+    "passed_m3": 0.757,
+    "death_causes": {
+     "no_traffic": 51,
+     "low_conversion": 286,
+     "price_too_high": 83,
+     "price_too_low": 0,
+     "churn": 25,
+     "cash_burn": 0,
+     "llm_costs": 0,
+     "build_too_long": 41
+    },
+    "mrr_m3": {
+     "p10": 323.1,
+     "p50": 789.0,
+     "p90": 1481.2
+    },
+    "mrr_m6": {
+     "p10": 0.0,
+     "p50": 1692.4,
+     "p90": 3146.0
+    },
+    "mrr_m12": {
+     "p10": 0.0,
+     "p50": 3801.7,
+     "p90": 6871.0
+    },
+    "customers_m3": {
+     "p10": 7.0,
+     "p50": 16.0,
+     "p90": 30.0
+    },
+    "customers_m12": {
+     "p10": 0.0,
+     "p50": 76.0,
+     "p90": 135.0
+    },
+    "cum_revenue": {
+     "p10": 977.5,
+     "p50": 27991.6,
+     "p90": 51555.7
+    },
+    "cash_min": {
+     "p10": 3601.6,
+     "p50": 4260.2,
+     "p90": 4542.6
+    },
+    "build_weeks": {
+     "p10": 8.0,
+     "p50": 12.0,
+     "p90": 17.0
+    },
+    "gross_margin": {
+     "p10": 0.502,
+     "p50": 0.695,
+     "p90": 0.819
+    },
+    "churn_monthly": {
+     "p10": 0.0385,
+     "p50": 0.0571,
+     "p90": 0.1111
+    },
+    "llm_cost": {
+     "p10": 164.0,
+     "p50": 6897.5,
+     "p90": 16115.3
+    },
+    "trials": {
+     "p10": 98.0,
+     "p50": 476.0,
+     "p90": 645.0
+    },
+    "trial_to_paid": 0.2379,
+    "price_lost_share": 0.344,
+    "visitors": {
+     "seo": 5879.6,
+     "geo": 1966.2,
+     "launch": 5237.0,
+     "ads": 1382.2,
+     "badge": 0.0,
+     "referral": 887.1
+    },
+    "segments": {
+     "Indie hacker / solo SaaS founder": {
+      "trials_per_run": 24.35,
+      "paid_per_run": 1.65,
+      "trial_to_paid": 0.0679,
+      "price_lost_share": 0.6183,
+      "mrr_end_per_run": 32.8
+     },
+     "Small SaaS startup team": {
+      "trials_per_run": 13.84,
+      "paid_per_run": 1.03,
+      "trial_to_paid": 0.0746,
+      "price_lost_share": 0.2428,
+      "mrr_end_per_run": 37.8
+     },
+     "E-commerce store owner (Shopify / WooCommerce)": {
+      "trials_per_run": 10.39,
+      "paid_per_run": 0.24,
+      "trial_to_paid": 0.0231,
+      "price_lost_share": 0.4005,
+      "mrr_end_per_run": 7.5
+     },
+     "Web agency or freelancer": {
+      "trials_per_run": 7.67,
+      "paid_per_run": 0.16,
+      "trial_to_paid": 0.0212,
+      "price_lost_share": 0.4227,
+      "mrr_end_per_run": 4.4
+     },
+     "Small business / showcase site": {
+      "trials_per_run": 4.1,
+      "paid_per_run": 0.08,
+      "trial_to_paid": 0.0199,
+      "price_lost_share": 0.4954,
+      "mrr_end_per_run": 1.5
+     },
+     "Edtech, kids or consumer-app team": {
+      "trials_per_run": 363.04,
+      "paid_per_run": 97.56,
+      "trial_to_paid": 0.2687,
+      "price_lost_share": 0.3364,
+      "mrr_end_per_run": 3623.8
+     }
+    },
+    "channels": {
+     "seo": {
+      "paid_per_run": 25.71,
+      "hours_per_paid": 10.2,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 356.8
+     },
+     "geo": {
+      "paid_per_run": 17.52,
+      "hours_per_paid": 5.9,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 206.6
+     },
+     "launch": {
+      "paid_per_run": 1.96,
+      "hours_per_paid": 29.0,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 1016.4
+     },
+     "ads": {
+      "paid_per_run": 3.88,
+      "hours_per_paid": 0.0,
+      "cash_per_paid": 754.2,
+      "cac_eur_incl_hours": 754.2
+     },
+     "referral": {
+      "paid_per_run": 5.42,
+      "hours_per_paid": 0.0,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 0.0
+     },
+     "outreach": {
+      "paid_per_run": 46.23,
+      "hours_per_paid": 35.0,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 1226.7
+     }
+    },
+    "in_run_adjusted_share": 0.2955
+   }
+  },
+  {
+   "strategy": {
+    "name": "search",
+    "targets": [
+     "Edtech, kids or consumer-app team"
+    ],
+    "pricing": {
+     "model": "tiered",
+     "free_plan": false,
+     "free_quota": 50,
+     "starter_price": 39.0,
+     "starter_quota": 1000,
+     "pro_price": 95.0,
+     "pro_quota": 5000,
+     "overage_per_100": 1.0,
+     "annual_discount": 0.17,
+     "launch_discount": 0.0,
+     "agency_plan_price": null,
+     "platform_fee": 0.0,
+     "per_resolution_price": 0.0
+    },
+    "hours": {
+     "engineering": 0.108,
+     "seo": 0.354,
+     "geo": 0.028,
+     "outreach": 0.428,
+     "app_store": 0.0,
+     "agency": 0.0,
+     "launches": 0.082
+    },
+    "cs_min_share": 0.15,
+    "prelaunch_marketing_share": 0.4,
+    "paid_ads_per_month": 0.0,
+    "scope": {
+     "platforms": [
+      "js_saas"
+     ],
+     "actions": 2
+    },
+    "style": "cute_pro",
+    "offer": {
+     "done_for_you": true,
+     "guarantee": true,
+     "presell": true
+    },
+    "ltd": {
+     "enabled": false,
+     "price": 59,
+     "week_after_launch": 4
+    },
+    "in_run_adjust": true
+   },
+   "description": "targets=edtech | price=39/95 +overage 1.0/100 annual-17% | hours: engineering 10%, seo 35%, outreach 42%, launches 8% | scope=js_saas/2 actions | DFY setup, guarantee, presell pilots, pro style, prelaunch mkt 40%",
+   "screen_kpis": {
+    "survival": 0.73,
+    "n": 200
+   },
+   "kpis": {
+    "n": 2000,
+    "survival": 0.7515,
+    "passed_m3": 0.7515,
+    "death_causes": {
+     "no_traffic": 13,
+     "low_conversion": 175,
+     "price_too_high": 164,
+     "price_too_low": 0,
+     "churn": 11,
+     "cash_burn": 0,
+     "llm_costs": 0,
+     "build_too_long": 134
+    },
+    "mrr_m3": {
+     "p10": 265.8,
+     "p50": 803.4,
+     "p90": 1574.6
+    },
+    "mrr_m6": {
+     "p10": 0.0,
+     "p50": 1962.9,
+     "p90": 3824.1
+    },
+    "mrr_m12": {
+     "p10": 0.0,
+     "p50": 4974.6,
+     "p90": 9500.1
+    },
+    "customers_m3": {
+     "p10": 4.0,
+     "p50": 14.0,
+     "p90": 27.0
+    },
+    "customers_m12": {
+     "p10": 0.0,
+     "p50": 84.0,
+     "p90": 162.0
+    },
+    "cum_revenue": {
+     "p10": 721.8,
+     "p50": 36194.9,
+     "p90": 70403.9
+    },
+    "cash_min": {
+     "p10": 4168.6,
+     "p50": 4376.4,
+     "p90": 4575.4
+    },
+    "build_weeks": {
+     "p10": 9.0,
+     "p50": 13.0,
+     "p90": 19.0
+    },
+    "gross_margin": {
+     "p10": 0.539,
+     "p50": 0.729,
+     "p90": 0.84
+    },
+    "churn_monthly": {
+     "p10": 0.0445,
+     "p50": 0.0646,
+     "p90": 0.1111
+    },
+    "llm_cost": {
+     "p10": 80.4,
+     "p50": 7997.7,
+     "p90": 19872.2
+    },
+    "trials": {
+     "p10": 93.0,
+     "p50": 716.0,
+     "p90": 1107.2
+    },
+    "trial_to_paid": 0.1784,
+    "price_lost_share": 0.4252,
+    "visitors": {
+     "seo": 19884.1,
+     "geo": 1876.1,
+     "launch": 5243.4,
+     "ads": 0.0,
+     "badge": 0.0,
+     "referral": 903.4
+    },
+    "segments": {
+     "Indie hacker / solo SaaS founder": {
+      "trials_per_run": 38.15,
+      "paid_per_run": 1.8,
+      "trial_to_paid": 0.0473,
+      "price_lost_share": 0.7236,
+      "mrr_end_per_run": 44.4
+     },
+     "Small SaaS startup team": {
+      "trials_per_run": 21.9,
+      "paid_per_run": 2.04,
+      "trial_to_paid": 0.0932,
+      "price_lost_share": 0.3252,
+      "mrr_end_per_run": 81.3
+     },
+     "E-commerce store owner (Shopify / WooCommerce)": {
+      "trials_per_run": 18.8,
+      "paid_per_run": 0.51,
+      "trial_to_paid": 0.0273,
+      "price_lost_share": 0.4535,
+      "mrr_end_per_run": 19.5
+     },
+     "Web agency or freelancer": {
+      "trials_per_run": 13.22,
+      "paid_per_run": 0.34,
+      "trial_to_paid": 0.0258,
+      "price_lost_share": 0.4926,
+      "mrr_end_per_run": 11.1
+     },
+     "Small business / showcase site": {
+      "trials_per_run": 7.42,
+      "paid_per_run": 0.16,
+      "trial_to_paid": 0.0218,
+      "price_lost_share": 0.5647,
+      "mrr_end_per_run": 4.4
+     },
+     "Edtech, kids or consumer-app team": {
+      "trials_per_run": 563.42,
+      "paid_per_run": 113.37,
+      "trial_to_paid": 0.2012,
+      "price_lost_share": 0.4161,
+      "mrr_end_per_run": 4833.6
+     }
+    },
+    "channels": {
+     "seo": {
+      "paid_per_run": 66.18,
+      "hours_per_paid": 17.1,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 599.6
+     },
+     "geo": {
+      "paid_per_run": 13.13,
+      "hours_per_paid": 6.8,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 239.1
+     },
+     "launch": {
+      "paid_per_run": 1.69,
+      "hours_per_paid": 29.6,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 1037.6
+     },
+     "referral": {
+      "paid_per_run": 4.6,
+      "hours_per_paid": 0.0,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 0.0
+     },
+     "outreach": {
+      "paid_per_run": 32.64,
+      "hours_per_paid": 44.3,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 1550.7
+     }
+    },
+    "in_run_adjusted_share": 0.334
+   }
+  },
+  {
+   "strategy": {
+    "name": "search",
+    "targets": [
+     "Edtech, kids or consumer-app team"
+    ],
+    "pricing": {
+     "model": "tiered",
+     "free_plan": false,
+     "free_quota": 50,
+     "starter_price": 33.0,
+     "starter_quota": 1000,
+     "pro_price": 80.0,
+     "pro_quota": 5000,
+     "overage_per_100": 4.0,
+     "annual_discount": 0.17,
+     "launch_discount": 0.0,
+     "agency_plan_price": null,
+     "platform_fee": 0.0,
+     "per_resolution_price": 0.0
+    },
+    "hours": {
+     "engineering": 0.353,
+     "seo": 0.076,
+     "geo": 0.03,
+     "outreach": 0.454,
+     "app_store": 0.0,
+     "agency": 0.0,
+     "launches": 0.087
+    },
+    "cs_min_share": 0.15,
+    "prelaunch_marketing_share": 0.4,
+    "paid_ads_per_month": 0.0,
+    "scope": {
+     "platforms": [
+      "js_saas"
+     ],
+     "actions": 2
+    },
+    "style": "cute_pro",
+    "offer": {
+     "done_for_you": true,
+     "guarantee": true,
+     "presell": true
+    },
+    "ltd": {
+     "enabled": false,
+     "price": 59,
+     "week_after_launch": 4
+    },
+    "in_run_adjust": true
+   },
+   "description": "targets=edtech | price=33/80 +overage 4.0/100 annual-17% | hours: engineering 35%, seo 7%, geo 3%, outreach 45%, launches 8% | scope=js_saas/2 actions | DFY setup, guarantee, presell pilots, pro style, prelaunch mkt 40%",
+   "screen_kpis": {
+    "survival": 0.72,
+    "n": 200
+   },
+   "kpis": {
+    "n": 2000,
+    "survival": 0.741,
+    "passed_m3": 0.741,
+    "death_causes": {
+     "no_traffic": 57,
+     "low_conversion": 217,
+     "price_too_high": 100,
+     "price_too_low": 0,
+     "churn": 10,
+     "cash_burn": 0,
+     "llm_costs": 0,
+     "build_too_long": 134
+    },
+    "mrr_m3": {
+     "p10": 247.3,
+     "p50": 779.8,
+     "p90": 1556.9
+    },
+    "mrr_m6": {
+     "p10": 0.0,
+     "p50": 1677.4,
+     "p90": 3241.9
+    },
+    "mrr_m12": {
+     "p10": 0.0,
+     "p50": 3783.2,
+     "p90": 6896.4
+    },
+    "customers_m3": {
+     "p10": 5.0,
+     "p50": 15.0,
+     "p90": 30.0
+    },
+    "customers_m12": {
+     "p10": 0.0,
+     "p50": 72.0,
+     "p90": 131.1
+    },
+    "cum_revenue": {
+     "p10": 768.2,
+     "p50": 28537.2,
+     "p90": 52543.9
+    },
+    "cash_min": {
+     "p10": 4168.6,
+     "p50": 4411.1,
+     "p90": 4584.3
+    },
+    "build_weeks": {
+     "p10": 9.0,
+     "p50": 13.0,
+     "p90": 19.0
+    },
+    "gross_margin": {
+     "p10": 0.582,
+     "p50": 0.739,
+     "p90": 0.845
+    },
+    "churn_monthly": {
+     "p10": 0.0365,
+     "p50": 0.0554,
+     "p90": 0.1
+    },
+    "llm_cost": {
+     "p10": 85.4,
+     "p50": 5838.5,
+     "p90": 14001.2
+    },
+    "trials": {
+     "p10": 81.9,
+     "p50": 460.0,
+     "p90": 649.0
+    },
+    "trial_to_paid": 0.232,
+    "price_lost_share": 0.3644,
+    "visitors": {
+     "seo": 6104.1,
+     "geo": 1936.2,
+     "launch": 5040.1,
+     "ads": 0.0,
+     "badge": 0.0,
+     "referral": 842.1
+    },
+    "segments": {
+     "Indie hacker / solo SaaS founder": {
+      "trials_per_run": 24.07,
+      "paid_per_run": 1.5,
+      "trial_to_paid": 0.0623,
+      "price_lost_share": 0.651,
+      "mrr_end_per_run": 31.0
+     },
+     "Small SaaS startup team": {
+      "trials_per_run": 13.52,
+      "paid_per_run": 1.42,
+      "trial_to_paid": 0.1048,
+      "price_lost_share": 0.2642,
+      "mrr_end_per_run": 52.4
+     },
+     "E-commerce store owner (Shopify / WooCommerce)": {
+      "trials_per_run": 10.41,
+      "paid_per_run": 0.31,
+      "trial_to_paid": 0.0302,
+      "price_lost_share": 0.4125,
+      "mrr_end_per_run": 11.0
+     },
+     "Web agency or freelancer": {
+      "trials_per_run": 7.59,
+      "paid_per_run": 0.24,
+      "trial_to_paid": 0.0322,
+      "price_lost_share": 0.4151,
+      "mrr_end_per_run": 7.2
+     },
+     "Small business / showcase site": {
+      "trials_per_run": 4.11,
+      "paid_per_run": 0.11,
+      "trial_to_paid": 0.027,
+      "price_lost_share": 0.5067,
+      "mrr_end_per_run": 2.6
+     },
+     "Edtech, kids or consumer-app team": {
+      "trials_per_run": 347.34,
+      "paid_per_run": 90.83,
+      "trial_to_paid": 0.2615,
+      "price_lost_share": 0.3564,
+      "mrr_end_per_run": 3549.4
+     }
+    },
+    "channels": {
+     "seo": {
+      "paid_per_run": 25.34,
+      "hours_per_paid": 10.6,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 372.2
+     },
+     "geo": {
+      "paid_per_run": 16.91,
+      "hours_per_paid": 6.3,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 220.1
+     },
+     "launch": {
+      "paid_per_run": 2.03,
+      "hours_per_paid": 30.7,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 1075.2
+     },
+     "referral": {
+      "paid_per_run": 5.0,
+      "hours_per_paid": 0.0,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 0.0
+     },
+     "outreach": {
+      "paid_per_run": 45.13,
+      "hours_per_paid": 36.9,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 1289.9
+     }
+    },
+    "in_run_adjusted_share": 0.2585
+   }
+  },
+  {
+   "strategy": {
+    "name": "search",
+    "targets": [
+     "Edtech, kids or consumer-app team"
+    ],
+    "pricing": {
+     "model": "tiered",
+     "free_plan": false,
+     "free_quota": 50,
+     "starter_price": 39.0,
+     "starter_quota": 1000,
+     "pro_price": 95.0,
+     "pro_quota": 5000,
+     "overage_per_100": 0.0,
+     "annual_discount": 0.15,
+     "launch_discount": 0.0,
+     "agency_plan_price": null,
+     "platform_fee": 0.0,
+     "per_resolution_price": 0.0
+    },
+    "hours": {
+     "engineering": 0.343,
+     "seo": 0.048,
+     "geo": 0.029,
+     "outreach": 0.496,
+     "app_store": 0.0,
+     "agency": 0.0,
+     "launches": 0.084
+    },
+    "cs_min_share": 0.15,
+    "prelaunch_marketing_share": 0.4,
+    "paid_ads_per_month": 0.0,
+    "scope": {
+     "platforms": [
+      "js_saas"
+     ],
+     "actions": 2
+    },
+    "style": "cute_pro",
+    "offer": {
+     "done_for_you": true,
+     "guarantee": true,
+     "presell": true
+    },
+    "ltd": {
+     "enabled": false,
+     "price": 59,
+     "week_after_launch": 4
+    },
+    "in_run_adjust": true
+   },
+   "description": "targets=edtech | price=39/95 annual-15% | hours: engineering 34%, seo 4%, outreach 49%, launches 8% | scope=js_saas/2 actions | DFY setup, guarantee, presell pilots, pro style, prelaunch mkt 40%",
+   "screen_kpis": {
+    "survival": 0.75,
+    "n": 200
+   },
+   "kpis": {
+    "n": 2000,
+    "survival": 0.7315,
+    "passed_m3": 0.7315,
+    "death_causes": {
+     "no_traffic": 20,
+     "low_conversion": 182,
+     "price_too_high": 189,
+     "price_too_low": 0,
+     "churn": 12,
+     "cash_burn": 0,
+     "llm_costs": 0,
+     "build_too_long": 134
+    },
+    "mrr_m3": {
+     "p10": 228.9,
+     "p50": 770.5,
+     "p90": 1511.1
+    },
+    "mrr_m6": {
+     "p10": 0.0,
+     "p50": 1545.2,
+     "p90": 3057.7
+    },
+    "mrr_m12": {
+     "p10": 0.0,
+     "p50": 3346.5,
+     "p90": 6302.1
+    },
+    "customers_m3": {
+     "p10": 5.0,
+     "p50": 14.0,
+     "p90": 27.0
+    },
+    "customers_m12": {
+     "p10": 0.0,
+     "p50": 61.0,
+     "p90": 112.1
+    },
+    "cum_revenue": {
+     "p10": 667.6,
+     "p50": 25542.1,
+     "p90": 47977.1
+    },
+    "cash_min": {
+     "p10": 4168.6,
+     "p50": 4418.0,
+     "p90": 4584.3
+    },
+    "build_weeks": {
+     "p10": 9.0,
+     "p50": 13.0,
+     "p90": 19.0
+    },
+    "gross_margin": {
+     "p10": 0.636,
+     "p50": 0.775,
+     "p90": 0.858
+    },
+    "churn_monthly": {
+     "p10": 0.0376,
+     "p50": 0.0577,
+     "p90": 0.1111
+    },
+    "llm_cost": {
+     "p10": 70.4,
+     "p50": 4272.4,
+     "p90": 10602.3
+    },
+    "trials": {
+     "p10": 79.9,
+     "p50": 437.0,
+     "p90": 599.0
+    },
+    "trial_to_paid": 0.2141,
+    "price_lost_share": 0.4243,
+    "visitors": {
+     "seo": 4140.4,
+     "geo": 1907.6,
+     "launch": 5183.9,
+     "ads": 0.0,
+     "badge": 0.0,
+     "referral": 777.9
+    },
+    "segments": {
+     "Indie hacker / solo SaaS founder": {
+      "trials_per_run": 22.06,
+      "paid_per_run": 1.1,
+      "trial_to_paid": 0.0499,
+      "price_lost_share": 0.7228,
+      "mrr_end_per_run": 26.8
+     },
+     "Small SaaS startup team": {
+      "trials_per_run": 12.39,
+      "paid_per_run": 1.2,
+      "trial_to_paid": 0.0969,
+      "price_lost_share": 0.3359,
+      "mrr_end_per_run": 48.9
+     },
+     "E-commerce store owner (Shopify / WooCommerce)": {
+      "trials_per_run": 9.23,
+      "paid_per_run": 0.23,
+      "trial_to_paid": 0.0252,
+      "price_lost_share": 0.5037,
+      "mrr_end_per_run": 8.3
+     },
+     "Web agency or freelancer": {
+      "trials_per_run": 6.88,
+      "paid_per_run": 0.19,
+      "trial_to_paid": 0.0276,
+      "price_lost_share": 0.4844,
+      "mrr_end_per_run": 6.6
+     },
+     "Small business / showcase site": {
+      "trials_per_run": 3.65,
+      "paid_per_run": 0.08,
+      "trial_to_paid": 0.0207,
+      "price_lost_share": 0.5984,
+      "mrr_end_per_run": 2.2
+     },
+     "Edtech, kids or consumer-app team": {
+      "trials_per_run": 327.21,
+      "paid_per_run": 78.88,
+      "trial_to_paid": 0.2411,
+      "price_lost_share": 0.416,
+      "mrr_end_per_run": 3197.9
+     }
+    },
+    "channels": {
+     "seo": {
+      "paid_per_run": 15.75,
+      "hours_per_paid": 10.8,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 377.6
+     },
+     "geo": {
+      "paid_per_run": 14.94,
+      "hours_per_paid": 6.9,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 240.4
+     },
+     "launch": {
+      "paid_per_run": 1.85,
+      "hours_per_paid": 32.5,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 1136.7
+     },
+     "referral": {
+      "paid_per_run": 4.17,
+      "hours_per_paid": 0.0,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 0.0
+     },
+     "outreach": {
+      "paid_per_run": 44.97,
+      "hours_per_paid": 40.4,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 1414.7
+     }
+    },
+    "in_run_adjusted_share": 0.2795
+   }
+  },
+  {
+   "strategy": {
+    "name": "search",
+    "targets": [
+     "Small SaaS startup team"
+    ],
+    "pricing": {
+     "model": "tiered",
+     "free_plan": false,
+     "free_quota": 25,
+     "starter_price": 59.0,
+     "starter_quota": 300,
+     "pro_price": 183.0,
+     "pro_quota": 5000,
+     "overage_per_100": 4.0,
+     "annual_discount": 0.2,
+     "launch_discount": 0.3,
+     "agency_plan_price": null,
+     "platform_fee": 49,
+     "per_resolution_price": 0.08
+    },
+    "hours": {
+     "engineering": 0.078,
+     "seo": 0.255,
+     "geo": 0.01,
+     "outreach": 0.552,
+     "app_store": 0.0,
+     "agency": 0.0,
+     "launches": 0.105
+    },
+    "cs_min_share": 0.03,
+    "prelaunch_marketing_share": 0.4,
+    "paid_ads_per_month": 150,
+    "scope": {
+     "platforms": [
+      "js_saas"
+     ],
+     "actions": 2
+    },
+    "style": "cute_pro",
+    "offer": {
+     "done_for_you": true,
+     "guarantee": false,
+     "presell": false
+    },
+    "ltd": {
+     "enabled": false,
+     "price": 79,
+     "week_after_launch": 2
+    },
+    "in_run_adjust": true
+   },
+   "description": "targets=smallSaaS | price=59/183 +overage 4.0/100 annual-20% early-30% | hours: engineering 7%, seo 25%, outreach 55%, launches 10% | scope=js_saas/2 actions | DFY setup, pro style, ads 150/mo, prelaunch mkt 40%",
+   "screen_kpis": {
+    "survival": 0.715,
+    "n": 200
+   },
+   "kpis": {
+    "n": 2000,
+    "survival": 0.7295,
+    "passed_m3": 0.7295,
+    "death_causes": {
+     "no_traffic": 0,
+     "low_conversion": 264,
+     "price_too_high": 143,
+     "price_too_low": 0,
+     "churn": 0,
+     "cash_burn": 0,
+     "llm_costs": 0,
+     "build_too_long": 134
+    },
+    "mrr_m3": {
+     "p10": 220.2,
+     "p50": 810.6,
+     "p90": 1705.3
+    },
+    "mrr_m6": {
+     "p10": 0.0,
+     "p50": 2247.4,
+     "p90": 4820.6
+    },
+    "mrr_m12": {
+     "p10": 0.0,
+     "p50": 6106.9,
+     "p90": 12478.7
+    },
+    "customers_m3": {
+     "p10": 4.0,
+     "p50": 12.0,
+     "p90": 23.0
+    },
+    "customers_m12": {
+     "p10": 0.0,
+     "p50": 71.0,
+     "p90": 141.0
+    },
+    "cum_revenue": {
+     "p10": 565.3,
+     "p50": 43265.1,
+     "p90": 90019.3
+    },
+    "cash_min": {
+     "p10": 4016.2,
+     "p50": 4224.0,
+     "p90": 4431.9
+    },
+    "build_weeks": {
+     "p10": 9.0,
+     "p50": 13.0,
+     "p90": 19.0
+    },
+    "gross_margin": {
+     "p10": 0.844,
+     "p50": 0.899,
+     "p90": 0.935
+    },
+    "churn_monthly": {
+     "p10": 0.0234,
+     "p50": 0.049,
+     "p90": 0.0878
+    },
+    "llm_cost": {
+     "p10": 26.0,
+     "p50": 2999.0,
+     "p90": 7806.4
+    },
+    "trials": {
+     "p10": 114.0,
+     "p50": 738.0,
+     "p90": 1121.0
+    },
+    "trial_to_paid": 0.1391,
+    "price_lost_share": 0.4999,
+    "visitors": {
+     "seo": 17425.0,
+     "geo": 2163.6,
+     "launch": 5041.3,
+     "ads": 421.6,
+     "badge": 0.0,
+     "referral": 808.3
+    },
+    "segments": {
+     "Indie hacker / solo SaaS founder": {
+      "trials_per_run": 39.34,
+      "paid_per_run": 1.06,
+      "trial_to_paid": 0.027,
+      "price_lost_share": 0.8348,
+      "mrr_end_per_run": 39.3
+     },
+     "Small SaaS startup team": {
+      "trials_per_run": 579.82,
+      "paid_per_run": 90.66,
+      "trial_to_paid": 0.1564,
+      "price_lost_share": 0.4855,
+      "mrr_end_per_run": 6130.3
+     },
+     "E-commerce store owner (Shopify / WooCommerce)": {
+      "trials_per_run": 19.34,
+      "paid_per_run": 0.35,
+      "trial_to_paid": 0.0182,
+      "price_lost_share": 0.6172,
+      "mrr_end_per_run": 20.7
+     },
+     "Web agency or freelancer": {
+      "trials_per_run": 13.22,
+      "paid_per_run": 0.22,
+      "trial_to_paid": 0.0166,
+      "price_lost_share": 0.6669,
+      "mrr_end_per_run": 11.5
+     },
+     "Small business / showcase site": {
+      "trials_per_run": 7.58,
+      "paid_per_run": 0.08,
+      "trial_to_paid": 0.0105,
+      "price_lost_share": 0.7609,
+      "mrr_end_per_run": 3.5
+     },
+     "Edtech, kids or consumer-app team": {
+      "trials_per_run": 8.45,
+      "paid_per_run": 0.52,
+      "trial_to_paid": 0.0615,
+      "price_lost_share": 0.5641,
+      "mrr_end_per_run": 37.9
+     }
+    },
+    "channels": {
+     "seo": {
+      "paid_per_run": 45.27,
+      "hours_per_paid": 18.1,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 633.3
+     },
+     "geo": {
+      "paid_per_run": 11.43,
+      "hours_per_paid": 2.8,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 98.3
+     },
+     "launch": {
+      "paid_per_run": 1.64,
+      "hours_per_paid": 33.7,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 1181.2
+     },
+     "ads": {
+      "paid_per_run": 0.7,
+      "hours_per_paid": 0.0,
+      "cash_per_paid": 2006.8,
+      "cac_eur_incl_hours": 2006.8
+     },
+     "referral": {
+      "paid_per_run": 2.99,
+      "hours_per_paid": 0.0,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 0.0
+     },
+     "outreach": {
+      "paid_per_run": 30.86,
+      "hours_per_paid": 60.9,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 2129.8
+     }
+    },
+    "in_run_adjusted_share": 0.43
+   }
+  },
+  {
+   "strategy": {
+    "name": "search",
+    "targets": [
+     "Edtech, kids or consumer-app team"
+    ],
+    "pricing": {
+     "model": "tiered",
+     "free_plan": false,
+     "free_quota": 50,
+     "starter_price": 46.0,
+     "starter_quota": 1000,
+     "pro_price": 114.0,
+     "pro_quota": 5000,
+     "overage_per_100": 0.0,
+     "annual_discount": 0.17,
+     "launch_discount": 0.0,
+     "agency_plan_price": null,
+     "platform_fee": 0.0,
+     "per_resolution_price": 0.0
+    },
+    "hours": {
+     "engineering": 0.343,
+     "seo": 0.074,
+     "geo": 0.006,
+     "outreach": 0.441,
+     "app_store": 0.0,
+     "agency": 0.0,
+     "launches": 0.136
+    },
+    "cs_min_share": 0.15,
+    "prelaunch_marketing_share": 0.4,
+    "paid_ads_per_month": 300,
+    "scope": {
+     "platforms": [
+      "js_saas"
+     ],
+     "actions": 2
+    },
+    "style": "cute_pro",
+    "offer": {
+     "done_for_you": true,
+     "guarantee": true,
+     "presell": true
+    },
+    "ltd": {
+     "enabled": false,
+     "price": 59,
+     "week_after_launch": 4
+    },
+    "in_run_adjust": true
+   },
+   "description": "targets=edtech | price=46/114 annual-17% | hours: engineering 34%, seo 7%, outreach 44%, launches 13% | scope=js_saas/2 actions | DFY setup, guarantee, presell pilots, pro style, ads 300/mo, prelaunch mkt 40%",
+   "screen_kpis": {
+    "survival": 0.745,
+    "n": 200
+   },
+   "kpis": {
+    "n": 2000,
+    "survival": 0.7245,
+    "passed_m3": 0.7245,
+    "death_causes": {
+     "no_traffic": 10,
+     "low_conversion": 119,
+     "price_too_high": 277,
+     "price_too_low": 0,
+     "churn": 11,
+     "cash_burn": 0,
+     "llm_costs": 0,
+     "build_too_long": 134
+    },
+    "mrr_m3": {
+     "p10": 214.2,
+     "p50": 756.0,
+     "p90": 1504.5
+    },
+    "mrr_m6": {
+     "p10": 0.0,
+     "p50": 1579.2,
+     "p90": 3108.7
+    },
+    "mrr_m12": {
+     "p10": 0.0,
+     "p50": 3541.8,
+     "p90": 6787.3
+    },
+    "customers_m3": {
+     "p10": 4.0,
+     "p50": 12.0,
+     "p90": 24.0
+    },
+    "customers_m12": {
+     "p10": 0.0,
+     "p50": 56.0,
+     "p90": 105.0
+    },
+    "cum_revenue": {
+     "p10": 607.8,
+     "p50": 26974.3,
+     "p90": 51370.3
+    },
+    "cash_min": {
+     "p10": 3716.9,
+     "p50": 4231.4,
+     "p90": 4501.1
+    },
+    "build_weeks": {
+     "p10": 9.0,
+     "p50": 13.0,
+     "p90": 19.0
+    },
+    "gross_margin": {
+     "p10": 0.687,
+     "p50": 0.807,
+     "p90": 0.878
+    },
+    "churn_monthly": {
+     "p10": 0.0343,
+     "p50": 0.0569,
+     "p90": 0.1111
+    },
+    "llm_cost": {
+     "p10": 58.7,
+     "p50": 3779.3,
+     "p90": 9003.8
+    },
+    "trials": {
+     "p10": 84.0,
+     "p50": 463.0,
+     "p90": 643.1
+    },
+    "trial_to_paid": 0.1857,
+    "price_lost_share": 0.4868,
+    "visitors": {
+     "seo": 5866.2,
+     "geo": 1521.4,
+     "launch": 5037.8,
+     "ads": 1320.2,
+     "badge": 0.0,
+     "referral": 734.0
+    },
+    "segments": {
+     "Indie hacker / solo SaaS founder": {
+      "trials_per_run": 22.73,
+      "paid_per_run": 0.85,
+      "trial_to_paid": 0.0372,
+      "price_lost_share": 0.7925,
+      "mrr_end_per_run": 24.4
+     },
+     "Small SaaS startup team": {
+      "trials_per_run": 12.74,
+      "paid_per_run": 1.12,
+      "trial_to_paid": 0.0878,
+      "price_lost_share": 0.3922,
+      "mrr_end_per_run": 51.2
+     },
+     "E-commerce store owner (Shopify / WooCommerce)": {
+      "trials_per_run": 9.81,
+      "paid_per_run": 0.23,
+      "trial_to_paid": 0.0229,
+      "price_lost_share": 0.561,
+      "mrr_end_per_run": 9.4
+     },
+     "Web agency or freelancer": {
+      "trials_per_run": 7.21,
+      "paid_per_run": 0.16,
+      "trial_to_paid": 0.0219,
+      "price_lost_share": 0.5659,
+      "mrr_end_per_run": 6.3
+     },
+     "Small business / showcase site": {
+      "trials_per_run": 3.85,
+      "paid_per_run": 0.07,
+      "trial_to_paid": 0.0179,
+      "price_lost_share": 0.6683,
+      "mrr_end_per_run": 2.3
+     },
+     "Edtech, kids or consumer-app team": {
+      "trials_per_run": 346.69,
+      "paid_per_run": 72.42,
+      "trial_to_paid": 0.2089,
+      "price_lost_share": 0.4783,
+      "mrr_end_per_run": 3383.8
+     }
+    },
+    "channels": {
+     "seo": {
+      "paid_per_run": 19.68,
+      "hours_per_paid": 13.6,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 476.4
+     },
+     "geo": {
+      "paid_per_run": 10.54,
+      "hours_per_paid": 2.1,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 72.1
+     },
+     "launch": {
+      "paid_per_run": 1.52,
+      "hours_per_paid": 61.6,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 2154.4
+     },
+     "ads": {
+      "paid_per_run": 2.86,
+      "hours_per_paid": 0.0,
+      "cash_per_paid": 979.0,
+      "cac_eur_incl_hours": 979.0
+     },
+     "referral": {
+      "paid_per_run": 3.46,
+      "hours_per_paid": 0.0,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 0.0
+     },
+     "outreach": {
+      "paid_per_run": 36.77,
+      "hours_per_paid": 45.1,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 1577.9
+     }
+    },
+    "in_run_adjusted_share": 0.279
+   }
+  },
+  {
+   "strategy": {
+    "name": "search",
+    "targets": [
+     "Edtech, kids or consumer-app team"
+    ],
+    "pricing": {
+     "model": "tiered",
+     "free_plan": false,
+     "free_quota": 50,
+     "starter_price": 39.0,
+     "starter_quota": 1000,
+     "pro_price": 95.0,
+     "pro_quota": 5000,
+     "overage_per_100": 0.0,
+     "annual_discount": 0.15,
+     "launch_discount": 0.0,
+     "agency_plan_price": null,
+     "platform_fee": 0.0,
+     "per_resolution_price": 0.0
+    },
+    "hours": {
+     "engineering": 0.353,
+     "seo": 0.076,
+     "geo": 0.03,
+     "outreach": 0.454,
+     "app_store": 0.0,
+     "agency": 0.0,
+     "launches": 0.087
+    },
+    "cs_min_share": 0.15,
+    "prelaunch_marketing_share": 0.4,
+    "paid_ads_per_month": 0.0,
+    "scope": {
+     "platforms": [
+      "js_saas"
+     ],
+     "actions": 2
+    },
+    "style": "cute_pro",
+    "offer": {
+     "done_for_you": true,
+     "guarantee": true,
+     "presell": true
+    },
+    "ltd": {
+     "enabled": false,
+     "price": 59,
+     "week_after_launch": 4
+    },
+    "in_run_adjust": true
+   },
+   "description": "targets=edtech | price=39/95 annual-15% | hours: engineering 35%, seo 7%, geo 3%, outreach 45%, launches 8% | scope=js_saas/2 actions | DFY setup, guarantee, presell pilots, pro style, prelaunch mkt 40%",
+   "screen_kpis": {
+    "survival": 0.73,
+    "n": 200
+   },
+   "kpis": {
+    "n": 2000,
+    "survival": 0.7235,
+    "passed_m3": 0.7235,
+    "death_causes": {
+     "no_traffic": 25,
+     "low_conversion": 193,
+     "price_too_high": 185,
+     "price_too_low": 0,
+     "churn": 16,
+     "cash_burn": 0,
+     "llm_costs": 0,
+     "build_too_long": 134
+    },
+    "mrr_m3": {
+     "p10": 221.1,
+     "p50": 741.2,
+     "p90": 1482.2
+    },
+    "mrr_m6": {
+     "p10": 0.0,
+     "p50": 1556.5,
+     "p90": 3032.5
+    },
+    "mrr_m12": {
+     "p10": 0.0,
+     "p50": 3471.6,
+     "p90": 6552.6
+    },
+    "customers_m3": {
+     "p10": 4.0,
+     "p50": 14.0,
+     "p90": 27.0
+    },
+    "customers_m12": {
+     "p10": 0.0,
+     "p50": 63.0,
+     "p90": 117.0
+    },
+    "cum_revenue": {
+     "p10": 636.1,
+     "p50": 25988.5,
+     "p90": 48367.2
+    },
+    "cash_min": {
+     "p10": 4168.6,
+     "p50": 4412.9,
+     "p90": 4584.3
+    },
+    "build_weeks": {
+     "p10": 9.0,
+     "p50": 13.0,
+     "p90": 19.0
+    },
+    "gross_margin": {
+     "p10": 0.637,
+     "p50": 0.775,
+     "p90": 0.861
+    },
+    "churn_monthly": {
+     "p10": 0.0377,
+     "p50": 0.0579,
+     "p90": 0.12
+    },
+    "llm_cost": {
+     "p10": 70.3,
+     "p50": 4379.0,
+     "p90": 10521.8
+    },
+    "trials": {
+     "p10": 83.0,
+     "p50": 455.0,
+     "p90": 646.0
+    },
+    "trial_to_paid": 0.2106,
+    "price_lost_share": 0.4257,
+    "visitors": {
+     "seo": 5994.0,
+     "geo": 1901.3,
+     "launch": 4898.7,
+     "ads": 0.0,
+     "badge": 0.0,
+     "referral": 782.4
+    },
+    "segments": {
+     "Indie hacker / solo SaaS founder": {
+      "trials_per_run": 23.52,
+      "paid_per_run": 1.2,
+      "trial_to_paid": 0.0508,
+      "price_lost_share": 0.7191,
+      "mrr_end_per_run": 29.1
+     },
+     "Small SaaS startup team": {
+      "trials_per_run": 13.33,
+      "paid_per_run": 1.33,
+      "trial_to_paid": 0.0994,
+      "price_lost_share": 0.3344,
+      "mrr_end_per_run": 53.0
+     },
+     "E-commerce store owner (Shopify / WooCommerce)": {
+      "trials_per_run": 10.12,
+      "paid_per_run": 0.28,
+      "trial_to_paid": 0.0278,
+      "price_lost_share": 0.4797,
+      "mrr_end_per_run": 10.0
+     },
+     "Web agency or freelancer": {
+      "trials_per_run": 7.4,
+      "paid_per_run": 0.2,
+      "trial_to_paid": 0.0277,
+      "price_lost_share": 0.5012,
+      "mrr_end_per_run": 6.8
+     },
+     "Small business / showcase site": {
+      "trials_per_run": 3.82,
+      "paid_per_run": 0.08,
+      "trial_to_paid": 0.0207,
+      "price_lost_share": 0.5842,
+      "mrr_end_per_run": 2.2
+     },
+     "Edtech, kids or consumer-app team": {
+      "trials_per_run": 342.83,
+      "paid_per_run": 81.35,
+      "trial_to_paid": 0.2373,
+      "price_lost_share": 0.4174,
+      "mrr_end_per_run": 3314.3
+     }
+    },
+    "channels": {
+     "seo": {
+      "paid_per_run": 22.75,
+      "hours_per_paid": 11.8,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 411.3
+     },
+     "geo": {
+      "paid_per_run": 14.72,
+      "hours_per_paid": 7.2,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 251.0
+     },
+     "launch": {
+      "paid_per_run": 1.73,
+      "hours_per_paid": 36.2,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 1266.5
+     },
+     "referral": {
+      "paid_per_run": 4.23,
+      "hours_per_paid": 0.0,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 0.0
+     },
+     "outreach": {
+      "paid_per_run": 41.01,
+      "hours_per_paid": 40.4,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 1415.1
+     }
+    },
+    "in_run_adjusted_share": 0.2745
+   }
+  },
+  {
+   "strategy": {
+    "name": "search",
+    "targets": [
+     "Small SaaS startup team"
+    ],
+    "pricing": {
+     "model": "tiered",
+     "free_plan": false,
+     "free_quota": 25,
+     "starter_price": 59.0,
+     "starter_quota": 300,
+     "pro_price": 183.0,
+     "pro_quota": 5000,
+     "overage_per_100": 4.0,
+     "annual_discount": 0.2,
+     "launch_discount": 0.3,
+     "agency_plan_price": null,
+     "platform_fee": 49,
+     "per_resolution_price": 0.08
+    },
+    "hours": {
+     "engineering": 0.08,
+     "seo": 0.263,
+     "geo": 0.018,
+     "outreach": 0.568,
+     "app_store": 0.0,
+     "agency": 0.0,
+     "launches": 0.071
+    },
+    "cs_min_share": 0.03,
+    "prelaunch_marketing_share": 0.4,
+    "paid_ads_per_month": 150,
+    "scope": {
+     "platforms": [
+      "js_saas"
+     ],
+     "actions": 2
+    },
+    "style": "cute_pro",
+    "offer": {
+     "done_for_you": true,
+     "guarantee": false,
+     "presell": false
+    },
+    "ltd": {
+     "enabled": false,
+     "price": 79,
+     "week_after_launch": 2
+    },
+    "in_run_adjust": true
+   },
+   "description": "targets=smallSaaS | price=59/183 +overage 4.0/100 annual-20% early-30% | hours: engineering 8%, seo 26%, outreach 56%, launches 7% | scope=js_saas/2 actions | DFY setup, pro style, ads 150/mo, prelaunch mkt 40%",
+   "screen_kpis": {
+    "survival": 0.73,
+    "n": 200
+   },
+   "kpis": {
+    "n": 2000,
+    "survival": 0.7195,
+    "passed_m3": 0.7195,
+    "death_causes": {
+     "no_traffic": 0,
+     "low_conversion": 272,
+     "price_too_high": 155,
+     "price_too_low": 0,
+     "churn": 0,
+     "cash_burn": 0,
+     "llm_costs": 0,
+     "build_too_long": 134
+    },
+    "mrr_m3": {
+     "p10": 242.6,
+     "p50": 786.9,
+     "p90": 1690.7
+    },
+    "mrr_m6": {
+     "p10": 0.0,
+     "p50": 2118.5,
+     "p90": 4802.9
+    },
+    "mrr_m12": {
+     "p10": 0.0,
+     "p50": 6044.9,
+     "p90": 12410.7
+    },
+    "customers_m3": {
+     "p10": 4.0,
+     "p50": 11.0,
+     "p90": 24.0
+    },
+    "customers_m12": {
+     "p10": 0.0,
+     "p50": 69.5,
+     "p90": 139.1
+    },
+    "cum_revenue": {
+     "p10": 559.9,
+     "p50": 42802.5,
+     "p90": 89336.6
+    },
+    "cash_min": {
+     "p10": 4001.2,
+     "p50": 4224.0,
+     "p90": 4431.9
+    },
+    "build_weeks": {
+     "p10": 9.0,
+     "p50": 13.0,
+     "p90": 19.0
+    },
+    "gross_margin": {
+     "p10": 0.844,
+     "p50": 0.9,
+     "p90": 0.936
+    },
+    "churn_monthly": {
+     "p10": 0.0231,
+     "p50": 0.0494,
+     "p90": 0.0876
+    },
+    "llm_cost": {
+     "p10": 25.4,
+     "p50": 2908.1,
+     "p90": 7622.8
+    },
+    "trials": {
+     "p10": 111.0,
+     "p50": 729.0,
+     "p90": 1139.0
+    },
+    "trial_to_paid": 0.1391,
+    "price_lost_share": 0.4994,
+    "visitors": {
+     "seo": 17250.1,
+     "geo": 2228.2,
+     "launch": 4939.8,
+     "ads": 417.7,
+     "badge": 0.0,
+     "referral": 802.8
+    },
+    "segments": {
+     "Indie hacker / solo SaaS founder": {
+      "trials_per_run": 39.32,
+      "paid_per_run": 1.04,
+      "trial_to_paid": 0.0264,
+      "price_lost_share": 0.8394,
+      "mrr_end_per_run": 37.6
+     },
+     "Small SaaS startup team": {
+      "trials_per_run": 574.79,
+      "paid_per_run": 89.99,
+      "trial_to_paid": 0.1566,
+      "price_lost_share": 0.4844,
+      "mrr_end_per_run": 6087.3
+     },
+     "E-commerce store owner (Shopify / WooCommerce)": {
+      "trials_per_run": 19.27,
+      "paid_per_run": 0.32,
+      "trial_to_paid": 0.0165,
+      "price_lost_share": 0.6478,
+      "mrr_end_per_run": 21.3
+     },
+     "Web agency or freelancer": {
+      "trials_per_run": 13.29,
+      "paid_per_run": 0.22,
+      "trial_to_paid": 0.0162,
+      "price_lost_share": 0.6779,
+      "mrr_end_per_run": 11.0
+     },
+     "Small business / showcase site": {
+      "trials_per_run": 7.43,
+      "paid_per_run": 0.1,
+      "trial_to_paid": 0.0131,
+      "price_lost_share": 0.7229,
+      "mrr_end_per_run": 4.4
+     },
+     "Edtech, kids or consumer-app team": {
+      "trials_per_run": 8.46,
+      "paid_per_run": 0.51,
+      "trial_to_paid": 0.0599,
+      "price_lost_share": 0.5793,
+      "mrr_end_per_run": 36.1
+     }
+    },
+    "channels": {
+     "seo": {
+      "paid_per_run": 44.55,
+      "hours_per_paid": 18.1,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 634.2
+     },
+     "geo": {
+      "paid_per_run": 11.89,
+      "hours_per_paid": 4.6,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 162.7
+     },
+     "launch": {
+      "paid_per_run": 1.61,
+      "hours_per_paid": 29.9,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 1048.1
+     },
+     "ads": {
+      "paid_per_run": 0.66,
+      "hours_per_paid": 0.0,
+      "cash_per_paid": 2104.7,
+      "cac_eur_incl_hours": 2104.7
+     },
+     "referral": {
+      "paid_per_run": 2.99,
+      "hours_per_paid": 0.0,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 0.0
+     },
+     "outreach": {
+      "paid_per_run": 30.46,
+      "hours_per_paid": 60.9,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 2130.9
+     }
+    },
+    "in_run_adjusted_share": 0.4545
+   }
+  },
+  {
+   "strategy": {
+    "name": "search",
+    "targets": [
+     "Small SaaS startup team"
+    ],
+    "pricing": {
+     "model": "tiered",
+     "free_plan": false,
+     "free_quota": 25,
+     "starter_price": 59.0,
+     "starter_quota": 150,
+     "pro_price": 183.0,
+     "pro_quota": 2500,
+     "overage_per_100": 4.0,
+     "annual_discount": 0.2,
+     "launch_discount": 0.3,
+     "agency_plan_price": null,
+     "platform_fee": 49,
+     "per_resolution_price": 0.08
+    },
+    "hours": {
+     "engineering": 0.08,
+     "seo": 0.254,
+     "geo": 0.017,
+     "outreach": 0.551,
+     "app_store": 0.06,
+     "agency": 0.0,
+     "launches": 0.038
+    },
+    "cs_min_share": 0.03,
+    "prelaunch_marketing_share": 0.4,
+    "paid_ads_per_month": 150,
+    "scope": {
+     "platforms": [
+      "js_saas"
+     ],
+     "actions": 2
+    },
+    "style": "cute_pro",
+    "offer": {
+     "done_for_you": true,
+     "guarantee": false,
+     "presell": false
+    },
+    "ltd": {
+     "enabled": false,
+     "price": 79,
+     "week_after_launch": 2
+    },
+    "in_run_adjust": true
+   },
+   "description": "targets=smallSaaS | price=59/183 +overage 4.0/100 annual-20% early-30% | hours: engineering 8%, seo 25%, outreach 55%, app_store 6%, launches 3% | scope=js_saas/2 actions | DFY setup, pro style, ads 150/mo, prelaunch mkt 40%",
+   "screen_kpis": {
+    "survival": 0.73,
+    "n": 200
+   },
+   "kpis": {
+    "n": 2000,
+    "survival": 0.6845,
+    "passed_m3": 0.6845,
+    "death_causes": {
+     "no_traffic": 1,
+     "low_conversion": 313,
+     "price_too_high": 182,
+     "price_too_low": 1,
+     "churn": 0,
+     "cash_burn": 0,
+     "llm_costs": 0,
+     "build_too_long": 134
+    },
+    "mrr_m3": {
+     "p10": 196.9,
+     "p50": 743.2,
+     "p90": 1629.8
+    },
+    "mrr_m6": {
+     "p10": 0.0,
+     "p50": 2117.8,
+     "p90": 4733.4
+    },
+    "mrr_m12": {
+     "p10": 0.0,
+     "p50": 6168.1,
+     "p90": 12867.6
+    },
+    "customers_m3": {
+     "p10": 3.0,
+     "p50": 10.0,
+     "p90": 21.0
+    },
+    "customers_m12": {
+     "p10": 0.0,
+     "p50": 67.0,
+     "p90": 137.0
+    },
+    "cum_revenue": {
+     "p10": 486.6,
+     "p50": 42986.8,
+     "p90": 91583.9
+    },
+    "cash_min": {
+     "p10": 3970.2,
+     "p50": 4207.8,
+     "p90": 4419.0
+    },
+    "build_weeks": {
+     "p10": 9.0,
+     "p50": 13.0,
+     "p90": 19.0
+    },
+    "gross_margin": {
+     "p10": 0.859,
+     "p50": 0.909,
+     "p90": 0.94
+    },
+    "churn_monthly": {
+     "p10": 0.0,
+     "p50": 0.0486,
+     "p90": 0.0909
+    },
+    "llm_cost": {
+     "p10": 20.9,
+     "p50": 2417.5,
+     "p90": 7101.5
+    },
+    "trials": {
+     "p10": 98.0,
+     "p50": 697.0,
+     "p90": 1089.0
+    },
+    "trial_to_paid": 0.1405,
+    "price_lost_share": 0.5,
+    "visitors": {
+     "seo": 16048.4,
+     "geo": 1863.3,
+     "launch": 4916.6,
+     "ads": 402.9,
+     "badge": 0.0,
+     "referral": 768.2
+    },
+    "segments": {
+     "Indie hacker / solo SaaS founder": {
+      "trials_per_run": 36.52,
+      "paid_per_run": 0.98,
+      "trial_to_paid": 0.0268,
+      "price_lost_share": 0.8369,
+      "mrr_end_per_run": 36.7
+     },
+     "Small SaaS startup team": {
+      "trials_per_run": 537.73,
+      "paid_per_run": 85.03,
+      "trial_to_paid": 0.1581,
+      "price_lost_share": 0.4854,
+      "mrr_end_per_run": 6095.3
+     },
+     "E-commerce store owner (Shopify / WooCommerce)": {
+      "trials_per_run": 17.91,
+      "paid_per_run": 0.31,
+      "trial_to_paid": 0.0171,
+      "price_lost_share": 0.6334,
+      "mrr_end_per_run": 19.8
+     },
+     "Web agency or freelancer": {
+      "trials_per_run": 12.52,
+      "paid_per_run": 0.19,
+      "trial_to_paid": 0.0149,
+      "price_lost_share": 0.6948,
+      "mrr_end_per_run": 10.2
+     },
+     "Small business / showcase site": {
+      "trials_per_run": 7.04,
+      "paid_per_run": 0.09,
+      "trial_to_paid": 0.0127,
+      "price_lost_share": 0.7436,
+      "mrr_end_per_run": 3.9
+     },
+     "Edtech, kids or consumer-app team": {
+      "trials_per_run": 7.82,
+      "paid_per_run": 0.46,
+      "trial_to_paid": 0.0592,
+      "price_lost_share": 0.5663,
+      "mrr_end_per_run": 34.1
+     }
+    },
+    "channels": {
+     "seo": {
+      "paid_per_run": 42.1,
+      "hours_per_paid": 18.5,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 645.9
+     },
+     "geo": {
+      "paid_per_run": 10.28,
+      "hours_per_paid": 5.1,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 176.9
+     },
+     "launch": {
+      "paid_per_run": 1.62,
+      "hours_per_paid": 28.8,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 1009.3
+     },
+     "ads": {
+      "paid_per_run": 0.68,
+      "hours_per_paid": 0.0,
+      "cash_per_paid": 1983.7,
+      "cac_eur_incl_hours": 1983.7
+     },
+     "referral": {
+      "paid_per_run": 2.87,
+      "hours_per_paid": 0.0,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 0.0
+     },
+     "outreach": {
+      "paid_per_run": 29.51,
+      "hours_per_paid": 60.9,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 2130.3
+     },
+     "app_store": {
+      "paid_per_run": 0.0,
+      "hours_per_paid": null,
+      "cash_per_paid": null,
+      "cac_eur_incl_hours": null
+     }
+    },
+    "in_run_adjusted_share": 0.5115
+   }
+  },
+  {
+   "strategy": {
+    "name": "search",
+    "targets": [
+     "Small SaaS startup team"
+    ],
+    "pricing": {
+     "model": "tiered",
+     "free_plan": false,
+     "free_quota": 25,
+     "starter_price": 59.0,
+     "starter_quota": 300,
+     "pro_price": 183.0,
+     "pro_quota": 5000,
+     "overage_per_100": 4.0,
+     "annual_discount": 0.2,
+     "launch_discount": 0.3,
+     "agency_plan_price": null,
+     "platform_fee": 49,
+     "per_resolution_price": 0.08
+    },
+    "hours": {
+     "engineering": 0.077,
+     "seo": 0.255,
+     "geo": 0.017,
+     "outreach": 0.552,
+     "app_store": 0.06,
+     "agency": 0.0,
+     "launches": 0.038
+    },
+    "cs_min_share": 0.03,
+    "prelaunch_marketing_share": 0.4,
+    "paid_ads_per_month": 150,
+    "scope": {
+     "platforms": [
+      "js_saas"
+     ],
+     "actions": 2
+    },
+    "style": "cute_pro",
+    "offer": {
+     "done_for_you": true,
+     "guarantee": false,
+     "presell": false
+    },
+    "ltd": {
+     "enabled": false,
+     "price": 79,
+     "week_after_launch": 2
+    },
+    "in_run_adjust": true
+   },
+   "description": "targets=smallSaaS | price=59/183 +overage 4.0/100 annual-20% early-30% | hours: engineering 7%, seo 25%, outreach 55%, app_store 6%, launches 3% | scope=js_saas/2 actions | DFY setup, pro style, ads 150/mo, prelaunch mkt 40%",
+   "screen_kpis": {
+    "survival": 0.725,
+    "n": 200
+   },
+   "kpis": {
+    "n": 2000,
+    "survival": 0.6695,
+    "passed_m3": 0.6695,
+    "death_causes": {
+     "no_traffic": 1,
+     "low_conversion": 343,
+     "price_too_high": 179,
+     "price_too_low": 3,
+     "churn": 1,
+     "cash_burn": 0,
+     "llm_costs": 0,
+     "build_too_long": 134
+    },
+    "mrr_m3": {
+     "p10": 192.7,
+     "p50": 700.5,
+     "p90": 1518.1
+    },
+    "mrr_m6": {
+     "p10": 0.0,
+     "p50": 2032.8,
+     "p90": 4546.2
+    },
+    "mrr_m12": {
+     "p10": 0.0,
+     "p50": 5632.5,
+     "p90": 12405.8
+    },
+    "customers_m3": {
+     "p10": 3.0,
+     "p50": 10.0,
+     "p90": 22.0
+    },
+    "customers_m12": {
+     "p10": 0.0,
+     "p50": 66.0,
+     "p90": 140.0
+    },
+    "cum_revenue": {
+     "p10": 466.5,
+     "p50": 40274.2,
+     "p90": 87298.4
+    },
+    "cash_min": {
+     "p10": 3955.0,
+     "p50": 4189.0,
+     "p90": 4404.2
+    },
+    "build_weeks": {
+     "p10": 9.0,
+     "p50": 13.0,
+     "p90": 19.0
+    },
+    "gross_margin": {
+     "p10": 0.844,
+     "p50": 0.902,
+     "p90": 0.937
+    },
+    "churn_monthly": {
+     "p10": 0.0,
+     "p50": 0.0487,
+     "p90": 0.0909
+    },
+    "llm_cost": {
+     "p10": 21.2,
+     "p50": 2579.8,
+     "p90": 7453.2
+    },
+    "trials": {
+     "p10": 98.0,
+     "p50": 691.0,
+     "p90": 1087.3
+    },
+    "trial_to_paid": 0.1404,
+    "price_lost_share": 0.4998,
+    "visitors": {
+     "seo": 15781.5,
+     "geo": 1834.0,
+     "launch": 4910.6,
+     "ads": 397.1,
+     "badge": 0.0,
+     "referral": 762.7
+    },
+    "segments": {
+     "Indie hacker / solo SaaS founder": {
+      "trials_per_run": 36.14,
+      "paid_per_run": 0.92,
+      "trial_to_paid": 0.0254,
+      "price_lost_share": 0.8446,
+      "mrr_end_per_run": 34.8
+     },
+     "Small SaaS startup team": {
+      "trials_per_run": 530.66,
+      "paid_per_run": 83.92,
+      "trial_to_paid": 0.1581,
+      "price_lost_share": 0.4852,
+      "mrr_end_per_run": 5722.8
+     },
+     "E-commerce store owner (Shopify / WooCommerce)": {
+      "trials_per_run": 17.68,
+      "paid_per_run": 0.3,
+      "trial_to_paid": 0.0173,
+      "price_lost_share": 0.6305,
+      "mrr_end_per_run": 18.9
+     },
+     "Web agency or freelancer": {
+      "trials_per_run": 12.27,
+      "paid_per_run": 0.2,
+      "trial_to_paid": 0.0163,
+      "price_lost_share": 0.6683,
+      "mrr_end_per_run": 10.6
+     },
+     "Small business / showcase site": {
+      "trials_per_run": 7.07,
+      "paid_per_run": 0.09,
+      "trial_to_paid": 0.0124,
+      "price_lost_share": 0.7369,
+      "mrr_end_per_run": 3.8
+     },
+     "Edtech, kids or consumer-app team": {
+      "trials_per_run": 7.86,
+      "paid_per_run": 0.48,
+      "trial_to_paid": 0.0608,
+      "price_lost_share": 0.5535,
+      "mrr_end_per_run": 34.4
+     }
+    },
+    "channels": {
+     "seo": {
+      "paid_per_run": 41.44,
+      "hours_per_paid": 18.6,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 649.5
+     },
+     "geo": {
+      "paid_per_run": 10.17,
+      "hours_per_paid": 5.0,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 176.4
+     },
+     "launch": {
+      "paid_per_run": 1.59,
+      "hours_per_paid": 29.3,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 1025.3
+     },
+     "ads": {
+      "paid_per_run": 0.64,
+      "hours_per_paid": 0.0,
+      "cash_per_paid": 2060.2,
+      "cac_eur_incl_hours": 2060.2
+     },
+     "referral": {
+      "paid_per_run": 2.88,
+      "hours_per_paid": 0.0,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 0.0
+     },
+     "outreach": {
+      "paid_per_run": 29.18,
+      "hours_per_paid": 60.9,
+      "cash_per_paid": 0.0,
+      "cac_eur_incl_hours": 2132.6
+     },
+     "app_store": {
+      "paid_per_run": 0.0,
+      "hours_per_paid": null,
+      "cash_per_paid": null,
+      "cac_eur_incl_hours": null
+     }
+    },
+    "in_run_adjusted_share": 0.5165
+   }
+  }
+ ]
+}
