@@ -1,0 +1,13 @@
+{
+  "id": "P016",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "My Intercom/Tidio setup is fine and nothing is on fire. I'd maybe test the free plan, but I wouldn't start paying within a month for a tool I can't find reviews of on G2 or Capterra.",
+  "objection": "Is it worth the risk of a bot adding to cart or filling forms on my live store, and what happens to costs and customer data if conversations explode? The GDPR agreement and hard caps help, but I have no independent proof it lifts sales.",
+  "would_change_my_mind": "A free-plan A/B test on my own store showing a measurable lift in sales, plus G2/Capterra reviews from other store owners.",
+  "price_too_cheap": 9,
+  "price_cheap": 29,
+  "price_expensive": 79,
+  "price_too_expensive": 200
+}
