@@ -1,0 +1,290 @@
+<title>Mascott, simulation à 6 mois</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column (verdict first), with wide tables and the chart scrolling inside their own boxes. */
+:root{
+  --bg:#f4f6fb; --surface:#ffffff; --ink:#1b2140; --muted:#5b6385; --line:#dde2f0;
+  --accent:#3d5afe; --accent-soft:#e6eaff; --sun:#ffcf5a; --sun-soft:#fff4d6;
+  --good:#1f8a5b; --good-soft:#e2f5ec; --bad:#c2410c; --bad-soft:#fdeadf;
+  --f-display:"Fredoka","Trebuchet MS",system-ui,sans-serif;
+  --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12152a; --surface:#1b1f3a; --ink:#eef0fb; --muted:#a3aad0; --line:#2e3460;
+  --accent:#8c9dff; --accent-soft:#262d5c; --sun:#ffd36e; --sun-soft:#3a3320;
+  --good:#5fd39c; --good-soft:#163a2c; --bad:#ff9a6b; --bad-soft:#3f2418; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12152a; --surface:#1b1f3a; --ink:#eef0fb; --muted:#a3aad0; --line:#2e3460;
+  --accent:#8c9dff; --accent-soft:#262d5c; --sun:#ffd36e; --sun-soft:#3a3320;
+  --good:#5fd39c; --good-soft:#163a2c; --bad:#ff9a6b; --bad-soft:#3f2418; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;padding-inline:16px;padding-block:32px 64px}
+.wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:56px}
+h1,h2,h3{font-family:var(--f-display);font-weight:600;line-height:1.15;text-wrap:balance;margin:0}
+h1{font-size:clamp(2rem,5vw,3rem)}
+h2{font-size:1.7rem}
+h3{font-size:1.15rem}
+p{margin:0;max-width:68ch}
+section{display:flex;flex-direction:column;gap:18px}
+.eyebrow{font-family:var(--f-mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+a{color:var(--accent)}
+/* hero */
+.hero{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center}
+.hero svg{width:120px;height:auto}
+.verdict{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:14px}
+.pill{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:.9rem;border-radius:999px;padding:4px 12px;width:fit-content}
+.pill.warn{background:var(--sun-soft);color:var(--ink)}
+.pill.good{background:var(--good-soft);color:var(--good)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.kpi{display:flex;flex-direction:column;gap:2px;padding:14px 16px;border-radius:14px;background:var(--bg)}
+.kpi b{font-family:var(--f-display);font-size:1.7rem;font-weight:600;font-variant-numeric:tabular-nums}
+.kpi span{font-size:.85rem;color:var(--muted);line-height:1.35}
+/* compare */
+.versus{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.card ul{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:4px}
+.card.after{border-color:var(--accent)}
+/* tables */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
+tr:last-child td{border-bottom:0}
+td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.bar{display:inline-block;height:8px;border-radius:4px;background:var(--accent);vertical-align:middle;margin-right:8px}
+.tag{font-family:var(--f-mono);font-size:.75rem;padding:2px 8px;border-radius:6px;background:var(--accent-soft);color:var(--ink);white-space:nowrap}
+.tag.rev{background:var(--bad-soft);color:var(--bad)}
+/* chart */
+.chart{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;overflow-x:auto}
+.chart svg{display:block;width:100%;min-width:520px;height:auto}
+.legend{display:flex;flex-wrap:wrap;gap:16px;font-size:.85rem;color:var(--muted)}
+.legend i{display:inline-block;width:14px;height:8px;border-radius:3px;margin-right:6px;vertical-align:middle}
+/* steps */
+.steps{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none;counter-reset:s}
+.steps li{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start}
+.steps li::before{counter-increment:s;content:counter(s);font-family:var(--f-display);font-weight:600;width:30px;height:30px;border-radius:50%;background:var(--sun);color:#1b2140;display:grid;place-items:center}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.note{font-size:.88rem;color:var(--muted);border-left:3px solid var(--line);padding-left:12px}
+code{font-family:var(--f-mono);font-size:.85em;background:var(--accent-soft);padding:1px 5px;border-radius:5px}
+@media (max-width:640px){.hero{grid-template-columns:1fr}.hero svg{width:84px}.versus,.two{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:no-preference){.blink{animation:blink 5s infinite}@keyframes blink{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}}
+</style>
+<div class="wrap">
+
+<header class="hero">
+  <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
+    <span class="eyebrow">Rapport du CEO au Président · Simulation v2 · 14 octobre 2026</span>
+    <h1>Six mois pour faire ses preuves : quels canaux tiennent ?</h1>
+    <p class="muted">Date butoir repoussée à 6 mois. SEO confronté aux vrais concurrents grâce aux données Semrush. Nouveau canal réseaux sociaux, avec ou sans community manager. Installation « en quelques clics » intégrée au produit. Environ 240 000 entreprises simulées sur GitHub Actions.</p>
+  </div>
+  <svg viewBox="0 0 120 120" aria-hidden="true">
+    <ellipse cx="60" cy="70" rx="46" ry="40" fill="var(--accent)"/>
+    <ellipse cx="60" cy="80" rx="30" ry="22" fill="var(--accent-soft)"/>
+    <g class="blink" style="transform-origin:60px 62px"><ellipse cx="45" cy="62" rx="6" ry="8" fill="var(--ink)"/><ellipse cx="75" cy="62" rx="6" ry="8" fill="var(--ink)"/></g>
+    <ellipse cx="34" cy="76" rx="7" ry="4" fill="var(--sun)" opacity=".8"/><ellipse cx="86" cy="76" rx="7" ry="4" fill="var(--sun)" opacity=".8"/>
+    <path d="M52 82 q8 7 16 0" stroke="var(--ink)" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M100 40 l10 -12" stroke="var(--ink)" stroke-width="4" stroke-linecap="round"/><circle cx="111" cy="26" r="5" fill="var(--sun)"/>
+  </svg>
+</header>
+
+<section class="verdict" aria-labelledby="v">
+  <span class="pill warn">Verdict : GO sous conditions</span>
+  <h2 id="v">Ta vision tient, à une condition : se concentrer sur une seule cible et lancer vite</h2>
+  <p>L'installation « en quelques clics » et la mascotte mignonne se retrouvent dans <b>les 10 meilleures stratégies sur environ 800 testées</b>. C'est donc bien une valeur ajoutée. En revanche, la version « tout pour tout le monde » meurt dans 100 % des cas : toutes les cibles, toutes les plateformes, toutes les actions, avec le SEO et les réseaux sociaux comme moteurs. Dans 81 % des cas, le produit n'est même pas prêt à temps, faute de pouvoir être construit en moins de 20 semaines.</p>
+  <div class="kpis">
+    <div class="kpi"><b class="num">58 %</b><span>survie au contrôle des 6 mois, meilleure stratégie (2 000 tirages)</span></div>
+    <div class="kpi"><b class="num">≈ 1 700 €</b><span>MRR médian à 6 mois (seuil : 1 500 €)</span></div>
+    <div class="kpi"><b class="num">≈ 3 700 €</b><span>MRR médian à 12 mois, 43 à 70 clients, marge brute 76-88 %</span></div>
+    <div class="kpi"><b class="num">0 %</b><span>survie de la vision « tout, partout » telle que formulée</span></div>
+  </div>
+  <p class="note">Nouveau seuil de viabilité, fixé par moi : à la fin du 6e mois après le lancement, <b>au moins 1 500 € de MRR</b> (≈ 30 clients, l'équivalent d'un mi-temps rémunéré) <b>et au moins 4 000 € encaissés</b> au total. Mourir aussi si la trésorerie passe sous zéro. Le mois 3 devient une simple alerte (MRR &lt; 300 €). La barre est plus haute qu'avant, d'où une survie plus basse que les 74 % du premier rapport.</p>
+</section>
+
+<section aria-labelledby="seo">
+  <span class="eyebrow">1 · Le SEO face aux concurrents (données Semrush)</span>
+  <h2 id="seo">Oui, on peut passer devant eux, mais sur un petit terrain</h2>
+  <p>Les concurrents ne sont pas des géants du SEO. Il y en a beaucoup, mais ils sont de taille moyenne : l'autorité de domaine médiane est de 37 sur 100, et les plus forts plafonnent autour de 50. Les acteurs « mascotte » n'ont quasiment aucun SEO.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Concurrent</th><th class="r">Autorité (0-100)</th><th class="r">Trafic organique US/mois</th><th>Lecture</th></tr></thead>
+    <tbody>
+      <tr><td>Crisp</td><td class="r">50</td><td class="r">60 000</td><td rowspan="3">Les poids lourds du chat. Inatteignables sur « AI chatbot for website » (KD 73), même à 12 mois.</td></tr>
+      <tr><td>Tidio</td><td class="r">50</td><td class="r">28 000</td></tr>
+      <tr><td>Intercom</td><td class="r">49</td><td class="r">44 000</td></tr>
+      <tr><td>Voiceflow</td><td class="r">48</td><td class="r">43 000</td><td>Builder d'agents, autre public.</td></tr>
+      <tr><td>Userpilot · Appcues · UserGuiding</td><td class="r">45 · 42 · 38</td><td class="r">22 000 · 9 000 · 3 000</td><td>Les outils d'onboarding : nos vrais voisins SEO.</td></tr>
+      <tr><td>Mascotbot · Tandem · Anam</td><td class="r">11 · 18 · 32</td><td class="r">0 · 16 · 701</td><td>Les acteurs « mascotte / avatar » : aucun ne domine la recherche.</td></tr>
+    </tbody></table></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Groupe de mots-clés</th><th class="r">Recherches/mois</th><th class="r">Difficulté</th><th class="r">Top 10 à 6 / 12 mois</th><th class="r">Top 3 à 6 / 12 mois</th><th>Devant le concurrent médian ?</th></tr></thead>
+    <tbody>
+      <tr><td><b>A · longue traîne</b> : « intercom alternative » (720, KD 13), « userpilot alternatives », « product tour software »…</td><td class="r">4 400</td><td class="r">11</td><td class="r">78 % / 91 %</td><td class="r">37 % / 60 %</td><td><span class="pill good">Oui, vers la semaine 16</span> (57 % des tirages)</td></tr>
+      <tr><td><b>B · intermédiaire</b> : outils d'onboarding, widgets…</td><td class="r">7 290</td><td class="r">39</td><td class="r">24 % / 45 %</td><td class="r">4 % / 11 %</td><td><span class="pill warn">Rarement</span> (5 % à 12 mois)</td></tr>
+      <tr><td><b>C · têtes de requête</b> : « ai chatbot for website », « website chatbot »</td><td class="r">2 720</td><td class="r">73</td><td class="r">0 % / 2 %</td><td class="r">0 %</td><td><span class="pill bad">Jamais</span></td></tr>
+    </tbody></table></div>
+  <p><b>Le problème, c'est le volume, pas la concurrence.</b> On gagne le groupe A, mais il ne pèse que 4 400 recherches par mois au total. Ça fait environ 160 clics par mois à 6 mois et 225 à 12 mois, soit 3 à 4 clients payants par an. Même en y mettant 30 % du temps, <b>le SEO ne rembourse que 1 % de son coût à 6 mois et 14 % à 12 mois</b> (temps fondateur compté à 35 €/h). Le retirer du meilleur plan ne change rien à la survie.</p>
+  <p class="note">À faire quand même, mais léger : environ 3 h par semaine sur les pages « alternative à… » et « … vs … », qui sont les mots-clés gagnables. Le SEO prépare l'année 2 et nourrit le GEO. Point d'attention : un domaine <code>mascott.ai</code> existe déjà et se classe 5e sur « ai mascot ». À vérifier avant de choisir le nom.</p>
+</section>
+
+<section aria-labelledby="canaux">
+  <span class="eyebrow">2 · Quel canal marche le mieux ?</span>
+  <h2 id="canaux">Chaque canal testé seul, sur les mêmes 600 tirages</h2>
+  <div class="chart"><svg id="chan" viewBox="0 0 640 300" role="img" aria-label="Survie à 6 mois avec un seul canal : prospection 40 %, GEO 8 %, marketplaces 3 %, social avec community manager 2 %, SEO 1 %, lancements 1 %, social du fondateur 0 %. Le plan combiné atteint 53 %."></svg></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Canal</th><th class="r">Mois 1-3</th><th class="r">Mois 4-6</th><th class="r">Mois 7-12</th><th class="r">Rentabilité à 12 mois</th></tr></thead>
+    <tbody>
+      <tr><td><b>Prospection directe</b></td><td class="r">70 %</td><td class="r">66 %</td><td class="r">55 %</td><td class="r">0,30×</td></tr>
+      <tr><td><b>GEO</b> (cité par les IA)</td><td class="r">9 %</td><td class="r">19 %</td><td class="r">22 %</td><td class="r"><b>1,21×</b></td></tr>
+      <tr><td>SEO</td><td class="r">1 %</td><td class="r">4 %</td><td class="r">10 %</td><td class="r">0,14×</td></tr>
+      <tr><td>Bouche-à-oreille et badge</td><td class="r">9 %</td><td class="r">3 %</td><td class="r">7 %</td><td class="r">gratuit</td></tr>
+      <tr><td>Lancements (Product Hunt…)</td><td class="r">6 %</td><td class="r">1 %</td><td class="r">2 %</td><td class="r">0,58×</td></tr>
+      <tr><td>Réseaux sociaux</td><td class="r">1 %</td><td class="r">1 %</td><td class="r">0 %</td><td class="r">0,02×</td></tr>
+    </tbody></table></div>
+  <p class="note">Les pourcentages sont la part des nouveaux clients payants de chaque période apportée par chaque canal. La rentabilité est le revenu attribué au canal divisé par son coût, temps fondateur compris (1× = remboursé). Retirer la prospection fait tomber la survie de 53 % à 13 %. Retirer le SEO ou le social ne change quasiment rien (0 et −2 points).</p>
+</section>
+
+<section aria-labelledby="social">
+  <span class="eyebrow">3 · Les réseaux sociaux et le community manager</span>
+  <h2 id="social">Le community manager ne se rembourse pas. Laisse tomber le social comme canal d'acquisition.</h2>
+  <div class="two">
+    <div class="card"><h3>Avec un community manager (900 €/mois)</h3>
+      <ul>
+        <li>Il coûte environ 6 000 € la première année et rapporte <b>−1 960 €</b> de revenu net en plus.</li>
+        <li>La survie baisse de 5 points : sa rémunération vide la trésorerie de départ (≈ 5 000 €).</li>
+        <li>En canal unique, la survie tombe à 2 %, avec un coût d'acquisition d'environ 4 800 € par client.</li>
+      </ul></div>
+    <div class="card"><h3>Le fondateur qui poste lui-même</h3>
+      <ul>
+        <li>+2 points de survie, ce qui reste dans le bruit statistique.</li>
+        <li>Son vrai rôle : réchauffer la prospection. Un prospect qui t'a déjà vu sur LinkedIn répond plus souvent.</li>
+        <li>Les vidéos courtes de mascottes (TikTok, Reels) touchent surtout des particuliers, pas des équipes SaaS.</li>
+      </ul></div>
+  </div>
+  <p><b>Ma recommandation :</b> pas de community manager au lancement. Deux ou trois posts LinkedIn par semaine en « build in public », pour soutenir la prospection, et c'est tout. On en reparlera quand il y aura une offre grand public, ou plus de trésorerie.</p>
+  <p class="note">Prudence : Semrush ne couvre pas les réseaux sociaux. La portée, l'audience B2B et la viralité sont des estimations. C'est l'hypothèse la plus fragile de la simulation, Mais augmenter la portée de 30 % ne change la survie que d'un point : le social reste loin derrière la prospection et le GEO.</p>
+</section>
+
+<section aria-labelledby="install">
+  <span class="eyebrow">4 · L'installation en quelques clics</span>
+  <h2 id="install">C'est bien ta valeur ajoutée, à condition de la livrer sur un seul terrain d'abord</h2>
+  <p>L'installation en quelques clics est présente dans les 10 meilleures stratégies. Quand le CEO simulé a tenté de revenir à une installation manuelle par simple script pour livrer plus vite, la survie est tombée de 44 % à 36 % et il a annulé ce changement. Le parcours qui ressort :</p>
+  <ol class="steps">
+    <li><span><b>Créer :</b> un prompt ou quelques cases à cocher (espèce, couleurs, personnalité, tenue). La mascotte est générée dans le style maison, avec ses animations communes.</span></li>
+    <li><span><b>Nourrir :</b> on colle l'URL du site, et la mascotte lit le contenu toute seule.</span></li>
+    <li><span><b>Installer :</b> un snippet à copier-coller pour les SaaS (React, Next, n'importe quel site), plus Google Tag Manager. Les plugins WordPress, Webflow et Shopify viendront ensuite.</span></li>
+    <li><span><b>Vérifier :</b> elle fonctionne sur le site en moins de 5 minutes, avec un aperçu avant publication.</span></li>
+  </ol>
+  <p class="note">C'est l'une des hypothèses qui pèsent le plus. Si l'effet de l'installation rapide sur la conversion est 30 % plus faible que prévu, la survie passe de 56 % à 36 %. C'est la première chose à mesurer avec de vrais testeurs : le temps entre l'inscription et la mascotte qui fonctionne sur leur site.</p>
+</section>
+
+<section aria-labelledby="plan">
+  <span class="eyebrow">5 · Le plan recommandé</span>
+  <h2 id="plan">Cible, prix et répartition du temps</h2>
+  <div class="two">
+    <div class="card after"><h3>Ce qu'on fait</h3>
+      <ul>
+        <li><b>Cible :</b> petites équipes SaaS B2B (2-20 personnes). C'est la seule cible qui convertit : 58 clients payants sur 59 dans la meilleure stratégie.</li>
+        <li><b>Produit :</b> générateur de mascotte + installation en quelques clics, 1 plateforme (script JS SaaS), 2 actions (répondre, pointer l'étape suivante), look mignon + variante pro.</li>
+        <li><b>Prix :</b> <b>49 € et 149 € par mois</b>, −17 % en annuel, essai sur le vrai site, garantie de remboursement, pas de plan gratuit. Le générateur de mascotte, lui, est gratuit et sert d'aimant.</li>
+        <li><b>Temps :</b> environ 35-48 % prospection, 25 % produit, 8 % lancements, 7 % SEO, 3 % GEO, 5 % LinkedIn.</li>
+      </ul></div>
+    <div class="card"><h3>Pourquoi 49 € et 149 €</h3>
+      <ul>
+        <li>Les meilleures stratégies vont de 35/102 € à 66/190 €, avec une survie quasi identique (57-58 %). Je prends le milieu.</li>
+        <li>« Prix trop haut » est la première cause de mort du meilleur plan, et le prix acceptable est l'hypothèse la plus sensible (39 points d'écart). Il ne faut donc pas viser le haut de la fourchette.</li>
+        <li>Les équipes SaaS du panel disent « ça devient cher » autour de 79 €.</li>
+        <li>Ajouter un plan gratuit fait chuter la survie de 52 % à 38 % (relance n°28).</li>
+      </ul></div>
+  </div>
+</section>
+
+<section aria-labelledby="mrr">
+  <span class="eyebrow">6 · La courbe</span>
+  <h2 id="mrr-h">MRR semaine par semaine, meilleure stratégie</h2>
+  <div class="chart"><svg id="mrr" viewBox="0 0 640 300" role="img" aria-label="MRR médian de la meilleure stratégie : 1 490 euros à la semaine 22, 1 706 euros à la semaine 24, environ 3 700 euros à la semaine 50"></svg></div>
+  <div class="legend">
+    <span><i style="background:var(--accent)"></i>Médiane</span>
+    <span><i style="background:var(--accent-soft)"></i>Médiane à p90</span>
+    <span><i style="background:var(--sun)"></i>Seuil : 1 500 € à la semaine 26</span>
+  </div>
+  <p class="note">p10 = 0 € sur toute la période : dans au moins 1 tirage sur 10, l'entreprise ne décolle pas. Les principales causes de mort sont un prix trop haut pour une partie des essais, et un produit pas prêt dans les 20 semaines. Toutes les hypothèses sont dans <code>sim/config.json</code> et tous les résultats dans <code>sim/results/report.md</code>.</p>
+</section>
+
+<section aria-labelledby="rel">
+  <span class="eyebrow">7 · Les relances du CEO simulé</span>
+  <h2 id="rel">30 relances, de 0 % à 53 %</h2>
+  <div class="tbl"><table>
+    <thead><tr><th class="r">#</th><th class="r">Survie</th><th>Ce qui tuait l'entreprise → ce qui a été changé</th></tr></thead>
+    <tbody id="iters"></tbody></table></div>
+  <p class="note">La recherche large (≈ 800 stratégies) fait mieux que ce chemin, avec 58 %. Le CEO simulé s'est d'abord enfermé sur les indie hackers avant de revenir aux équipes SaaS à la relance 15.</p>
+</section>
+
+<section aria-labelledby="next">
+  <span class="eyebrow">8 · La suite</span>
+  <h2 id="next">Ce que je propose pour les 30 prochains jours</h2>
+  <ol class="steps">
+    <li><span><b>Prototype du parcours « en quelques clics »</b> (générateur + snippet), à faire chronométrer par 5 fondateurs de SaaS. Objectif : une mascotte qui fonctionne sur leur site en moins de 5 minutes.</span></li>
+    <li><span><b>200 messages de prospection</b> vers des SaaS de 2 à 20 personnes. Seuil de décision : <b>3 pilotes prépayés</b>.</span></li>
+    <li><span><b>SEO léger :</b> 2 pages « alternative à… » par semaine (Intercom, Tidio, Userpilot, Appcues), et la checklist GEO (llms.txt, annuaires, avis G2).</span></li>
+    <li><span><b>LinkedIn :</b> 2-3 posts par semaine du fondateur. Pas de community manager.</span></li>
+    <li><span><b>Nom de marque :</b> vérifier <code>mascott.ai</code> avant tout.</span></li>
+  </ol>
+  <p class="muted">Limites. Les acheteurs sont simulés, et les modèles de langage ont tendance à dire oui. Les effets du social et de l'installation rapide sont estimés, pas mesurés. Le budget (≈ 5 000 €, 2 fondateurs non payés) est une hypothèse. Le trafic SEO vient de Semrush, qui sous-estime souvent la longue traîne B2B. Le simulateur, les données et les trois runs précédents sont sur la branche <code>claude/saas-mascots-simulation-syx5y6</code>.</p>
+</section>
+</div>
+
+<script>
+(function(){
+  var NS='http://www.w3.org/2000/svg';
+  function txt(x,y,s,o){o=o||{};return '<text x="'+x+'" y="'+y+'" font-size="'+(o.size||11)+'" fill="'+(o.fill||'var(--muted)')+'" text-anchor="'+(o.anchor||'start')+'" font-family="'+(o.font||'Figtree, sans-serif')+'"'+(o.weight?' font-weight="'+o.weight+'"':'')+'>'+s+'</text>';}
+
+  // channel bars
+  var ch=[['Plan combiné (tous canaux)',53,1],['Prospection directe seule',40],['GEO seul',8],['Marketplaces / plugins seuls',3],['Social + community manager',2],['SEO seul',1],['Lancements seuls',1],['Social du fondateur seul',0]];
+  var L=210,R=50,T=10,rowH=34,W=640,maxV=60,out='';
+  [0,20,40,60].forEach(function(v){var x=L+v/maxV*(W-L-R);out+='<line x1="'+x+'" x2="'+x+'" y1="'+T+'" y2="'+(T+rowH*ch.length)+'" stroke="var(--line)"/>'+txt(x,T+rowH*ch.length+16,v+' %',{anchor:'middle',font:'IBM Plex Mono, monospace'});});
+  ch.forEach(function(c,i){var y=T+i*rowH+8,w=Math.max(2,c[1]/maxV*(W-L-R));
+    out+=txt(L-10,y+13,c[0],{anchor:'end',fill:'var(--ink)',size:12,weight:c[2]?700:400});
+    out+='<rect x="'+L+'" y="'+y+'" width="'+w+'" height="18" rx="4" fill="'+(c[2]?'var(--good)':(c[1]>=20?'var(--accent)':'var(--muted)'))+'" opacity="'+(c[1]>=20||c[2]?1:.55)+'"/>';
+    out+=txt(L+w+8,y+13,c[1]+' %',{fill:'var(--ink)',size:12,weight:700});});
+  document.getElementById('chan').setAttribute('viewBox','0 0 640 '+(T+rowH*ch.length+26));
+  document.getElementById('chan').innerHTML=out;
+
+  // MRR chart
+  var med=[0,231,319,443,518,671,761,939,1094,1192,1386,1488,1706,1781,2012,2079,2264,2350,2584,2678,2912,3120,3185,3413,3412,3715];
+  var p90=[152,635,815,1029,1159,1451,1642,1952,2274,2517,2910,3078,3416,3552,4011,4259,4645,4764,5333,5409,5885,6369,6581,6959,7094,7587];
+  var W2=640,H=300,L2=56,R2=16,T2=16,B2=36,maxY=8000,maxX=50;
+  function x(i){return L2+(i*2)/maxX*(W2-L2-R2)} function y(v){return T2+(1-v/maxY)*(H-T2-B2)}
+  var o='';
+  [0,2000,4000,6000,8000].forEach(function(v){o+='<line x1="'+L2+'" x2="'+(W2-R2)+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="var(--line)"/>'+txt(L2-8,y(v)+4,v===0?'0':(v/1000)+' k€',{anchor:'end',font:'IBM Plex Mono, monospace'});});
+  [0,13,26,39,50].forEach(function(w){o+=txt(L2+w/maxX*(W2-L2-R2),H-12,'sem. '+w,{anchor:'middle',font:'IBM Plex Mono, monospace'});});
+  var band='M'+x(0)+','+y(p90[0]);for(var i=1;i<p90.length;i++)band+=' L'+x(i)+','+y(p90[i]);for(var j=med.length-1;j>=0;j--)band+=' L'+x(j)+','+y(med[j]);
+  o+='<path d="'+band+' Z" fill="var(--accent-soft)"/>';
+  var xt=L2+26/maxX*(W2-L2-R2);
+  o+='<line x1="'+xt+'" x2="'+xt+'" y1="'+T2+'" y2="'+(H-B2)+'" stroke="var(--sun)" stroke-width="2" stroke-dasharray="4 4"/><circle cx="'+xt+'" cy="'+y(1500)+'" r="6" fill="var(--sun)"/>'+txt(xt+10,y(1500)+20,'seuil 1 500 €',{fill:'var(--ink)'});
+  var line='M'+x(0)+','+y(med[0]);for(var k=1;k<med.length;k++)line+=' L'+x(k)+','+y(med[k]);
+  o+='<path d="'+line+'" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linejoin="round"/><circle cx="'+x(25)+'" cy="'+y(3715)+'" r="5" fill="var(--accent)"/>'+txt(x(25)-8,y(3715)-12,'3 715 €',{anchor:'end',fill:'var(--ink)',size:12,weight:700});
+  document.getElementById('mrr').innerHTML=o;
+
+  var it=[
+    [1,'0 %','Vision « tout, partout » : produit pas prêt en 20 semaines (81 %) → périmètre réduit à 1 plateforme et 2 actions.'],
+    [2,'0 %','Pas de trafic (98 %) : le SEO face à des concurrents d’autorité 40+ ne ramène rien avant 6 mois → temps transféré vers la prospection.'],
+    [4,'0 %','Pas de trafic → focus sur une seule cible (les indie hackers, un mauvais choix).'],
+    [6,'3 %','Pas de trafic → pilotes prévendus avant le lancement.'],
+    [9,'6 %','Générateur de mascotte gratuit comme aimant.'],
+    [10,'8 %','Embauche d’un community manager → 78 % des morts deviennent des faillites de trésorerie, il est retiré (n°12).'],
+    [14,'1 %','Pivot vers les petites équipes SaaS, à 69/199 € → la survie remonte à 28 % (n°15).'],
+    [15,'28 %','Prix trop haut → −20 %, deux fois.'],
+    [17,'34 %','Conversion faible → installation faite pour le client en plus des quelques clics.'],
+    [18,'44 %','Essai : revenir au simple script pour livrer plus vite → la survie chute à 36 %, annulé.'],
+    [22,'52 %','Garantie de remboursement ajoutée.'],
+    [28,'38 %','Essai : ajouter un plan gratuit → chute, annulé.'],
+    [30,'53 %','Arrêt (30 relances).']
+  ];
+  document.getElementById('iters').innerHTML=it.map(function(r){return '<tr><td class="r">'+r[0]+'</td><td class="r"><b>'+r[1]+'</b></td><td>'+r[2]+'</td></tr>';}).join('');
+})();
+</script>
