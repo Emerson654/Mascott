@@ -257,7 +257,7 @@
       "effort_offset": 10,
       "effort_exponent": 0.35,
       "effort_min": 0.5,
-      "effort_max": 1.6,
+      "effort_max": 1.15,
       "link_building_share": 0.25,
       "links_per_hour": 0.2,
       "rank": {
@@ -285,7 +285,8 @@
         "rank": "r = auth_coef*ln((A+1)/(T+1)) - kd_coef*(KD-kd_ref)/100 + depth_coef*ln(1+min(depth,3)) + focus_bonus + per-run noise; keyword-level r ~ N(r, kw_sigma); share in top 3/10/20 = Phi((r-t)/kw_sigma). auth_coef, kd_coef, t3, t10, t20 FITTED by calibrate_seo.py to the analyst's position_share_assumptions at months 6 and 12 (RMSE 0.028 on cumulative shares), assuming full content depth and a focused site; kw_sigma, kd_ref, depth_coef, focus_bonus, run_sigma are estimates. 'Outranks the median competitor' = r >= (t3+t10)/2 with depth >= 0.3",
         "brand_visits_per_1k_followers_week": "estimate: brand searches per week per 1,000 social followers (counted as organic)",
         "competitors": "founder/seo-competition.json (Semrush API via MCP (40 calls, ~9,800 API units), 2026-10-14) via sim/calibrate_seo.py: reported in the results, not used in the maths (tier top10_authority is)",
-        "analyst_expected_clicks": "founder/seo-competition.json (Semrush API via MCP (40 calls, ~9,800 API units), 2026-10-14) via sim/calibrate_seo.py: the analyst's own clicks/month estimate (comparison only)"
+        "analyst_expected_clicks": "founder/seo-competition.json (Semrush API via MCP (40 calls, ~9,800 API units), 2026-10-14) via sim/calibrate_seo.py: the analyst's own clicks/month estimate (comparison only)",
+        "effort_max": "CEO review 2026-10-14: lowered from 1.6 to 1.15 (conservative link-effort bonus). Note: authority is counted from the first published page, which happens during the build, so 'M3 after launch' is ~6 months of site age on the analyst's curve"
       },
       "competitors": {
         "median_authority_top10": 43.5,

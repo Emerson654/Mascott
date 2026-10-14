@@ -733,7 +733,7 @@ def write_report(path, cfg, iters, search, n_screened, chans, sens, stress, meta
         w("")
         w("**Channel x time** (share of new paying customers acquired in each period, best strategy):")
         w("")
-        w("| channel | months 1-3 | months 4-6 | months 7-12 | paid/run | SEO-style payoff by M6 / M12 (revenue / cost) |")
+        w("| channel | months 1-3 | months 4-6 | months 7-12 | paid/run | payoff by M6 / M12 (attributed revenue / cost incl. founder hours) |")
         w("|---|---|---|---|---|---|")
         for c, sh in sorted(chans["channel_x_time"].items(), key=lambda kv: -chans["baseline_channels"][kv[0]]["paid_per_run"]):
             bc = chans["baseline_channels"][c]

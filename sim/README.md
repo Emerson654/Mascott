@@ -24,7 +24,9 @@ Options: `--quick` / `--full` (sizes come from `config.json` -> `simulation` and
 `sim/results`), `--config PATH`, `--max-iterations N`, `--skip-search`, `--skip-channels`,
 `--skip-sensitivity`.
 
-**Timing (measured).** @@TIMING@@ Most of the time goes to the search (800 strategies x 200 seeds,
+**Timing (measured).** `--full` = ~240k simulated companies: 8m23s with 2 workers on this dev
+container (quick: ~40 s). Budget 1.5-2x that for a slower 2-vCPU GitHub runner, so ~13-17 min, under
+the 40-minute limit. Most of the time goes to the search (800 strategies x 200 seeds,
 then up to 15 finalists - the overall top 10 plus the top 5 that keep the founder's vision - re-run at
 2,000 fresh seeds), the sensitivity analysis (26 inputs x 2 x 600 seeds) and the channel experiment
 (~16 variants x 600 seeds). To trade time for precision, edit `seeds_search`, `search_strategies`,
