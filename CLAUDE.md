@@ -18,16 +18,16 @@ Sources : `founder/` (board, panels, concurrents, CFO, marketing, SEO Semrush), 
 | Pôle | Agent (`.claude/agents/`) | Skills dédiés |
 |---|---|---|
 | Direction | CEO (conversation principale) | founder-* (board, plan, cfo, launch…), caveman/cavecrew et context-mode pour économiser les tokens |
-| Marketing · Marque & DA | `marketing-brand` | founder-brand, product-marketing, copywriting, copy-editing, marketing-psychology |
-| Marketing · CRO (avec le front) | `marketing-cro` | cro, cro-optimization, signup, onboarding, popups, ab-testing, analytics, lead-magnets, copywriting |
-| Marketing · Prix & Stripe | `marketing-pricing` | pricing, offers, founder-pricing, founder-offer, founder-cfo ; + implementing-api-schema-validation-security avant de toucher au code Stripe |
-| Marketing · Communication (INACTIF au départ) | `marketing-communication` | copywriting, copy-editing, marketing-psychology, hyperframes (+ hyperframes-*), general-video, media-use |
-| Commercial · Prospection | `sales` | customer-research, competitors, founder-competitors, offers, copywriting |
-| Dev · Front-end (pages du SaaS) | `dev-frontend` | TOUS les skills design : impeccable, apple-design, react-bits |
-| Dev · Back-end (base de données, API) | `dev-backend` | lean-build, migration, safe-refactor, surgical-patch, investigate-first |
-| Dev · Moteur de la mascotte | `dev-mascot-engine` | lean-build, investigate-first, safe-refactor, surgical-patch, apple-design (animations) |
-| Dev · SEO / GEO | `dev-seo-geo` | TOUS les skills SEO/GEO : seo, seo-audit, seo-content, seo-geo, seo-local, seo-page, seo-schema, seo-sitemap, seo-technical, + competitors (pages « alternative à ») |
-| Dev · Cybersécurité | `dev-security` | implementing-api-schema-validation-security, implementing-secret-scanning-with-gitleaks, testing-api-security-with-owasp-top-10, testing-for-broken-access-control |
+| Marketing · Marque & DA | `marketing-brand` (Léa) | founder-brand, product-marketing, copywriting, copy-editing, marketing-psychology |
+| Marketing · CRO (avec le front) | `marketing-cro` (Hugo) | cro, cro-optimization, signup, onboarding, popups, ab-testing, analytics, lead-magnets, copywriting |
+| Marketing · Prix & Stripe | `marketing-pricing` (Inès) | pricing, offers, founder-pricing, founder-offer, founder-cfo ; + implementing-api-schema-validation-security avant de toucher au code Stripe |
+| Marketing · Communication (INACTIF au départ) | `marketing-communication` (Nora) | copywriting, copy-editing, marketing-psychology, hyperframes (+ hyperframes-*), general-video, media-use |
+| Commercial · Prospection | `sales` (Malik) | customer-research, competitors, founder-competitors, offers, copywriting |
+| Dev · Front-end (pages du SaaS) | `dev-frontend` (Chloé) | TOUS les skills design : impeccable, apple-design, react-bits |
+| Dev · Back-end (base de données, API) | `dev-backend` (Yanis) | lean-build, migration, safe-refactor, surgical-patch, investigate-first |
+| Dev · Moteur de la mascotte | `dev-mascot-engine` (Sacha) | lean-build, investigate-first, safe-refactor, surgical-patch, apple-design (animations) |
+| Dev · SEO / GEO | `dev-seo-geo` (Camille) | TOUS les skills SEO/GEO : seo, seo-audit, seo-content, seo-geo, seo-local, seo-page, seo-schema, seo-sitemap, seo-technical, + competitors (pages « alternative à ») |
+| Dev · Cybersécurité | `dev-security` (Victor) | implementing-api-schema-validation-security, implementing-secret-scanning-with-gitleaks, testing-api-security-with-owasp-top-10, testing-for-broken-access-control |
 
 Note : certains skills personnels mentionnent « Favoly » (autre projet du fondateur) ; ici, lire « Mascott ».
 
@@ -36,3 +36,11 @@ Note : certains skills personnels mentionnent « Favoly » (autre projet du fond
 2. Le CEO découpe en missions, lance les agents concernés (en parallèle si indépendants) avec un brief autonome (les agents ne voient pas la conversation).
 3. Les agents livrent ; le CEO relit, lance les tests, renvoie si besoin (l'agent `dev-security` passe sur tout ce qui touche auth, paiements, données).
 4. Le CEO soumet au Président : ce qui est fait, comment tester, ce qui reste. Commit + push sur la branche de travail.
+
+## Organigramme en direct (obligatoire dès qu'une demande mobilise des sous-agents)
+Page : https://claude.ai/artifact/V21CttCNhW8co6hBZbMEx9 (source : `report/organigramme.html`).
+1. Ouvrir la page pour le Président (outil Artifact, action `open`).
+2. État = document `org/status` de la base de la page (outil `ArtifactData`, `collection: "org"`, `doc_id: "status"`, toujours avec `if_version`).
+   Clés = id de l'agent (ex. `"dev-frontend"`), valeur `{"state": "working" | "testing" | "idle", "task": "≤ 16 caractères"}` ; `ceo: {"task": ...}`.
+3. `working` au lancement d'un agent (le courant descend) ; `testing` quand le CEO vérifie son travail (le courant remonte) ; `idle` quand c'est fini. Plusieurs agents peuvent être actifs en même temps.
+4. Parler des employés par leur prénom (Léa, Hugo, Inès, Nora, Malik, Chloé, Yanis, Sacha, Camille, Victor).
