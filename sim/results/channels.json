@@ -1,0 +1,1113 @@
+{
+ "seeds": 600,
+ "strategy": {
+  "name": "search",
+  "targets": [
+   "Small SaaS startup team"
+  ],
+  "pricing": {
+   "model": "tiered",
+   "free_plan": false,
+   "free_quota": 50,
+   "starter_price": 66.0,
+   "starter_quota": 2000,
+   "pro_price": 190.0,
+   "pro_quota": 10000,
+   "overage_per_100": 1.0,
+   "annual_discount": 0.17,
+   "launch_discount": 0.0,
+   "agency_plan_price": null,
+   "platform_fee": 0.0,
+   "per_resolution_price": 0.0
+  },
+  "hours": {
+   "engineering": 0.265,
+   "seo": 0.077,
+   "geo": 0.033,
+   "social": 0.057,
+   "outreach": 0.48,
+   "app_store": 0.0,
+   "agency": 0.0,
+   "launches": 0.088
+  },
+  "cs_min_share": 0.05,
+  "prelaunch_marketing_share": 0.25,
+  "paid_ads_per_month": 600,
+  "scope": {
+   "platforms": [
+    "js_saas"
+   ],
+   "actions": 2
+  },
+  "style": "cute_pro",
+  "offer": {
+   "done_for_you": true,
+   "guarantee": true,
+   "presell": true
+  },
+  "ltd": {
+   "enabled": false,
+   "price": 59,
+   "week_after_launch": 4
+  },
+  "in_run_adjust": true,
+  "install": "few_clicks",
+  "social": {
+   "cm": false,
+   "cm_cost": 900,
+   "platform_mix": {
+    "linkedin": 0.32,
+    "x": 0.348,
+    "shorts": 0.332
+   }
+  },
+  "free_generator": false
+ },
+ "baseline_description": "install=few_clicks | targets=smallSaaS | price=66/190 +overage 1.0/100 annual-17% | hours: engineering 26%, seo 7%, geo 3%, social 5%, outreach 48%, launches 8% | scope=js_saas/2 actions | DFY setup, guarantee, presell pilots, pro style, ads 600/mo, prelaunch mkt 25%, social mix linkedin 32%/x 34%/shorts 33%",
+ "variants": [
+  {
+   "label": "best strategy (baseline)",
+   "kind": "baseline",
+   "channel": null,
+   "survival": 0.5333,
+   "mrr_m6_p50": 1601.6,
+   "mrr_m12_p50": 3301.3,
+   "mrr_m6_mean": 1776.5,
+   "mrr_m12_mean": 3148.1,
+   "customers_m12_p50": 40.0,
+   "revenue_mean": 25872.0,
+   "cash_cost_per_run": 4965.6,
+   "channel_paid_per_run": 0,
+   "channel_cac_cash": null,
+   "channel_cac_incl_hours": null,
+   "death_causes": {
+    "no_traffic": 6,
+    "low_conversion": 17,
+    "price_too_high": 156,
+    "churn": 7,
+    "cash_burn": 1,
+    "build_too_long": 93
+   },
+   "seo": null,
+   "channel_payoff_m6": null,
+   "channel_payoff_m12": null,
+   "channel_mrr_m12_per_run": 0,
+   "channel_hours_per_run": 0,
+   "description": "install=few_clicks | targets=smallSaaS | price=66/190 +overage 1.0/100 annual-17% | hours: engineering 26%, seo 7%, geo 3%, social 5%, outreach 48%, launches 8% | scope=js_saas/2 actions | DFY setup, guarantee, presell pilots, pro style, ads 600/mo, prelaunch mkt 25%, social mix linkedin 32%/x 34%/shorts 33%",
+   "delta_survival": 0.0,
+   "delta_mrr_m12_mean": 0.0,
+   "delta_revenue_mean": 0.0,
+   "delta_cash_cost": 0.0
+  },
+  {
+   "label": "only SEO",
+   "kind": "single",
+   "channel": "seo",
+   "survival": 0.01,
+   "mrr_m6_p50": 318.8,
+   "mrr_m12_p50": 0.0,
+   "mrr_m6_mean": 387.9,
+   "mrr_m12_mean": 52.3,
+   "customers_m12_p50": 0.0,
+   "revenue_mean": 2027.2,
+   "cash_cost_per_run": 0.0,
+   "channel_paid_per_run": 2.25,
+   "channel_cac_cash": 0.0,
+   "channel_cac_incl_hours": 10559.1,
+   "death_causes": {
+    "no_traffic": 403,
+    "low_conversion": 19,
+    "price_too_high": 78,
+    "churn": 1,
+    "build_too_long": 93
+   },
+   "seo": {
+    "authority": {
+     "m3": {
+      "p10": 8.5,
+      "p50": 11.7,
+      "p90": 16.5
+     },
+     "m6": {
+      "p10": 11.9,
+      "p50": 16.2,
+      "p90": 22.6
+     },
+     "m12": {
+      "p10": 15.6,
+      "p50": 21.1,
+      "p90": 36.8
+     }
+    },
+    "tiers": {
+     "A": {
+      "top10_share_m6_p50": 0.789,
+      "top3_share_m6_p50": 0.388,
+      "clicks_per_month_m6": {
+       "p10": 72.5,
+       "p50": 167.1,
+       "p90": 358.6
+      },
+      "top10_share_m12_p50": 0.929,
+      "top3_share_m12_p50": 0.65,
+      "clicks_per_month_m12": {
+       "p10": 161.3,
+       "p50": 479.4,
+       "p90": 1063.0
+      },
+      "outranks_median_competitor_by_m6": 0.582,
+      "outranks_median_competitor_by_m12": 0.582,
+      "first_outrank_week_p50": 14.0
+     },
+     "B": {
+      "top10_share_m6_p50": 0.256,
+      "top3_share_m6_p50": 0.041,
+      "clicks_per_month_m6": {
+       "p10": 19.2,
+       "p50": 61.8,
+       "p90": 164.9
+      },
+      "top10_share_m12_p50": 0.51,
+      "top3_share_m12_p50": 0.146,
+      "clicks_per_month_m12": {
+       "p10": 74.3,
+       "p50": 203.5,
+       "p90": 784.6
+      },
+      "outranks_median_competitor_by_m6": 0.007,
+      "outranks_median_competitor_by_m12": 0.007,
+      "first_outrank_week_p50": 14.5
+     },
+     "C": {
+      "top10_share_m6_p50": 0.004,
+      "top3_share_m6_p50": 0.0,
+      "clicks_per_month_m6": {
+       "p10": 0.1,
+       "p50": 0.4,
+       "p90": 2.2
+      },
+      "top10_share_m12_p50": 0.034,
+      "top3_share_m12_p50": 0.002,
+      "clicks_per_month_m12": {
+       "p10": 1.1,
+       "p50": 6.0,
+       "p90": 28.5
+      },
+      "outranks_median_competitor_by_m6": 0.0,
+      "outranks_median_competitor_by_m12": 0.0,
+      "first_outrank_week_p50": null
+     }
+    }
+   },
+   "channel_payoff_m6": 0.013,
+   "channel_payoff_m12": 0.362,
+   "channel_mrr_m12_per_run": 33.1,
+   "channel_hours_per_run": 678.8,
+   "description": "install=few_clicks | targets=smallSaaS | price=66/190 +overage 1.0/100 annual-17% | hours: engineering 70%, seo 30% | scope=js_saas/2 actions | DFY setup, guarantee, pro style, prelaunch mkt 25%",
+   "delta_survival": -0.5233,
+   "delta_mrr_m12_mean": -3095.8,
+   "delta_revenue_mean": -23844.8,
+   "delta_cash_cost": -4965.6
+  },
+  {
+   "label": "only GEO",
+   "kind": "single",
+   "channel": "geo",
+   "survival": 0.0783,
+   "mrr_m6_p50": 481.6,
+   "mrr_m12_p50": 0.0,
+   "mrr_m6_mean": 623.0,
+   "mrr_m12_mean": 361.6,
+   "customers_m12_p50": 0.0,
+   "revenue_mean": 4997.4,
+   "cash_cost_per_run": 0.0,
+   "channel_paid_per_run": 8.83,
+   "channel_cac_cash": 0.0,
+   "channel_cac_incl_hours": 2837.7,
+   "death_causes": {
+    "no_traffic": 285,
+    "low_conversion": 23,
+    "price_too_high": 145,
+    "churn": 7,
+    "build_too_long": 93
+   },
+   "seo": null,
+   "channel_payoff_m6": 0.056,
+   "channel_payoff_m12": 0.509,
+   "channel_mrr_m12_per_run": 289.8,
+   "channel_hours_per_run": 715.9,
+   "description": "install=few_clicks | targets=smallSaaS | price=66/190 +overage 1.0/100 annual-17% | hours: engineering 70%, geo 30% | scope=js_saas/2 actions | DFY setup, guarantee, pro style, prelaunch mkt 25%",
+   "delta_survival": -0.455,
+   "delta_mrr_m12_mean": -2786.5,
+   "delta_revenue_mean": -20874.6,
+   "delta_cash_cost": -4965.6
+  },
+  {
+   "label": "only Founder outreach",
+   "kind": "single",
+   "channel": "outreach",
+   "survival": 0.3983,
+   "mrr_m6_p50": 1215.7,
+   "mrr_m12_p50": 0.0,
+   "mrr_m6_mean": 1337.4,
+   "mrr_m12_mean": 1768.3,
+   "customers_m12_p50": 0.0,
+   "revenue_mean": 16318.7,
+   "cash_cost_per_run": 0.0,
+   "channel_paid_per_run": 30.61,
+   "channel_cac_cash": 0.0,
+   "channel_cac_incl_hours": 1708.5,
+   "death_causes": {
+    "no_traffic": 68,
+    "low_conversion": 26,
+    "price_too_high": 157,
+    "churn": 17,
+    "build_too_long": 93
+   },
+   "seo": null,
+   "channel_payoff_m6": 0.111,
+   "channel_payoff_m12": 0.348,
+   "channel_mrr_m12_per_run": 1590.5,
+   "channel_hours_per_run": 1494.2,
+   "description": "install=few_clicks | targets=smallSaaS | price=66/190 +overage 1.0/100 annual-17% | hours: engineering 52%, outreach 48% | scope=js_saas/2 actions | DFY setup, guarantee, presell pilots, pro style, prelaunch mkt 25%",
+   "delta_survival": -0.135,
+   "delta_mrr_m12_mean": -1379.8,
+   "delta_revenue_mean": -9553.3,
+   "delta_cash_cost": -4965.6
+  },
+  {
+   "label": "only Social (founder posting)",
+   "kind": "single",
+   "channel": "social_founder",
+   "survival": 0.0033,
+   "mrr_m6_p50": 166.6,
+   "mrr_m12_p50": 0.0,
+   "mrr_m6_mean": 259.0,
+   "mrr_m12_mean": 14.6,
+   "customers_m12_p50": 0.0,
+   "revenue_mean": 1479.6,
+   "cash_cost_per_run": 0.0,
+   "channel_paid_per_run": 0.54,
+   "channel_cac_cash": 0.0,
+   "channel_cac_incl_hours": 53731.5,
+   "death_causes": {
+    "no_traffic": 462,
+    "low_conversion": 7,
+    "price_too_high": 36,
+    "build_too_long": 93
+   },
+   "seo": null,
+   "channel_payoff_m6": 0.005,
+   "channel_payoff_m12": 0.033,
+   "channel_mrr_m12_per_run": 0.7,
+   "channel_hours_per_run": 829.0,
+   "description": "install=few_clicks | targets=smallSaaS | price=66/190 +overage 1.0/100 annual-17% | hours: engineering 70%, social 30% | scope=js_saas/2 actions | DFY setup, guarantee, pro style, prelaunch mkt 25%, social mix linkedin 32%/x 34%/shorts 33%",
+   "delta_survival": -0.53,
+   "delta_mrr_m12_mean": -3133.5,
+   "delta_revenue_mean": -24392.4,
+   "delta_cash_cost": -4965.6
+  },
+  {
+   "label": "only Social (founder + community manager)",
+   "kind": "single",
+   "channel": "social_cm",
+   "survival": 0.015,
+   "mrr_m6_p50": 0.0,
+   "mrr_m12_p50": 0.0,
+   "mrr_m6_mean": 173.0,
+   "mrr_m12_mean": 71.6,
+   "customers_m12_p50": 0.0,
+   "revenue_mean": 1770.0,
+   "cash_cost_per_run": 3918.0,
+   "channel_paid_per_run": 0.82,
+   "channel_cac_cash": 4778.0,
+   "channel_cac_incl_hours": 37776.2,
+   "death_causes": {
+    "no_traffic": 103,
+    "low_conversion": 3,
+    "price_too_high": 17,
+    "price_too_low": 2,
+    "churn": 4,
+    "cash_burn": 369,
+    "build_too_long": 93
+   },
+   "seo": null,
+   "channel_payoff_m6": 0.012,
+   "channel_payoff_m12": 0.08,
+   "channel_mrr_m12_per_run": 17.1,
+   "channel_hours_per_run": 773.1,
+   "description": "install=few_clicks | targets=smallSaaS | price=66/190 +overage 1.0/100 annual-17% | hours: engineering 70%, social 30% | scope=js_saas/2 actions | DFY setup, guarantee, pro style, prelaunch mkt 25%, CM 900/mo, social mix linkedin 32%/x 34%/shorts 33%",
+   "delta_survival": -0.5183,
+   "delta_mrr_m12_mean": -3076.5,
+   "delta_revenue_mean": -24102.0,
+   "delta_cash_cost": -1047.6
+  },
+  {
+   "label": "only Launches / directories",
+   "kind": "single",
+   "channel": "launches",
+   "survival": 0.0083,
+   "mrr_m6_p50": 198.0,
+   "mrr_m12_p50": 0.0,
+   "mrr_m6_mean": 290.3,
+   "mrr_m12_mean": 28.8,
+   "customers_m12_p50": 0.0,
+   "revenue_mean": 1823.2,
+   "cash_cost_per_run": 0.0,
+   "channel_paid_per_run": 0.92,
+   "channel_cac_cash": 0.0,
+   "channel_cac_incl_hours": 11759.2,
+   "death_causes": {
+    "no_traffic": 435,
+    "low_conversion": 7,
+    "price_too_high": 58,
+    "churn": 2,
+    "build_too_long": 93
+   },
+   "seo": null,
+   "channel_payoff_m6": 0.03,
+   "channel_payoff_m12": 0.637,
+   "channel_mrr_m12_per_run": 4.7,
+   "channel_hours_per_run": 309.1,
+   "description": "install=few_clicks | targets=smallSaaS | price=66/190 +overage 1.0/100 annual-17% | hours: engineering 70%, launches 30% | scope=js_saas/2 actions | DFY setup, guarantee, pro style, prelaunch mkt 25%",
+   "delta_survival": -0.525,
+   "delta_mrr_m12_mean": -3119.3,
+   "delta_revenue_mean": -24048.8,
+   "delta_cash_cost": -4965.6
+  },
+  {
+   "label": "only Marketplaces / plugin directories",
+   "kind": "single",
+   "channel": "marketplaces",
+   "survival": 0.03,
+   "mrr_m6_p50": 394.3,
+   "mrr_m12_p50": 0.0,
+   "mrr_m6_mean": 479.9,
+   "mrr_m12_mean": 112.2,
+   "customers_m12_p50": 0.0,
+   "revenue_mean": 3195.2,
+   "cash_cost_per_run": 0.0,
+   "channel_paid_per_run": 7.41,
+   "channel_cac_cash": 0.0,
+   "channel_cac_incl_hours": 2104.7,
+   "death_causes": {
+    "no_traffic": 9,
+    "low_conversion": 23,
+    "price_too_high": 457,
+    "build_too_long": 93
+   },
+   "seo": null,
+   "channel_payoff_m6": 0.085,
+   "channel_payoff_m12": 0.878,
+   "channel_mrr_m12_per_run": 96.4,
+   "channel_hours_per_run": 445.6,
+   "description": "install=few_clicks | targets=smallSaaS | price=66/190 +overage 1.0/100 annual-17% | hours: engineering 70%, app_store 30% | scope=js_saas/2 actions | DFY setup, guarantee, pro style, prelaunch mkt 25%",
+   "delta_survival": -0.5033,
+   "delta_mrr_m12_mean": -3035.9,
+   "delta_revenue_mean": -22676.8,
+   "delta_cash_cost": -4965.6
+  },
+  {
+   "label": "best minus seo",
+   "kind": "leave_one_out",
+   "channel": "seo",
+   "survival": 0.5333,
+   "mrr_m6_p50": 1603.4,
+   "mrr_m12_p50": 3088.2,
+   "mrr_m6_mean": 1740.7,
+   "mrr_m12_mean": 3052.1,
+   "customers_m12_p50": 36.5,
+   "revenue_mean": 25036.4,
+   "cash_cost_per_run": 4965.8,
+   "channel_paid_per_run": 0.19,
+   "channel_cac_cash": 0.0,
+   "channel_cac_incl_hours": 0.0,
+   "death_causes": {
+    "no_traffic": 6,
+    "low_conversion": 21,
+    "price_too_high": 159,
+    "churn": 1,
+    "build_too_long": 93
+   },
+   "seo": {
+    "authority": {
+     "m3": {
+      "p10": 8.1,
+      "p50": 11.1,
+      "p90": 15.6
+     },
+     "m6": {
+      "p10": 9.9,
+      "p50": 13.5,
+      "p90": 18.7
+     },
+     "m12": {
+      "p10": 12.8,
+      "p50": 17.7,
+      "p90": 23.9
+     }
+    },
+    "tiers": {
+     "A": {
+      "top10_share_m6_p50": 0.0,
+      "top3_share_m6_p50": 0.0,
+      "clicks_per_month_m6": {
+       "p10": 0.0,
+       "p50": 0.0,
+       "p90": 0.0
+      },
+      "top10_share_m12_p50": 0.0,
+      "top3_share_m12_p50": 0.0,
+      "clicks_per_month_m12": {
+       "p10": 0.0,
+       "p50": 0.0,
+       "p90": 0.0
+      },
+      "outranks_median_competitor_by_m6": 0.0,
+      "outranks_median_competitor_by_m12": 0.0,
+      "first_outrank_week_p50": null
+     },
+     "B": {
+      "top10_share_m6_p50": 0.0,
+      "top3_share_m6_p50": 0.0,
+      "clicks_per_month_m6": {
+       "p10": 0.0,
+       "p50": 0.0,
+       "p90": 0.0
+      },
+      "top10_share_m12_p50": 0.0,
+      "top3_share_m12_p50": 0.0,
+      "clicks_per_month_m12": {
+       "p10": 0.0,
+       "p50": 0.0,
+       "p90": 0.0
+      },
+      "outranks_median_competitor_by_m6": 0.0,
+      "outranks_median_competitor_by_m12": 0.0,
+      "first_outrank_week_p50": null
+     },
+     "C": {
+      "top10_share_m6_p50": 0.0,
+      "top3_share_m6_p50": 0.0,
+      "clicks_per_month_m6": {
+       "p10": 0.0,
+       "p50": 0.0,
+       "p90": 0.0
+      },
+      "top10_share_m12_p50": 0.0,
+      "top3_share_m12_p50": 0.0,
+      "clicks_per_month_m12": {
+       "p10": 0.0,
+       "p50": 0.0,
+       "p90": 0.0
+      },
+      "outranks_median_competitor_by_m6": 0.0,
+      "outranks_median_competitor_by_m12": 0.0,
+      "first_outrank_week_p50": null
+     }
+    }
+   },
+   "channel_payoff_m6": null,
+   "channel_payoff_m12": null,
+   "channel_mrr_m12_per_run": 9.4,
+   "channel_hours_per_run": 0.0,
+   "description": "install=few_clicks | targets=smallSaaS | price=66/190 +overage 1.0/100 annual-17% | hours: engineering 34%, geo 3%, social 5%, outreach 48%, launches 8% | scope=js_saas/2 actions | DFY setup, guarantee, presell pilots, pro style, ads 600/mo, prelaunch mkt 25%, social mix linkedin 32%/x 34%/shorts 33%",
+   "delta_survival": 0.0,
+   "delta_mrr_m12_mean": -96.0,
+   "delta_revenue_mean": -835.6,
+   "delta_cash_cost": 0.2
+  },
+  {
+   "label": "best minus geo",
+   "kind": "leave_one_out",
+   "channel": "geo",
+   "survival": 0.515,
+   "mrr_m6_p50": 1532.7,
+   "mrr_m12_p50": 2824.3,
+   "mrr_m6_mean": 1737.9,
+   "mrr_m12_mean": 3035.4,
+   "customers_m12_p50": 33.0,
+   "revenue_mean": 24964.5,
+   "cash_cost_per_run": 4899.8,
+   "channel_paid_per_run": 8.29,
+   "channel_cac_cash": 0.0,
+   "channel_cac_incl_hours": 0.0,
+   "death_causes": {
+    "no_traffic": 4,
+    "low_conversion": 30,
+    "price_too_high": 158,
+    "price_too_low": 1,
+    "churn": 4,
+    "cash_burn": 1,
+    "build_too_long": 93
+   },
+   "seo": null,
+   "channel_payoff_m6": null,
+   "channel_payoff_m12": null,
+   "channel_mrr_m12_per_run": 493.4,
+   "channel_hours_per_run": 0.0,
+   "description": "install=few_clicks | targets=smallSaaS | price=66/190 +overage 1.0/100 annual-17% | hours: engineering 29%, seo 7%, social 5%, outreach 48%, launches 8% | scope=js_saas/2 actions | DFY setup, guarantee, presell pilots, pro style, ads 600/mo, prelaunch mkt 25%, social mix linkedin 32%/x 34%/shorts 33%",
+   "delta_survival": -0.0183,
+   "delta_mrr_m12_mean": -112.7,
+   "delta_revenue_mean": -907.5,
+   "delta_cash_cost": -65.8
+  },
+  {
+   "label": "best minus outreach",
+   "kind": "leave_one_out",
+   "channel": "outreach",
+   "survival": 0.1283,
+   "mrr_m6_p50": 632.6,
+   "mrr_m12_p50": 0.0,
+   "mrr_m6_mean": 747.0,
+   "mrr_m12_mean": 592.7,
+   "customers_m12_p50": 0.0,
+   "revenue_mean": 6813.5,
+   "cash_cost_per_run": 3505.6,
+   "channel_paid_per_run": 1.53,
+   "channel_cac_cash": 0.0,
+   "channel_cac_incl_hours": 1637.9,
+   "death_causes": {
+    "no_traffic": 139,
+    "low_conversion": 45,
+    "price_too_high": 221,
+    "price_too_low": 1,
+    "churn": 16,
+    "cash_burn": 8,
+    "build_too_long": 93
+   },
+   "seo": null,
+   "channel_payoff_m6": 0.072,
+   "channel_payoff_m12": 0.365,
+   "channel_mrr_m12_per_run": 44.8,
+   "channel_hours_per_run": 71.6,
+   "description": "install=few_clicks | targets=smallSaaS | price=66/190 +overage 1.0/100 annual-17% | hours: engineering 74%, seo 7%, geo 3%, social 5%, launches 8% | scope=js_saas/2 actions | DFY setup, guarantee, pro style, ads 600/mo, prelaunch mkt 25%, social mix linkedin 32%/x 34%/shorts 33%",
+   "delta_survival": -0.405,
+   "delta_mrr_m12_mean": -2555.4,
+   "delta_revenue_mean": -19058.5,
+   "delta_cash_cost": -1460.0
+  },
+  {
+   "label": "best minus launches",
+   "kind": "leave_one_out",
+   "channel": "launches",
+   "survival": 0.455,
+   "mrr_m6_p50": 1378.2,
+   "mrr_m12_p50": 0.0,
+   "mrr_m6_mean": 1519.3,
+   "mrr_m12_mean": 2536.1,
+   "customers_m12_p50": 0.0,
+   "revenue_mean": 21148.2,
+   "cash_cost_per_run": 4683.6,
+   "channel_paid_per_run": 1.2,
+   "channel_cac_cash": 0.0,
+   "channel_cac_incl_hours": 638.8,
+   "death_causes": {
+    "no_traffic": 20,
+    "low_conversion": 41,
+    "price_too_high": 165,
+    "churn": 8,
+    "build_too_long": 93
+   },
+   "seo": null,
+   "channel_payoff_m6": 0.098,
+   "channel_payoff_m12": 1.778,
+   "channel_mrr_m12_per_run": 59.2,
+   "channel_hours_per_run": 21.9,
+   "description": "install=few_clicks | targets=smallSaaS | price=66/190 +overage 1.0/100 annual-17% | hours: engineering 35%, seo 7%, geo 3%, social 5%, outreach 48% | scope=js_saas/2 actions | DFY setup, guarantee, presell pilots, pro style, ads 600/mo, prelaunch mkt 25%, social mix linkedin 32%/x 34%/shorts 33%",
+   "delta_survival": -0.0783,
+   "delta_mrr_m12_mean": -612.0,
+   "delta_revenue_mean": -4723.8,
+   "delta_cash_cost": -282.0
+  },
+  {
+   "label": "best minus social",
+   "kind": "leave_one_out",
+   "channel": "social",
+   "survival": 0.5117,
+   "mrr_m6_p50": 1570.0,
+   "mrr_m12_p50": 2992.5,
+   "mrr_m6_mean": 1724.0,
+   "mrr_m12_mean": 3071.8,
+   "customers_m12_p50": 36.0,
+   "revenue_mean": 24880.9,
+   "cash_cost_per_run": 4887.7,
+   "channel_paid_per_run": 0.0,
+   "channel_cac_cash": null,
+   "channel_cac_incl_hours": null,
+   "death_causes": {
+    "no_traffic": 7,
+    "low_conversion": 23,
+    "price_too_high": 169,
+    "churn": 1,
+    "build_too_long": 93
+   },
+   "seo": null,
+   "channel_payoff_m6": null,
+   "channel_payoff_m12": null,
+   "channel_mrr_m12_per_run": 0.0,
+   "channel_hours_per_run": 0.0,
+   "description": "install=few_clicks | targets=smallSaaS | price=66/190 +overage 1.0/100 annual-17% | hours: engineering 32%, seo 7%, geo 3%, outreach 48%, launches 8% | scope=js_saas/2 actions | DFY setup, guarantee, presell pilots, pro style, ads 600/mo, prelaunch mkt 25%",
+   "delta_survival": -0.0216,
+   "delta_mrr_m12_mean": -76.3,
+   "delta_revenue_mean": -991.1,
+   "delta_cash_cost": -77.9
+  },
+  {
+   "label": "best minus ads",
+   "kind": "leave_one_out",
+   "channel": "ads",
+   "survival": 0.5117,
+   "mrr_m6_p50": 1557.6,
+   "mrr_m12_p50": 2709.4,
+   "mrr_m6_mean": 1708.1,
+   "mrr_m12_mean": 2981.6,
+   "customers_m12_p50": 32.5,
+   "revenue_mean": 24665.5,
+   "cash_cost_per_run": 0.0,
+   "channel_paid_per_run": 0.0,
+   "channel_cac_cash": null,
+   "channel_cac_incl_hours": null,
+   "death_causes": {
+    "no_traffic": 12,
+    "low_conversion": 23,
+    "price_too_high": 161,
+    "churn": 4,
+    "build_too_long": 93
+   },
+   "seo": null,
+   "channel_payoff_m6": null,
+   "channel_payoff_m12": null,
+   "channel_mrr_m12_per_run": 0.0,
+   "channel_hours_per_run": 0.0,
+   "description": "install=few_clicks | targets=smallSaaS | price=66/190 +overage 1.0/100 annual-17% | hours: engineering 26%, seo 7%, geo 3%, social 5%, outreach 48%, launches 8% | scope=js_saas/2 actions | DFY setup, guarantee, presell pilots, pro style, prelaunch mkt 25%, social mix linkedin 32%/x 34%/shorts 33%",
+   "delta_survival": -0.0216,
+   "delta_mrr_m12_mean": -166.5,
+   "delta_revenue_mean": -1206.5,
+   "delta_cash_cost": -4965.6
+  },
+  {
+   "label": "best + SEO at 30% of hours",
+   "kind": "add",
+   "channel": "seo",
+   "survival": 0.4733,
+   "mrr_m6_p50": 1437.2,
+   "mrr_m12_p50": 0.0,
+   "mrr_m6_mean": 1490.8,
+   "mrr_m12_mean": 2570.7,
+   "customers_m12_p50": 0.0,
+   "revenue_mean": 21075.2,
+   "cash_cost_per_run": 4749.6,
+   "channel_paid_per_run": 5.61,
+   "channel_cac_cash": 0.0,
+   "channel_cac_incl_hours": 4703.5,
+   "death_causes": {
+    "no_traffic": 5,
+    "low_conversion": 36,
+    "price_too_high": 174,
+    "churn": 8,
+    "build_too_long": 93
+   },
+   "seo": {
+    "authority": {
+     "m3": {
+      "p10": 9.2,
+      "p50": 12.6,
+      "p90": 17.8
+     },
+     "m6": {
+      "p10": 11.7,
+      "p50": 16.1,
+      "p90": 22.2
+     },
+     "m12": {
+      "p10": 16.6,
+      "p50": 22.6,
+      "p90": 31.6
+     }
+    },
+    "tiers": {
+     "A": {
+      "top10_share_m6_p50": 0.778,
+      "top3_share_m6_p50": 0.374,
+      "clicks_per_month_m6": {
+       "p10": 70.3,
+       "p50": 162.6,
+       "p90": 355.6
+      },
+      "top10_share_m12_p50": 0.913,
+      "top3_share_m12_p50": 0.605,
+      "clicks_per_month_m12": {
+       "p10": 114.6,
+       "p50": 225.4,
+       "p90": 493.0
+      },
+      "outranks_median_competitor_by_m6": 0.572,
+      "outranks_median_competitor_by_m12": 0.677,
+      "first_outrank_week_p50": 16.0
+     },
+     "B": {
+      "top10_share_m6_p50": 0.244,
+      "top3_share_m6_p50": 0.038,
+      "clicks_per_month_m6": {
+       "p10": 18.2,
+       "p50": 58.4,
+       "p90": 162.7
+      },
+      "top10_share_m12_p50": 0.452,
+      "top3_share_m12_p50": 0.114,
+      "clicks_per_month_m12": {
+       "p10": 41.9,
+       "p50": 128.0,
+       "p90": 314.3
+      },
+      "outranks_median_competitor_by_m6": 0.007,
+      "outranks_median_competitor_by_m12": 0.05,
+      "first_outrank_week_p50": 42.0
+     },
+     "C": {
+      "top10_share_m6_p50": 0.003,
+      "top3_share_m6_p50": 0.0,
+      "clicks_per_month_m6": {
+       "p10": 0.0,
+       "p50": 0.3,
+       "p90": 1.7
+      },
+      "top10_share_m12_p50": 0.022,
+      "top3_share_m12_p50": 0.001,
+      "clicks_per_month_m12": {
+       "p10": 0.3,
+       "p50": 2.0,
+       "p90": 7.8
+      },
+      "outranks_median_competitor_by_m6": 0.0,
+      "outranks_median_competitor_by_m12": 0.0,
+      "first_outrank_week_p50": null
+     }
+    }
+   },
+   "channel_payoff_m6": 0.013,
+   "channel_payoff_m12": 0.082,
+   "channel_mrr_m12_per_run": 336.2,
+   "channel_hours_per_run": 753.9,
+   "description": "install=few_clicks | targets=smallSaaS | price=66/190 +overage 1.0/100 annual-17% | hours: engineering 20%, seo 30%, social 4%, outreach 36%, launches 6% | scope=js_saas/2 actions | DFY setup, guarantee, presell pilots, pro style, ads 600/mo, prelaunch mkt 25%, social mix linkedin 32%/x 34%/shorts 33%",
+   "delta_survival": -0.06,
+   "delta_mrr_m12_mean": -577.4,
+   "delta_revenue_mean": -4796.8,
+   "delta_cash_cost": -216.0
+  },
+  {
+   "label": "best + CM only (no founder posting)",
+   "kind": "add",
+   "channel": "cm",
+   "survival": 0.4833,
+   "mrr_m6_p50": 1423.2,
+   "mrr_m12_p50": 0.0,
+   "mrr_m6_mean": 1416.2,
+   "mrr_m12_mean": 2992.2,
+   "customers_m12_p50": 0.0,
+   "revenue_mean": 23911.5,
+   "cash_cost_per_run": 11004.6,
+   "channel_paid_per_run": 0.85,
+   "channel_cac_cash": 7768.0,
+   "channel_cac_incl_hours": 15949.8,
+   "death_causes": {
+    "no_traffic": 5,
+    "low_conversion": 3,
+    "price_too_high": 23,
+    "cash_burn": 186,
+    "build_too_long": 93
+   },
+   "seo": null,
+   "channel_payoff_m6": 0.011,
+   "channel_payoff_m12": 0.026,
+   "channel_mrr_m12_per_run": 43.8,
+   "channel_hours_per_run": 198.7,
+   "description": "install=few_clicks | targets=smallSaaS | price=66/190 +overage 1.0/100 annual-17% | hours: engineering 26%, seo 7%, geo 3%, social 5%, outreach 48%, launches 8% | scope=js_saas/2 actions | DFY setup, guarantee, presell pilots, pro style, ads 600/mo, prelaunch mkt 25%, CM 900/mo, social mix linkedin 32%/x 34%/shorts 33%",
+   "delta_survival": -0.05,
+   "delta_mrr_m12_mean": -155.9,
+   "delta_revenue_mean": -1960.5,
+   "delta_cash_cost": 6039.0
+  }
+ ],
+ "single_channel_ranking": [
+  "only Founder outreach",
+  "only GEO",
+  "only Marketplaces / plugin directories",
+  "only Social (founder + community manager)",
+  "only SEO",
+  "only Launches / directories",
+  "only Social (founder posting)"
+ ],
+ "channel_x_time": {
+  "seo": {
+   "m1_3": 0.007,
+   "m4_6": 0.043,
+   "m7_12": 0.095
+  },
+  "geo": {
+   "m1_3": 0.09,
+   "m4_6": 0.187,
+   "m7_12": 0.217
+  },
+  "social": {
+   "m1_3": 0.007,
+   "m4_6": 0.007,
+   "m7_12": 0.005
+  },
+  "launch": {
+   "m1_3": 0.056,
+   "m4_6": 0.013,
+   "m7_12": 0.018
+  },
+  "ads": {
+   "m1_3": 0.048,
+   "m4_6": 0.061,
+   "m7_12": 0.053
+  },
+  "referral": {
+   "m1_3": 0.087,
+   "m4_6": 0.028,
+   "m7_12": 0.067
+  },
+  "outreach": {
+   "m1_3": 0.704,
+   "m4_6": 0.66,
+   "m7_12": 0.546
+  }
+ },
+ "baseline_channels": {
+  "seo": {
+   "paid_per_run": 3.46,
+   "hours_per_run": 220.8,
+   "cash_per_run": 0.0,
+   "hours_per_paid": 63.8,
+   "cash_per_paid": 0.0,
+   "cac_eur_incl_hours": 2233.3,
+   "share_of_new_paid": {
+    "m1_3": 0.007,
+    "m4_6": 0.043,
+    "m7_12": 0.095
+   },
+   "mrr_m6_per_run": 52.0,
+   "mrr_m12_per_run": 220.8,
+   "revenue_m6_per_run": 85.1,
+   "revenue_m12_per_run": 841.3,
+   "payoff_m6": 0.017,
+   "payoff_cash_only_m6": null,
+   "payoff_m12": 0.144,
+   "payoff_cash_only_m12": null
+  },
+  "geo": {
+   "paid_per_run": 10.08,
+   "hours_per_run": 94.6,
+   "cash_per_run": 0.0,
+   "hours_per_paid": 9.4,
+   "cash_per_paid": 0.0,
+   "cac_eur_incl_hours": 328.5,
+   "share_of_new_paid": {
+    "m1_3": 0.09,
+    "m4_6": 0.187,
+    "m7_12": 0.217
+   },
+   "mrr_m6_per_run": 258.6,
+   "mrr_m12_per_run": 585.4,
+   "revenue_m6_per_run": 602.8,
+   "revenue_m12_per_run": 3040.8,
+   "payoff_m6": 0.279,
+   "payoff_cash_only_m6": null,
+   "payoff_m12": 1.213,
+   "payoff_cash_only_m12": null
+  },
+  "social": {
+   "paid_per_run": 0.33,
+   "hours_per_run": 171.2,
+   "cash_per_run": 0.0,
+   "hours_per_paid": 513.5,
+   "cash_per_paid": 0.0,
+   "cac_eur_incl_hours": 17972.9,
+   "share_of_new_paid": {
+    "m1_3": 0.007,
+    "m4_6": 0.007,
+    "m7_12": 0.005
+   },
+   "mrr_m6_per_run": 12.7,
+   "mrr_m12_per_run": 14.2,
+   "revenue_m6_per_run": 40.4,
+   "revenue_m12_per_run": 98.7,
+   "payoff_m6": 0.01,
+   "payoff_cash_only_m6": null,
+   "payoff_m12": 0.023,
+   "payoff_cash_only_m12": null
+  },
+  "launch": {
+   "paid_per_run": 1.36,
+   "hours_per_run": 48.3,
+   "cash_per_run": 0.0,
+   "hours_per_paid": 35.4,
+   "cash_per_paid": 0.0,
+   "cac_eur_incl_hours": 1239.1,
+   "share_of_new_paid": {
+    "m1_3": 0.056,
+    "m4_6": 0.013,
+    "m7_12": 0.018
+   },
+   "mrr_m6_per_run": 49.0,
+   "mrr_m12_per_run": 65.3,
+   "revenue_m6_per_run": 235.7,
+   "revenue_m12_per_run": 525.4,
+   "payoff_m6": 0.166,
+   "payoff_cash_only_m6": null,
+   "payoff_m12": 0.585,
+   "payoff_cash_only_m12": null
+  },
+  "ads": {
+   "paid_per_run": 2.97,
+   "hours_per_run": 0.0,
+   "cash_per_run": 4965.6,
+   "hours_per_paid": 0.0,
+   "cash_per_paid": 1671.9,
+   "cac_eur_incl_hours": 1671.9,
+   "share_of_new_paid": {
+    "m1_3": 0.048,
+    "m4_6": 0.061,
+    "m7_12": 0.053
+   },
+   "mrr_m6_per_run": 102.3,
+   "mrr_m12_per_run": 166.6,
+   "revenue_m6_per_run": 284.8,
+   "revenue_m12_per_run": 1007.7,
+   "payoff_m6": 0.094,
+   "payoff_cash_only_m6": 0.094,
+   "payoff_m12": 0.262,
+   "payoff_cash_only_m12": 0.262
+  },
+  "referral": {
+   "paid_per_run": 3.36,
+   "hours_per_run": 0.0,
+   "cash_per_run": 0.0,
+   "hours_per_paid": 0.0,
+   "cash_per_paid": 0.0,
+   "cac_eur_incl_hours": 0.0,
+   "share_of_new_paid": {
+    "m1_3": 0.087,
+    "m4_6": 0.028,
+    "m7_12": 0.067
+   },
+   "mrr_m6_per_run": 95.0,
+   "mrr_m12_per_run": 198.4,
+   "revenue_m6_per_run": 428.9,
+   "revenue_m12_per_run": 1152.8,
+   "payoff_m6": null,
+   "payoff_cash_only_m6": null,
+   "payoff_m12": null,
+   "payoff_cash_only_m12": null
+  },
+  "outreach": {
+   "paid_per_run": 33.6,
+   "hours_per_run": 1605.4,
+   "cash_per_run": 0.0,
+   "hours_per_paid": 47.8,
+   "cash_per_paid": 0.0,
+   "cac_eur_incl_hours": 1672.3,
+   "share_of_new_paid": {
+    "m1_3": 0.704,
+    "m4_6": 0.66,
+    "m7_12": 0.546
+   },
+   "mrr_m6_per_run": 1206.9,
+   "mrr_m12_per_run": 1897.4,
+   "revenue_m6_per_run": 3863.7,
+   "revenue_m12_per_run": 12157.1,
+   "payoff_m6": 0.105,
+   "payoff_cash_only_m6": null,
+   "payoff_m12": 0.299,
+   "payoff_cash_only_m12": null
+  }
+ },
+ "baseline_seo": {
+  "authority": {
+   "m3": {
+    "p10": 8.4,
+    "p50": 11.5,
+    "p90": 16.2
+   },
+   "m6": {
+    "p10": 10.5,
+    "p50": 14.3,
+    "p90": 19.8
+   },
+   "m12": {
+    "p10": 14.3,
+    "p50": 19.5,
+    "p90": 26.9
+   }
+  },
+  "tiers": {
+   "A": {
+    "top10_share_m6_p50": 0.516,
+    "top3_share_m6_p50": 0.166,
+    "clicks_per_month_m6": {
+     "p10": 33.6,
+     "p50": 85.8,
+     "p90": 208.3
+    },
+    "top10_share_m12_p50": 0.815,
+    "top3_share_m12_p50": 0.424,
+    "clicks_per_month_m12": {
+     "p10": 76.8,
+     "p50": 169.8,
+     "p90": 396.0
+    },
+    "outranks_median_competitor_by_m6": 0.228,
+    "outranks_median_competitor_by_m12": 0.482,
+    "first_outrank_week_p50": 27.0
+   },
+   "B": {
+    "top10_share_m6_p50": 0.097,
+    "top3_share_m6_p50": 0.009,
+    "clicks_per_month_m6": {
+     "p10": 5.7,
+     "p50": 20.7,
+     "p90": 70.5
+    },
+    "top10_share_m12_p50": 0.289,
+    "top3_share_m12_p50": 0.051,
+    "clicks_per_month_m12": {
+     "p10": 22.6,
+     "p50": 71.8,
+     "p90": 194.8
+    },
+    "outranks_median_competitor_by_m6": 0.0,
+    "outranks_median_competitor_by_m12": 0.008,
+    "first_outrank_week_p50": 46.0
+   },
+   "C": {
+    "top10_share_m6_p50": 0.0,
+    "top3_share_m6_p50": 0.0,
+    "clicks_per_month_m6": {
+     "p10": 0.0,
+     "p50": 0.0,
+     "p90": 0.2
+    },
+    "top10_share_m12_p50": 0.004,
+    "top3_share_m12_p50": 0.0,
+    "clicks_per_month_m12": {
+     "p10": 0.0,
+     "p50": 0.4,
+     "p90": 1.9
+    },
+    "outranks_median_competitor_by_m6": 0.0,
+    "outranks_median_competitor_by_m12": 0.0,
+    "first_outrank_week_p50": null
+   }
+  }
+ },
+ "answers": {
+  "cm_pays_for_itself": false,
+  "social": "Founder social posting changes survival by +2pp and mean M12 MRR by +76 EUR (within noise). Adding a community manager costs 6039 EUR/run and brings -1960 EUR of extra revenue in year 1 (survival -5pp): the CM does NOT pay for itself.",
+  "seo": "measured inside the best plan with SEO raised to 30% of hours (754 founder hours/run on SEO; survival -6pp vs the best plan); by M6 SEO-attributed revenue = 0.01x its cost (founder hours at 35 EUR/h; companies alive at M6); by M12 SEO-attributed revenue = 0.08x its cost (founder hours at 35 EUR/h; companies alive at M12); SEO-acquired MRR at M12 336 EUR/run vs ~2199 EUR/month of founder time; tier A outranks the median competitor in 57% of runs by M6 / 68% by M12; tier B outranks the median competitor in 1% of runs by M6 / 5% by M12; tier C outranks the median competitor in 0% of runs by M6 / 0% by M12; SEO alone: survival 1%, M12 MRR p50 0 EUR; removing SEO from the best plan: survival +0pp.",
+  "seo_pays_off_m6": false,
+  "seo_pays_off_m12": false
+ }
+}

@@ -1,0 +1,527 @@
+{
+ "seeds": {
+  "base_seed": 20261013,
+  "offsets": {
+   "iterations": 0,
+   "search": 0,
+   "search_top": 100000,
+   "sensitivity": 200000,
+   "stress": 200000,
+   "timeseries": 300000,
+   "channels": 400000
+  },
+  "sensitivity": [
+   200000,
+   200600
+  ]
+ },
+ "strategy": {
+  "name": "search",
+  "targets": [
+   "Small SaaS startup team"
+  ],
+  "pricing": {
+   "model": "tiered",
+   "free_plan": false,
+   "free_quota": 50,
+   "starter_price": 66.0,
+   "starter_quota": 2000,
+   "pro_price": 190.0,
+   "pro_quota": 10000,
+   "overage_per_100": 1.0,
+   "annual_discount": 0.17,
+   "launch_discount": 0.0,
+   "agency_plan_price": null,
+   "platform_fee": 0.0,
+   "per_resolution_price": 0.0
+  },
+  "hours": {
+   "engineering": 0.265,
+   "seo": 0.077,
+   "geo": 0.033,
+   "social": 0.057,
+   "outreach": 0.48,
+   "app_store": 0.0,
+   "agency": 0.0,
+   "launches": 0.088
+  },
+  "cs_min_share": 0.05,
+  "prelaunch_marketing_share": 0.25,
+  "paid_ads_per_month": 600,
+  "scope": {
+   "platforms": [
+    "js_saas"
+   ],
+   "actions": 2
+  },
+  "style": "cute_pro",
+  "offer": {
+   "done_for_you": true,
+   "guarantee": true,
+   "presell": true
+  },
+  "ltd": {
+   "enabled": false,
+   "price": 59,
+   "week_after_launch": 4
+  },
+  "in_run_adjust": true,
+  "install": "few_clicks",
+  "social": {
+   "cm": false,
+   "cm_cost": 900,
+   "platform_mix": {
+    "linkedin": 0.32,
+    "x": 0.348,
+    "shorts": 0.332
+   }
+  },
+  "free_generator": false
+ },
+ "description": "install=few_clicks | targets=smallSaaS | price=66/190 +overage 1.0/100 annual-17% | hours: engineering 26%, seo 7%, geo 3%, social 5%, outreach 48%, launches 8% | scope=js_saas/2 actions | DFY setup, guarantee, presell pilots, pro style, ads 600/mo, prelaunch mkt 25%, social mix linkedin 32%/x 34%/shorts 33%",
+ "sensitivity": {
+  "base_survival": 0.5583,
+  "delta": 0.3,
+  "seeds": 600,
+  "rows": [
+   {
+    "param": "segments.*.wtp_median",
+    "survival_minus": 0.3133,
+    "survival_plus": 0.7067,
+    "mrr_m12_p50_minus": 0.0,
+    "mrr_m12_p50_plus": 4862.6,
+    "swing": 0.3934
+   },
+   {
+    "param": "segments.*.trial_to_paid",
+    "survival_minus": 0.3633,
+    "survival_plus": 0.725,
+    "mrr_m12_p50_minus": 0.0,
+    "mrr_m12_p50_plus": 4976.6,
+    "swing": 0.3617
+   },
+   {
+    "param": "product.few_clicks.trial_to_paid_mult",
+    "survival_minus": 0.3633,
+    "survival_plus": 0.725,
+    "mrr_m12_p50_minus": 0.0,
+    "mrr_m12_p50_plus": 4976.6,
+    "swing": 0.3617
+   },
+   {
+    "param": "team.hours_per_week",
+    "survival_minus": 0.33,
+    "survival_plus": 0.6917,
+    "mrr_m12_p50_minus": 0.0,
+    "mrr_m12_p50_plus": 4890.8,
+    "swing": 0.3617
+   },
+   {
+    "param": "segments.*.reply_rate",
+    "survival_minus": 0.4333,
+    "survival_plus": 0.655,
+    "mrr_m12_p50_minus": 0.0,
+    "mrr_m12_p50_plus": 4346.6,
+    "swing": 0.2217
+   },
+   {
+    "param": "sales.outreach.contacts_per_hour",
+    "survival_minus": 0.445,
+    "survival_plus": 0.6483,
+    "mrr_m12_p50_minus": 0.0,
+    "mrr_m12_p50_plus": 4240.9,
+    "swing": 0.2033
+   },
+   {
+    "param": "product.base_build_weeks",
+    "survival_minus": 0.6033,
+    "survival_plus": 0.4567,
+    "mrr_m12_p50_minus": 3945.1,
+    "mrr_m12_p50_plus": 0.0,
+    "swing": 0.1466
+   },
+   {
+    "param": "product.asr_narrow_start",
+    "survival_minus": 0.5083,
+    "survival_plus": 0.61,
+    "mrr_m12_p50_minus": 2842.9,
+    "mrr_m12_p50_plus": 3860.8,
+    "swing": 0.1017
+   },
+   {
+    "param": "segments.*.proof_sensitivity",
+    "survival_minus": 0.6133,
+    "survival_plus": 0.5183,
+    "mrr_m12_p50_minus": 3831.1,
+    "mrr_m12_p50_plus": 3137.7,
+    "swing": 0.095
+   },
+   {
+    "param": "segments.*.visitor_to_signup",
+    "survival_minus": 0.5267,
+    "survival_plus": 0.6167,
+    "mrr_m12_p50_minus": 2912.7,
+    "mrr_m12_p50_plus": 4093.7,
+    "swing": 0.09
+   },
+   {
+    "param": "segments.*.competition_pressure",
+    "survival_minus": 0.59,
+    "survival_plus": 0.5233,
+    "mrr_m12_p50_minus": 3771.7,
+    "mrr_m12_p50_plus": 3012.5,
+    "swing": 0.0667
+   },
+   {
+    "param": "marketing.geo.max_referrals_per_week",
+    "survival_minus": 0.5233,
+    "survival_plus": 0.58,
+    "mrr_m12_p50_minus": 3025.4,
+    "mrr_m12_p50_plus": 3748.7,
+    "swing": 0.0567
+   },
+   {
+    "param": "segments.*.churn_monthly",
+    "survival_minus": 0.5817,
+    "survival_plus": 0.54,
+    "mrr_m12_p50_minus": 3838.2,
+    "mrr_m12_p50_plus": 3131.0,
+    "swing": 0.0417
+   },
+   {
+    "param": "customer_success.hours_per_paid_customer_per_week",
+    "survival_minus": 0.5617,
+    "survival_plus": 0.5333,
+    "mrr_m12_p50_minus": 3604.0,
+    "mrr_m12_p50_plus": 3253.7,
+    "swing": 0.0284
+   },
+   {
+    "param": "marketing.seo_competition.authority_anchor",
+    "survival_minus": 0.55,
+    "survival_plus": 0.5633,
+    "mrr_m12_p50_minus": 3472.5,
+    "mrr_m12_p50_plus": 3630.8,
+    "swing": 0.0133
+   },
+   {
+    "param": "social.platforms.*.base_impressions",
+    "survival_minus": 0.56,
+    "survival_plus": 0.5733,
+    "mrr_m12_p50_minus": 3418.2,
+    "mrr_m12_p50_plus": 3574.8,
+    "swing": 0.0133
+   },
+   {
+    "param": "marketing.seo_competition.tiers.*.monthly_volume",
+    "survival_minus": 0.5517,
+    "survival_plus": 0.56,
+    "mrr_m12_p50_minus": 3364.3,
+    "mrr_m12_p50_plus": 3552.4,
+    "swing": 0.0083
+   },
+   {
+    "param": "marketing.launches.*.visitors_median",
+    "survival_minus": 0.545,
+    "survival_plus": 0.5517,
+    "mrr_m12_p50_minus": 3535.2,
+    "mrr_m12_p50_plus": 3480.6,
+    "swing": 0.0067
+   },
+   {
+    "param": "social.platforms.*.click_rate",
+    "survival_minus": 0.5517,
+    "survival_plus": 0.5583,
+    "mrr_m12_p50_minus": 3535.7,
+    "mrr_m12_p50_plus": 3502.0,
+    "swing": 0.0066
+   },
+   {
+    "param": "segments.*.conv_per_month_median",
+    "survival_minus": 0.56,
+    "survival_plus": 0.5633,
+    "mrr_m12_p50_minus": 3445.3,
+    "mrr_m12_p50_plus": 3688.7,
+    "swing": 0.0033
+   },
+   {
+    "param": "segments.*.style_appeal",
+    "survival_minus": 0.5583,
+    "survival_plus": 0.56,
+    "mrr_m12_p50_minus": 3584.4,
+    "mrr_m12_p50_plus": 3562.7,
+    "swing": 0.0017
+   },
+   {
+    "param": "marketing.seo.sandbox_weeks",
+    "survival_minus": 0.5583,
+    "survival_plus": 0.56,
+    "mrr_m12_p50_minus": 3584.4,
+    "mrr_m12_p50_plus": 3575.9,
+    "swing": 0.0017
+   },
+   {
+    "param": "costs.llm_cost_per_conv",
+    "survival_minus": 0.5583,
+    "survival_plus": 0.5583,
+    "mrr_m12_p50_minus": 3584.4,
+    "mrr_m12_p50_plus": 3584.4,
+    "swing": 0.0
+   },
+   {
+    "param": "marketing.seo_competition.tiers.*.top10_authority",
+    "survival_minus": 0.55,
+    "survival_plus": 0.55,
+    "mrr_m12_p50_minus": 3486.1,
+    "mrr_m12_p50_plus": 3271.6,
+    "swing": 0.0
+   },
+   {
+    "param": "sales.app_store.base_installs_per_week",
+    "survival_minus": 0.5583,
+    "survival_plus": 0.5583,
+    "mrr_m12_p50_minus": 3584.4,
+    "mrr_m12_p50_plus": 3584.4,
+    "swing": 0.0
+   },
+   {
+    "param": "viability.starting_cash",
+    "survival_minus": 0.5583,
+    "survival_plus": 0.5583,
+    "mrr_m12_p50_minus": 3584.4,
+    "mrr_m12_p50_plus": 3584.4,
+    "swing": 0.0
+   }
+  ]
+ },
+ "stress": {
+  "naive": {
+   "pessimistic": {
+    "survival": 0.0,
+    "mrr_m3": {
+     "p10": 0.0,
+     "p50": 0.0,
+     "p90": 0.0
+    },
+    "mrr_m6": {
+     "p10": 0.0,
+     "p50": 0.0,
+     "p90": 0.0
+    },
+    "mrr_m12": {
+     "p10": 0.0,
+     "p50": 0.0,
+     "p90": 0.0
+    },
+    "death_causes": {
+     "no_traffic": 31,
+     "low_conversion": 0,
+     "price_too_high": 0,
+     "price_too_low": 0,
+     "churn": 0,
+     "cash_burn": 0,
+     "llm_costs": 0,
+     "build_too_long": 569
+    }
+   },
+   "baseline": {
+    "survival": 0.0,
+    "mrr_m3": {
+     "p10": 0.0,
+     "p50": 0.0,
+     "p90": 0.0
+    },
+    "mrr_m6": {
+     "p10": 0.0,
+     "p50": 0.0,
+     "p90": 116.0
+    },
+    "mrr_m12": {
+     "p10": 0.0,
+     "p50": 0.0,
+     "p90": 0.0
+    },
+    "death_causes": {
+     "no_traffic": 120,
+     "low_conversion": 0,
+     "price_too_high": 0,
+     "price_too_low": 0,
+     "churn": 0,
+     "cash_burn": 0,
+     "llm_costs": 0,
+     "build_too_long": 480
+    }
+   },
+   "optimistic": {
+    "survival": 0.0133,
+    "mrr_m3": {
+     "p10": 0.0,
+     "p50": 29.0,
+     "p90": 224.0
+    },
+    "mrr_m6": {
+     "p10": 0.0,
+     "p50": 477.0,
+     "p90": 1344.5
+    },
+    "mrr_m12": {
+     "p10": 0.0,
+     "p50": 0.0,
+     "p90": 0.0
+    },
+    "death_causes": {
+     "no_traffic": 336,
+     "low_conversion": 0,
+     "price_too_high": 0,
+     "price_too_low": 0,
+     "churn": 0,
+     "cash_burn": 0,
+     "llm_costs": 0,
+     "build_too_long": 256
+    }
+   },
+   "very_optimistic": {
+    "survival": 0.62,
+    "mrr_m3": {
+     "p10": 0.0,
+     "p50": 369.0,
+     "p90": 751.0
+    },
+    "mrr_m6": {
+     "p10": 0.0,
+     "p50": 2328.0,
+     "p90": 3923.6
+    },
+    "mrr_m12": {
+     "p10": 0.0,
+     "p50": 7866.5,
+     "p90": 14295.8
+    },
+    "death_causes": {
+     "no_traffic": 154,
+     "low_conversion": 0,
+     "price_too_high": 0,
+     "price_too_low": 0,
+     "churn": 0,
+     "cash_burn": 0,
+     "llm_costs": 0,
+     "build_too_long": 74
+    }
+   }
+  },
+  "best_search": {
+   "pessimistic": {
+    "survival": 0.0,
+    "mrr_m3": {
+     "p10": 0.0,
+     "p50": 0.0,
+     "p90": 190.0
+    },
+    "mrr_m6": {
+     "p10": 0.0,
+     "p50": 0.0,
+     "p90": 0.0
+    },
+    "mrr_m12": {
+     "p10": 0.0,
+     "p50": 0.0,
+     "p90": 0.0
+    },
+    "death_causes": {
+     "no_traffic": 5,
+     "low_conversion": 8,
+     "price_too_high": 15,
+     "price_too_low": 3,
+     "churn": 0,
+     "cash_burn": 381,
+     "llm_costs": 0,
+     "build_too_long": 188
+    }
+   },
+   "baseline": {
+    "survival": 0.5583,
+    "mrr_m3": {
+     "p10": 0.0,
+     "p50": 774.9,
+     "p90": 1637.8
+    },
+    "mrr_m6": {
+     "p10": 0.0,
+     "p50": 1682.3,
+     "p90": 3462.7
+    },
+    "mrr_m12": {
+     "p10": 0.0,
+     "p50": 3584.4,
+     "p90": 7644.3
+    },
+    "death_causes": {
+     "no_traffic": 6,
+     "low_conversion": 18,
+     "price_too_high": 158,
+     "price_too_low": 0,
+     "churn": 7,
+     "cash_burn": 0,
+     "llm_costs": 0,
+     "build_too_long": 76
+    }
+   },
+   "optimistic": {
+    "survival": 0.9733,
+    "mrr_m3": {
+     "p10": 2220.0,
+     "p50": 4483.5,
+     "p90": 7484.3
+    },
+    "mrr_m6": {
+     "p10": 5194.0,
+     "p50": 9942.4,
+     "p90": 15366.3
+    },
+    "mrr_m12": {
+     "p10": 12150.9,
+     "p50": 22373.7,
+     "p90": 32952.9
+    },
+    "death_causes": {
+     "no_traffic": 0,
+     "low_conversion": 0,
+     "price_too_high": 0,
+     "price_too_low": 0,
+     "churn": 0,
+     "cash_burn": 0,
+     "llm_costs": 0,
+     "build_too_long": 16
+    }
+   },
+   "very_optimistic": {
+    "survival": 0.995,
+    "mrr_m3": {
+     "p10": 5921.2,
+     "p50": 9378.8,
+     "p90": 13072.1
+    },
+    "mrr_m6": {
+     "p10": 13601.9,
+     "p50": 21061.1,
+     "p90": 28285.2
+    },
+    "mrr_m12": {
+     "p10": 32111.7,
+     "p50": 48574.2,
+     "p90": 65677.3
+    },
+    "death_causes": {
+     "no_traffic": 0,
+     "low_conversion": 0,
+     "price_too_high": 0,
+     "price_too_low": 0,
+     "churn": 0,
+     "cash_burn": 0,
+     "llm_costs": 0,
+     "build_too_long": 3
+    }
+   }
+  }
+ }
+}
