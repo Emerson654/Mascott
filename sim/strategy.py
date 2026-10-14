@@ -20,37 +20,51 @@ A strategy is a plain JSON-serialisable dict:
                        offered a paid 3-month pilot instead of a trial)
     ltd                enabled, price, week_after_launch
     in_run_adjust      let the CEO move hours during the run (monthly review)
+    install            "snippet" | "few_clicks" (v2: guided wizard + site crawl + plugins)
+    social             cm (hire a freelance community manager), cm_cost (EUR/month),
+                       platform_mix (linkedin / x / shorts); founder posting = hours["social"]
+    free_generator     offer the mascot generator free as a lead magnet (v2)
 """
 import copy
 import math
 
-from engine import PLATFORMS, HOUR_KEYS
+from engine import PLATFORMS, HOUR_KEYS, MARKETING_KEYS
 
 AGENCY = "Web agency or freelancer"
 
 
 # --------------------------------------------------------------------------- basics
 def naive_strategy(cfg):
-    """Iteration 1: the founder's plan from idea.md / pitch.md."""
+    """Iteration 1 (SPEC-v2): the founder's stated vision - few-clicks install, cute mascot with a
+    pro option, all segments, SEO + GEO + social (founder posting) as the main channels,
+    29/79 EUR with a free plan, broad scope."""
     return normalize({
-        "name": "naive: all segments, 29/79 + free, SEO/GEO only, broad scope",
+        "name": "founder vision: few-clicks, cute+pro, all segments, SEO/GEO/social, 29/79 + free",
         "targets": list(cfg["segments"].keys()),
         "pricing": {"model": "tiered", "free_plan": True, "free_quota": 50,
                     "starter_price": 29, "starter_quota": 1000,
                     "pro_price": 79, "pro_quota": 5000,
                     "overage_per_100": 0.0, "annual_discount": 0.0, "launch_discount": 0.0,
                     "agency_plan_price": None, "platform_fee": 0.0, "per_resolution_price": 0.0},
-        "hours": {"engineering": 0.3, "seo": 0.5, "geo": 0.2, "outreach": 0.0,
+        "hours": {"engineering": 0.3, "seo": 0.35, "geo": 0.15, "social": 0.2, "outreach": 0.0,
                   "app_store": 0.0, "agency": 0.0, "launches": 0.0},
         "cs_min_share": 0.05,
         "prelaunch_marketing_share": 0.0,
         "paid_ads_per_month": 0.0,
         "scope": {"platforms": list(PLATFORMS), "actions": 6},
-        "style": "cute",
+        "style": "cute_pro",
         "offer": {"done_for_you": False, "guarantee": False, "presell": False},
         "ltd": {"enabled": False, "price": 59, "week_after_launch": 4},
         "in_run_adjust": True,
+        "install": "few_clicks",
+        "social": {"cm": False, "cm_cost": 900, "platform_mix": {"linkedin": 0.4, "x": 0.2, "shorts": 0.4}},
+        "free_generator": False,
     }, cfg)
+
+
+def is_vision(s):
+    """The founder's non-negotiables: few-clicks install, cute house style (with or without the pro option)."""
+    return s.get("install") == "few_clicks" and s.get("style") in ("cute", "cute_pro")
 
 
 def normalize(s, cfg):
@@ -94,6 +108,16 @@ def normalize(s, cfg):
     s.setdefault("ltd", {"enabled": False, "price": 59, "week_after_launch": 4})
     s.setdefault("in_run_adjust", True)
     s.setdefault("name", "strategy")
+    s["install"] = "few_clicks" if s.get("install") == "few_clicks" else "snippet"
+    so = s.setdefault("social", {})
+    so["cm"] = bool(so.get("cm", False))
+    lo, hi = cfg["social"]["cm_cost_range"]
+    so["cm_cost"] = round(min(hi, max(lo, float(so.get("cm_cost", cfg["social"]["cm_ref_cost"])))))
+    mix = so.get("platform_mix") or {"linkedin": 1.0}
+    mix = {k: max(0.0, float(mix.get(k, 0.0))) for k in cfg["social"]["platforms"]}
+    tot = sum(mix.values()) or 1.0
+    so["platform_mix"] = {k: round(v / tot, 3) for k, v in mix.items()}
+    s["free_generator"] = bool(s.get("free_generator", False))
     return s
 
 
@@ -135,7 +159,15 @@ def describe(s):
         extras.append("ads %g/mo" % s["paid_ads_per_month"])
     if s["prelaunch_marketing_share"]:
         extras.append("prelaunch mkt %d%%" % (s["prelaunch_marketing_share"] * 100))
-    return "targets=%s | price=%s | hours: %s | scope=%s | %s" % (tg, price, hrs, sc, ", ".join(extras) or "no extras")
+    if s.get("social", {}).get("cm"):
+        extras.append("CM %g/mo" % s["social"]["cm_cost"])
+    if s["hours"].get("social", 0) >= 0.03 or s.get("social", {}).get("cm"):
+        mix = s["social"]["platform_mix"]
+        extras.append("social mix " + "/".join("%s %d%%" % (k, v * 100) for k, v in mix.items() if v > 0))
+    if s.get("free_generator"):
+        extras.append("free generator")
+    return "install=%s | targets=%s | price=%s | hours: %s | scope=%s | %s" % (
+        s.get("install", "snippet"), tg, price, hrs, sc, ", ".join(extras) or "no extras")
 
 
 def short(seg):
@@ -253,13 +285,13 @@ def a_switch_segment(s, sm, cfg, rng):
 
 def a_outreach(s, sm, cfg, rng):
     h = s["hours"]
-    if h["outreach"] >= 0.45:
+    if h["outreach"] >= 0.3:
         return None
     moved = _shift(h, ("seo", "geo"), "outreach", 0.5)
     if moved < 0.05:
         h["outreach"] += 0.2
-    return ("shift %.0f%% of hours from SEO/GEO to founder-led outreach: SEO sandbox (8-16 wks) means "
-            "organic traffic arrives after the M3 deadline" % (max(moved, 0.2) * 100))
+    return ("shift %.0f%% of hours from SEO/GEO to founder-led outreach: against AS-40+ competitors organic "
+            "traffic stays small until months 6-12" % (max(moved, 0.2) * 100))
 
 
 def a_prelaunch(s, sm, cfg, rng):
@@ -282,6 +314,63 @@ def a_presell(s, sm, cfg, rng):
         s["hours"]["outreach"] += 0.15
     return ("presell: offer pre-launch outreach replies a paid 3-month pilot (-20%) so the first euros "
             "arrive at launch instead of after the sandbox (board Offers lens condition #3)")
+
+
+def a_social(s, sm, cfg, rng):
+    h = s["hours"]
+    if h.get("social", 0) >= 0.08:
+        return None
+    moved = _shift(h, ("seo", "geo"), "social", 0.25)
+    if h["social"] < 0.08:
+        h["social"] = 0.1
+    s["social"]["platform_mix"] = {"linkedin": 0.6, "x": 0.3, "shorts": 0.1}
+    return ("founders post on LinkedIn/X (build in public): warms outreach, earns mentions, short mascot clips "
+            "(%.0f%% of SEO/GEO hours moved)" % (moved * 100))
+
+
+def a_hire_cm(s, sm, cfg, rng):
+    so = s["social"]
+    if so["cm"]:
+        return None
+    so["cm"] = True
+    so["cm_cost"] = cfg["social"]["cm_ref_cost"]
+    return "hire a part-time freelance community manager (%g EUR/month) to post mascot clips daily" % so["cm_cost"]
+
+
+def a_drop_cm(s, sm, cfg, rng):
+    if not s["social"]["cm"]:
+        return None
+    s["social"]["cm"] = False
+    return "let the community manager go (cash burn; reach did not turn into paying B2B customers)"
+
+
+def a_social_b2b(s, sm, cfg, rng):
+    so = s["social"]
+    if not (s["hours"].get("social", 0) > 0.02 or so["cm"]) or so["platform_mix"].get("linkedin", 0) >= 0.6:
+        return None
+    so["platform_mix"] = {"linkedin": 0.6, "x": 0.3, "shorts": 0.1}
+    return "shift social to LinkedIn/X where the B2B buyers are (Shorts reach is mostly consumers)"
+
+
+def a_few_clicks(s, sm, cfg, rng):
+    if s.get("install") == "few_clicks":
+        return None
+    s["install"] = "few_clicks"
+    return "build the few-clicks install (wizard, site crawl, plugins): faster time-to-value, higher trial->paid"
+
+
+def a_snippet(s, sm, cfg, rng):
+    if s.get("install") != "few_clicks":
+        return None
+    s["install"] = "snippet"
+    return "ship with the plain snippet install first (saves 2-4 build weeks); few-clicks later"
+
+
+def a_free_generator(s, sm, cfg, rng):
+    if s.get("free_generator"):
+        return None
+    s["free_generator"] = True
+    return "offer the mascot generator free as a lead magnet (links, shareable mascots, generator searches)"
 
 
 def a_launches(s, sm, cfg, rng):
@@ -502,16 +591,22 @@ def a_cut_prelaunch(s, sm, cfg, rng):
 
 
 PLAYBOOK = {
-    "no_traffic": [a_outreach, a_focus, a_prelaunch, a_presell, a_app_store, a_launches, a_agency,
-                   a_switch_segment, a_ads],
-    "low_conversion": [a_focus, a_narrow, a_dfy, a_pro_style, a_guarantee, a_switch_segment, a_cs, a_eng],
+    "no_traffic": [a_outreach, a_focus, a_prelaunch, a_presell, a_social_b2b, a_social, a_app_store,
+                   a_launches, a_free_generator, a_hire_cm, a_agency, a_switch_segment, a_ads],
+    "low_conversion": [a_focus, a_narrow, a_few_clicks, a_dfy, a_pro_style, a_guarantee, a_switch_segment,
+                       a_cs, a_eng],
     "price_too_high": [a_lower_price, a_focus_wtp, a_launch_discount, a_switch_segment, a_add_free],
     "price_too_low": [a_raise_price, a_no_free, a_overage, a_annual],
-    "churn": [a_cs, a_eng, a_narrow, a_annual, a_dfy],
-    "cash_burn": [a_cut_ads, a_drop_ltd, a_no_free, a_annual],
+    "churn": [a_cs, a_eng, a_few_clicks, a_narrow, a_annual, a_dfy],
+    "cash_burn": [a_cut_ads, a_drop_cm, a_drop_ltd, a_no_free, a_annual],
     "llm_costs": [a_overage, a_quotas, a_no_free, a_per_resolution, a_raise_price],
-    "build_too_long": [a_narrow, a_drop_pro_style, a_cut_prelaunch],
+    "build_too_long": [a_narrow, a_snippet, a_drop_pro_style, a_cut_prelaunch],
 }
+
+
+OPPOSITE = {"a_drop_cm": "a_hire_cm", "a_snippet": "a_few_clicks", "a_few_clicks": "a_snippet",
+            "a_no_free": "a_add_free", "a_add_free": "a_no_free", "a_drop_pro_style": "a_pro_style",
+            "a_drop_ltd": "a_add_ltd", "a_cut_ads": "a_ads"}
 
 
 def dominant_cause(summary):
@@ -526,8 +621,9 @@ def dominant_cause(summary):
 def cause_evidence(cause, sm, cfg):
     v = cfg["viability"]
     if cause == "no_traffic":
-        return ("median %d trials by end of run, %.0f SEO / %.0f GEO visitors per run; M3 needs %d EUR MRR"
-                % (sm["trials"]["p50"], sm["visitors"]["seo"], sm["visitors"]["geo"], v["m3_min_mrr"]))
+        return ("median %d trials by end of run, %.0f SEO / %.0f GEO / %.0f social visitors per run; M6 needs %d EUR MRR"
+                % (sm["trials"]["p50"], sm["visitors"]["seo"], sm["visitors"]["geo"], sm["visitors"].get("social", 0),
+                   v["m6_min_mrr"]))
     if cause in ("low_conversion", "price_too_high"):
         return ("trial->paid %.0f%%, %.0f%% of fitting trialists priced out"
                 % (sm["trial_to_paid"] * 100, sm["price_lost_share"] * 100))
@@ -610,6 +706,9 @@ def post_mortem(strategy, summary, history, rng, cfg, tried):
         if change is None:
             change, action_name = "no playbook move left; exploring", "explore"
     tried.add((fp, action_name))
+    # a move that undoes an earlier lever retires the opposite move for good (no hire/fire ping-pong)
+    if action_name in OPPOSITE:
+        tried.add(("*", OPPOSITE[action_name]))
     s = normalize(s, cfg)
     reason = "%.0f%% of deaths were %s (%s)" % (share * 100, cause, cause_evidence(cause, base_summary, cfg))
     decision = {
@@ -653,7 +752,7 @@ def random_strategy(rng, cfg):
         "per_resolution_price": rng.choice([0.08, 0.12, 0.2, 0.3]),
     }
     hours = {k: rng.random() ** 1.5 for k in HOUR_KEYS}
-    for k in ("app_store", "agency", "launches", "geo"):
+    for k in ("app_store", "agency", "launches", "geo", "social"):
         if rng.random() < 0.5:
             hours[k] = 0.0
     hours["engineering"] = max(hours["engineering"], 0.1)
@@ -676,6 +775,10 @@ def random_strategy(rng, cfg):
                   "presell": rng.random() < 0.35},
         "ltd": {"enabled": rng.random() < 0.12, "price": rng.choice([49, 59, 79, 99]), "week_after_launch": rng.choice([2, 4, 8])},
         "in_run_adjust": True,
+        "install": "few_clicks" if rng.random() < 0.5 else "snippet",
+        "social": {"cm": rng.random() < 0.25, "cm_cost": rng.choice([600, 900, 1200, 1500]),
+                   "platform_mix": {k: rng.random() for k in cfg["social"]["platforms"]}},
+        "free_generator": rng.random() < 0.3,
     }
     return normalize(s, cfg)
 
@@ -688,7 +791,8 @@ def mutate(s, rng, cfg, n_changes=None, return_log=False):
     n = n_changes or rng.choice([1, 1, 2, 3])
     for _ in range(n):
         kind = rng.choice(["targets", "price", "price", "hours", "hours", "scope", "offer", "free",
-                           "quota", "prelaunch", "ads", "style", "annual", "overage"])
+                           "quota", "prelaunch", "ads", "style", "annual", "overage",
+                           "install", "cm", "social_mix", "generator"])
         p = s["pricing"]
         if kind == "targets":
             t = rng.choice(segs)
@@ -762,6 +866,23 @@ def mutate(s, rng, cfg, n_changes=None, return_log=False):
         elif kind == "overage":
             p["overage_per_100"] = rng.choice([0.0, 1.0, 2.0, 4.0])
             log.append("overage %.1f/100" % p["overage_per_100"])
+        elif kind == "install":
+            s["install"] = "snippet" if s.get("install") == "few_clicks" else "few_clicks"
+            log.append("install=%s" % s["install"])
+        elif kind == "cm":
+            so = s["social"]
+            if so["cm"] and rng.random() < 0.5:
+                so["cm_cost"] = rng.choice([600, 900, 1200, 1500])
+                log.append("CM cost %g" % so["cm_cost"])
+            else:
+                so["cm"] = not so["cm"]
+                log.append("CM=%s" % so["cm"])
+        elif kind == "social_mix":
+            s["social"]["platform_mix"] = {k: rng.random() for k in cfg["social"]["platforms"]}
+            log.append("social platform mix reshuffled")
+        elif kind == "generator":
+            s["free_generator"] = not s.get("free_generator")
+            log.append("free_generator=%s" % s["free_generator"])
     s = normalize(s, cfg)
     if return_log:
         return s, "; ".join(log)

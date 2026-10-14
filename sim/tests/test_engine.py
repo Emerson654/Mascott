@@ -38,7 +38,8 @@ def great_market(c):
                    style_appeal=1.0, pro_style_appeal=1.0, competition_pressure=0.0,
                    proof_sensitivity=0.0, churn_monthly=0.005, reply_rate=[0.3, 0.4], need_actions=0.0)
     c["marketing"]["seo"]["sandbox_weeks"] = [1, 2]
-    c["marketing"]["seo"]["visits_per_page_mature"] = 30
+    for tier in c["marketing"]["seo_competition"]["tiers"].values():
+        tier.update(monthly_volume=50000, kd=5, top10_authority=5)
     c["marketing"]["referral"]["network_launch_visitors"] = [3000, 4000]
     c["costs"]["llm_cost_per_conv"] = [0.001, 0.002, 0.003]
     # the naive plan's broad scope takes longer to build than the CEO's 20-week cap;
@@ -67,7 +68,7 @@ def survival(c, s, n):
 
 
 class TestDeathRules(unittest.TestCase):
-    def test_zero_demand_market_dies_at_m3(self):
+    def test_zero_demand_market_dies_at_m6(self):
         c = set_all_segments(cfg(), "trial_to_paid", 0.0)
         c["sales"]["ltd"]["units_median"] = 1
         s = strat.naive_strategy(c)
@@ -76,15 +77,34 @@ class TestDeathRules(unittest.TestCase):
         for r in res:
             self.assertFalse(r["alive"])
             if r["cause"] != "build_too_long":
-                # died exactly at the month-3 check (end of post-launch week 13 = index 12)
-                self.assertEqual(r["death_wsl"], BASE_CFG["viability"]["m3_week"] - 1)
-                self.assertEqual(r["mrr_m3"], 0.0)
+                # v2: died exactly at the month-6 check (end of post-launch week 26 = index 25)
+                self.assertEqual(r["death_wsl"], BASE_CFG["viability"]["m6_week"] - 1)
+                self.assertEqual(r["mrr_m6"], 0.0)
                 self.assertEqual(r["mrr_m12"], 0.0)
+                self.assertTrue(r["m3_warning"])
 
-    def test_m3_thresholds_come_from_config(self):
+    def test_m3_is_only_a_warning(self):
+        """v2: a company below the old M3 bar keeps going; it gets the early-warning flag instead."""
+        c = cfg()
+        s = strong_strategy(c)
+        s["offer"]["presell"] = False            # no presold pilots: traction starts later
+        s["prelaunch_marketing_share"] = 0.0
+        s = strat.normalize(s, c)
+        seen_warned_survivor = False
+        for i in range(120):
+            r = engine.simulate(c, s, i)
+            if r["death_wsl"] is not None:
+                self.assertNotEqual(r["death_wsl"], c["viability"]["m3_week"] - 1)
+            if r["mrr_m3"] < c["viability"]["m3_warning_mrr"] and r["mrr_m3"] > 0:
+                self.assertTrue(r["m3_warning"])
+            if r["alive"] and (r["mrr_m3"] < 500 or r["cum_rev_m3"] < 1000):
+                seen_warned_survivor = True     # would have died under the v1 month-3 rule
+        self.assertTrue(seen_warned_survivor, "some company failing the old M3 bar should still survive the year")
+
+    def test_m6_thresholds_come_from_config(self):
         c = set_all_segments(cfg(), "trial_to_paid", 0.0)
-        c["viability"]["m3_min_mrr"] = 0
-        c["viability"]["m3_min_cum_revenue"] = 0
+        c["viability"]["m6_min_mrr"] = 0
+        c["viability"]["m6_min_cum_revenue"] = 0
         c["viability"]["max_build_weeks"] = 200
         s = strat.naive_strategy(c)
         s["pricing"]["free_plan"] = False
@@ -264,11 +284,18 @@ class TestStrategyAndConfig(unittest.TestCase):
             "Small business / showcase site", "Edtech, kids or consumer-app team"])
 
     def test_naive_plan_matches_spec(self):
+        """SPEC-v2: iteration 1 = the founder's vision."""
         s = strat.naive_strategy(cfg())
         self.assertEqual(len(s["targets"]), 6)
         self.assertEqual((s["pricing"]["starter_price"], s["pricing"]["pro_price"]), (29, 79))
         self.assertTrue(s["pricing"]["free_plan"])
         self.assertEqual(s["hours"]["outreach"] + s["hours"]["app_store"] + s["hours"]["agency"], 0)
+        self.assertGreater(s["hours"]["social"], 0)
+        self.assertGreater(s["hours"]["seo"], 0)
+        self.assertGreater(s["hours"]["geo"], 0)
+        self.assertEqual(s["install"], "few_clicks")
+        self.assertEqual(s["style"], "cute_pro")
+        self.assertTrue(strat.is_vision(s))
         self.assertEqual(len(s["scope"]["platforms"]), 4)
 
     def test_random_and_mutated_strategies_are_valid(self):
@@ -327,3 +354,139 @@ class TestStrategyAndConfig(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestV2Mechanics(unittest.TestCase):
+    def test_social_channel_accounting(self):
+        c = cfg()
+        s = strong_strategy(c)
+        s["hours"]["social"] = 0.15
+        s["social"].update(cm=True, cm_cost=1200, platform_mix={"linkedin": 0.6, "x": 0.3, "shorts": 0.1})
+        s = strat.normalize(s, c)
+        for seed in range(6):
+            r = engine.simulate(c, s, seed)
+            led = r["ledger_out"]["social_cm"]
+            self.assertAlmostEqual(led, r["ch_cash"]["social"], delta=0.5)
+            self.assertAlmostEqual(r["social"]["cm_cost_total"], led, delta=0.5)
+            if r["alive"]:
+                # CM is paid every week from launch to the end of the horizon
+                self.assertAlmostEqual(led, 1200 * 52 / c["simulation"]["weeks_per_month"], delta=5)
+            self.assertGreater(r["ch_hours"]["social"], 0)
+            expected = c["viability"]["starting_cash"] + sum(r["ledger_in"].values()) - sum(r["ledger_out"].values())
+            self.assertAlmostEqual(r["cash_end"], expected, delta=0.05)
+            self.assertGreaterEqual(r["social"]["followers"], 800)
+        no_social = strat.normalize(dict(s, social={"cm": False, "cm_cost": 900, "platform_mix": {"linkedin": 1}},
+                                         hours=dict(s["hours"], social=0.0), install="snippet"), c)
+        r0 = engine.simulate(c, no_social, 0)
+        self.assertEqual(r0["ledger_out"]["social_cm"], 0.0)
+        self.assertEqual(r0["social"]["impressions"], 0)
+
+    def test_cm_costs_cash_and_can_kill(self):
+        c = cfg()
+        c["viability"]["starting_cash"] = 1500
+        s = strong_strategy(c)
+        with_cm = strat.normalize(dict(s, social={"cm": True, "cm_cost": 1500, "platform_mix": {"linkedin": 1}}), c)
+        a, _ = survival(c, s, 60)
+        b, _ = survival(c, with_cm, 60)
+        self.assertGreater(b["death_causes"]["cash_burn"], a["death_causes"]["cash_burn"])
+
+    def test_install_effects(self):
+        c = cfg()
+        snip = strong_strategy(c)
+        snip["install"] = "snippet"
+        snip = strat.normalize(snip, c)
+        few = strat.normalize(dict(snip, install="few_clicks"), c)
+        a = engine.Company(c, snip, 3)
+        b = engine.Company(c, few, 3)
+        self.assertGreater(b.product.build_hours_needed, a.product.build_hours_needed)   # +2-4 build weeks
+        self.assertLess(b.product.setup_minutes, a.product.setup_minutes)
+        i = a.segs.index("Small SaaS startup team")
+        self.assertGreater(b.fit_static[i], a.fit_static[i])                             # higher trial->paid
+        a.new_customers_week = b.new_customers_week = 10
+        a.trials_active = b.trials_active = 20
+        self.assertLess(b.cs.need(), a.cs.need())                                        # fewer support hours
+        sa, _ = survival(c, snip, 150)
+        sb, _ = survival(c, few, 150)
+        self.assertGreater(sb["trial_to_paid"], sa["trial_to_paid"])
+        self.assertGreater(sb["build_weeks"]["p50"], sa["build_weeks"]["p50"])
+
+    def _seo_strategy(self, c):
+        s = strong_strategy(c)
+        s["hours"].update(seo=0.4)
+        return strat.normalize(s, c)
+
+    def test_strong_authority_market_blocks_new_domain(self):
+        c = cfg()
+        for tier in c["marketing"]["seo_competition"]["tiers"].values():
+            tier.update(top10_authority=90, kd=80)
+        s = self._seo_strategy(c)
+        clicks, outranked = 0.0, 0
+        for i in range(20):
+            r = engine.simulate(c, s, i)
+            snap = r["seo"]["snap"].get(6) or r["seo"]["snap"].get(3) or {"tiers": {}}
+            clicks += sum(t[2] for t in snap["tiers"].values())
+            outranked += sum(1 for v in r["seo"]["first_outrank"].values() if v is not None)
+        self.assertLess(clicks / 20, 5)
+        self.assertEqual(outranked, 0)
+
+    def test_weak_market_lets_a_new_domain_rank(self):
+        c = cfg()
+        for tier in c["marketing"]["seo_competition"]["tiers"].values():
+            tier.update(top10_authority=3, kd=5)
+        s = self._seo_strategy(c)
+        clicks, outranked, n = 0.0, 0, 0
+        for i in range(20):
+            r = engine.simulate(c, s, i)
+            if 6 in r["seo"]["snap"]:
+                n += 1
+                clicks += sum(t[2] for t in r["seo"]["snap"][6]["tiers"].values())
+            outranked += 1 if r["seo"]["first_outrank"]["A"] is not None else 0
+        self.assertGreater(clicks / max(1, n), 200)
+        self.assertGreaterEqual(outranked, 18)
+
+    def test_authority_grows_with_links(self):
+        c = cfg()
+        s = self._seo_strategy(c)
+        lazy = strat.normalize(dict(s, hours=dict(s["hours"], seo=0.05, launches=0.0, geo=0.0)), c)
+        a = [engine.simulate(c, s, i)["seo"]["snap"].get(6, {}).get("authority") for i in range(15)]
+        b = [engine.simulate(c, lazy, i)["seo"]["snap"].get(6, {}).get("authority") for i in range(15)]
+        pairs = [(x, y) for x, y in zip(a, b) if x is not None and y is not None]
+        self.assertTrue(pairs)
+        self.assertGreater(sum(x for x, _ in pairs), sum(y for _, y in pairs))
+        for x, _ in pairs:
+            self.assertTrue(0 <= x <= 100)
+
+    def test_channel_period_shares(self):
+        c = cfg()
+        r = engine.simulate(c, strong_strategy(c), 1)
+        total = sum(sum(v) for v in r["ch_period"].values())
+        self.assertEqual(total, r["paid"])
+
+    def test_calibrate_seo_loader(self):
+        import calibrate_seo
+        c = cfg()
+        data = {"generated": "test", "source": "unit test",
+                "keywords": [{"tier": "A", "top10_median_authority": 30}, {"tier": "B", "top10_median_authority": 50}],
+                "tiers": {"A": {"total_volume": 1000, "avg_kd": 10, "count": 10},
+                          "B": {"total_volume": 2000, "avg_kd": 40, "count": 4},
+                          "C": {"total_volume": 3000, "avg_kd": 75, "count": 2}},
+                "model_inputs": {"median_competitor_authority_top10": 45, "expected_ctr_pos_1_3": 0.2,
+                                 "expected_ctr_pos_4_10": 0.05, "expected_ctr_pos_11_20": 0.01,
+                                 "our_authority_month_3_estimate": 4, "our_authority_month_6_estimate": 10,
+                                 "our_authority_month_12_estimate": 18,
+                                 "position_share_assumptions": {
+                                     "6": {"A": {"1_3": 0.1, "4_10": 0.3, "11_20": 0.2}, "B": {"1_3": 0, "4_10": 0.05, "11_20": 0.1},
+                                           "C": {"1_3": 0, "4_10": 0, "11_20": 0}},
+                                     "12": {"A": {"1_3": 0.3, "4_10": 0.4, "11_20": 0.1}, "B": {"1_3": 0.05, "4_10": 0.2, "11_20": 0.3},
+                                            "C": {"1_3": 0, "4_10": 0, "11_20": 0.05}}}}}
+        names = calibrate_seo.calibrate(data, c, log=lambda *_: None)
+        sc = c["marketing"]["seo_competition"]
+        self.assertEqual(names, ["A", "B", "C"])
+        self.assertEqual(sc["tiers"]["A"]["monthly_volume"], 1000)
+        self.assertEqual(sc["tiers"]["A"]["top10_authority"], 30)
+        self.assertEqual(sc["tiers"]["C"]["top10_authority"], 45)          # fallback to overall median
+        self.assertEqual(sc["ctr"]["1_3"], 0.2)
+        self.assertEqual(sc["authority_anchor"]["12"], 18)
+        self.assertTrue(sc["rank"]["t3"] > sc["rank"]["t10"] > sc["rank"]["t20"])
+        self.assertIn("calibrate_seo", sc["_source"]["tiers"])
+        engine.simulate(c, strong_strategy(c), 0)                          # calibrated config runs

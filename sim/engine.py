@@ -2,7 +2,8 @@
 
 Standard library only. One call to ``simulate(cfg, strategy, seed)`` runs one company
 week by week (pre-launch build, then up to 52 weeks on the market) and returns a small
-dict of KPIs. Every market/cost number comes from ``cfg`` (sim/config.json); the engine
+dict of KPIs. v2 (sim/SPEC-v2.md): month-6 death rule, competitive SEO model, social
+department, few-clicks install lever, free mascot generator, channel x time tracking. Every market/cost number comes from ``cfg`` (sim/config.json); the engine
 holds no market constants of its own.
 
 Randomness: two streams per seed.
@@ -15,16 +16,18 @@ Randomness: two streams per seed.
 import math
 import random
 
-CHANNELS = ("seo", "geo", "launch", "ads", "badge", "referral", "outreach", "app_store",
-            "agency", "free_plan")
-WEB_CHANNELS = ("seo", "geo", "launch", "ads", "badge", "referral")
+CHANNELS = ("seo", "geo", "social", "generator", "launch", "ads", "badge", "referral", "outreach",
+            "app_store", "agency", "free_plan")
+WEB_CHANNELS = ("seo", "geo", "social", "generator", "launch", "ads", "badge", "referral")
 PLATFORMS = ("shopify", "wordpress", "webflow_wix", "js_saas")
-HOUR_KEYS = ("engineering", "seo", "geo", "outreach", "app_store", "agency", "launches")
+HOUR_KEYS = ("engineering", "seo", "geo", "social", "outreach", "app_store", "agency", "launches")
+MARKETING_KEYS = ("seo", "geo", "social", "outreach", "app_store", "agency", "launches")
+PERIODS = ("m1_3", "m4_6", "m7_12")
 CAUSES = ("no_traffic", "low_conversion", "price_too_high", "price_too_low", "churn",
           "cash_burn", "llm_costs", "build_too_long")
 TS_KEYS = ("mrr", "cash", "customers", "free_users", "trials", "vis_seo", "vis_geo",
-           "vis_launch", "vis_ads", "vis_badge", "vis_referral", "outreach_contacts",
-           "app_installs", "agency_sites")
+           "vis_social", "vis_generator", "vis_launch", "vis_ads", "vis_badge", "vis_referral",
+           "outreach_contacts", "app_installs", "agency_sites", "authority", "social_followers")
 
 SQRT2 = math.sqrt(2.0)
 
@@ -141,6 +144,12 @@ class MarketDraw:
             else:
                 v = ev["fail_visitors"] * rng.lognormvariate(0.0, 0.4)
             self.launch_visitors.append(v)
+        # v2 draws (appended so v1 draws keep their order)
+        sc = cfg["marketing"]["seo_competition"]
+        self.auth_mult = rng.lognormvariate(0.0, sc["authority_sigma"])
+        self.rank_noise = {t: rng.gauss(0.0, sc["rank"]["run_sigma"]) for t in sc["tiers"]}
+        self.social_yield = rng.lognormvariate(0.0, cfg["social"]["yield_sigma"])
+        self.few_clicks_extra_weeks = rng.uniform(*cfg["product"]["few_clicks"]["extra_build_weeks"])
 
 
 # --------------------------------------------------------------------------- company
@@ -181,9 +190,13 @@ class Company:
         self.death_wsl = None
         self.ledger_in = {"subscriptions": 0.0, "prepaid": 0.0, "ltd": 0.0}
         self.ledger_out = {"llm": 0.0, "payment_fees": 0.0, "hosting": 0.0, "tools": 0.0,
-                           "admin": 0.0, "ads": 0.0, "salary": 0.0, "refunds": 0.0}
+                           "admin": 0.0, "ads": 0.0, "salary": 0.0, "refunds": 0.0,
+                           "social_cm": 0.0, "generator": 0.0}
         self.cum_revenue = 0.0
         self.cum_revenue_m3 = 0.0
+        self.cum_revenue_m6 = 0.0
+        self.few_clicks = strategy.get("install") == "few_clicks"
+        self.m3_warning = False
 
         # customers: list of lists
         # [seg, plan, mrr, conv_billed, channel, prepaid_until_wsl, wsl_acq, capped, appstore,
@@ -216,17 +229,25 @@ class Company:
         self.ch_paid = {c: 0 for c in CHANNELS}
         self.ch_hours = {c: 0.0 for c in CHANNELS}
         self.ch_cash = {c: 0.0 for c in CHANNELS}
+        self.ch_period = {c: [0, 0, 0] for c in CHANNELS}   # new paying customers by M1-3/M4-6/M7-12
+        self.ch_mrr = {c: 0.0 for c in CHANNELS}            # live MRR by acquisition channel
+        self.ch_rev = {c: 0.0 for c in CHANNELS}            # cumulative attributed revenue
+        self.ch_snap = {}                                   # milestone snapshots of ch_mrr / ch_rev
         self.vis_total = {c: 0.0 for c in WEB_CHANNELS}
         self.in_run_adjustments = []
         self.mrr_m = {}
         self.cust_m = {}
-        self.ts = {k: [] for k in TS_KEYS} if record else None
+        self.tier_names = list(cfg["marketing"]["seo_competition"]["tiers"].keys())
+        self.ts_keys = list(TS_KEYS) + ["%s_%s" % (m, t) for t in self.tier_names
+                                        for m in ("seo_clicks", "top10_share", "top3_share")]
+        self.ts = {k: [] for k in self.ts_keys} if record else None
         self._wk = {}
 
         self.ceo = CEO(self)
         self.product = Product(self)
         self.marketing = Marketing(self)
         self.sales = Sales(self)
+        self.social = Social(self)
         self.cs = CustomerSuccess(self)
         self.finance = Finance(self)
         self._precompute_fit()
@@ -255,7 +276,10 @@ class Company:
             appeal = seg["style_appeal"]
             if s.get("style") == "cute_pro":
                 appeal = max(appeal, seg["pro_style_appeal"])
-            plat_fit = 1.0 if plats.intersection(seg["platforms"]) else pr["unsupported_platform_fit"]
+            if plats.intersection(seg["platforms"]):
+                plat_fit = 1.0
+            else:
+                plat_fit = pr["few_clicks"]["unsupported_platform_fit"] if self.few_clicks else pr["unsupported_platform_fit"]
             # actions: segment that needs actions but product has fewer action types
             act_cov = min(1.0, n_act / 3.0)
             act_fit = 1.0 - seg["need_actions"] * (1.0 - act_cov) * 0.5
@@ -265,6 +289,9 @@ class Company:
                  * comp * pos * max(0.3, 1.0 - friction))
             if offer.get("done_for_you"):
                 f *= csc["dfy_conv_mult"]
+            if self.few_clicks:
+                fc = pr["few_clicks"]
+                f *= fc["trial_to_paid_mult"] * fc["self_serve_appeal"].get(self.segs[i], 1.0)
             self.fit_static.append(f)
             ps = seg["proof_sensitivity"]
             floor = 1.0 - ps
@@ -357,6 +384,8 @@ class Company:
         self.customers.append(c)
         self.mrr += price
         self.conv_paid += billed
+        self.ch_mrr[ch] += price
+        self.ch_period[ch][0 if wsl < 3 * self.wpm else 1 if wsl < 6 * self.wpm else 2] += 1
         if prepay_weeks:
             cash = price * prepay_weeks / self.wpm
             costs = self.cfg["costs"]
@@ -384,6 +413,7 @@ class Company:
     def remove_customer(self, idx):
         c = self.customers[idx]
         self.mrr -= c[2]
+        self.ch_mrr[c[4]] -= c[2]
         self.conv_paid -= c[3]
         if c[10]:
             if c[8]:
@@ -429,7 +459,7 @@ class Company:
         pb = self.cfg["pricing_behaviour"]
         ch_q = {"outreach": self.cfg["sales"]["outreach"]["trial_quality_mult"],
                 "agency": self.cfg["sales"]["agency"]["client_quality_mult"],
-                "geo": 1.15, "launch": 0.8, "ads": 0.85, "badge": 0.9}
+                "geo": 1.15, "launch": 0.8, "ads": 0.85, "badge": 0.9, "social": 0.9, "generator": 0.8}
         for (i, ch, n, qual) in entries:
             self.trials_active -= n
             p_fit = clamp(self.fit_static[i] * self.fit_dynamic(i) * ch_q.get(ch, 1.0) * qual, 0.0, 0.95)
@@ -541,13 +571,13 @@ class Company:
             if self.cum_revenue > 0 and gross < 0:
                 return "price_too_low"
             return "cash_burn"
-        # m3 rule
+        # month-6 rule
         p = self.s["pricing"]
         if p.get("model") == "per_resolution":
             list_arpa = p["platform_fee"] + 20.0
         else:
             list_arpa = 0.7 * p["starter_price"] + 0.3 * (p.get("pro_price") or p["starter_price"])
-        need = self.cfg["viability"]["m3_min_mrr"]
+        need = self.cfg["viability"]["m6_min_mrr"]
         resolved = max(0, self.d_trials - self.trials_active)
         if resolved * d["benchmark_trial_to_paid"] * list_arpa < need:
             return "no_traffic"
@@ -562,7 +592,7 @@ class Company:
         if n > 0 and self.mrr / n < d["low_arpa_ratio"] * list_arpa:
             return "price_too_low"
         # enough trials, fine conversion/churn/ARPA, still short: traction came too late for the
-        # M3 MRR / cumulative-revenue bar -> the fix is earlier demand (presell, outreach, launches)
+        # M6 MRR / cumulative-revenue bar -> the fix is earlier demand (presell, outreach, launches)
         return "no_traffic"
 
     # ---------------------------------------------------------------- main loop
@@ -570,14 +600,15 @@ class Company:
         cfg = self.cfg
         via = cfg["viability"]
         m3 = via["m3_week"]
+        m6 = via["m6_week"]
         max_build = via["max_build_weeks"]
-        rng = self.rng
         while True:
             self._wk = {}
             hours = self.ceo.allocate()
             if not self.launched:
                 self.product.build_week(hours["engineering"])
                 self.marketing.content_week(hours)
+                self.social.week(hours["social"])
                 self.sales.prelaunch_week(hours)
                 self.finance.week()
                 if self.cash < 0:
@@ -598,6 +629,8 @@ class Company:
             self.product.live_week(hours["engineering"])
             self.marketing.content_week(hours)
             vis = self.marketing.visitors()
+            vis["social"] = self.social.week(hours["social"])
+            self.vis_total["social"] += vis["social"]
             self.sales.live_week(hours)
             self.resolve_trials()
             self.free_dynamics(month_tick)
@@ -614,23 +647,32 @@ class Company:
                 self.die("cash")
                 break
             if self.wsl == m3 - 1:
+                # month 3: KPIs + early warning only (v2: no longer a death rule)
+                self._milestone(3)
                 self.cum_revenue_m3 = self.cum_revenue
-                self.mrr_m[3] = self.mrr
-                self.cust_m[3] = len(self.customers)
-                if self.mrr < via["m3_min_mrr"] or self.cum_revenue < via["m3_min_cum_revenue"]:
-                    self.die("m3")
+                self.m3_warning = self.mrr < via["m3_warning_mrr"]
+            if self.wsl == m6 - 1:
+                self._milestone(6)
+                self.cum_revenue_m6 = self.cum_revenue
+                if self.mrr < via["m6_min_mrr"] or self.cum_revenue < via["m6_min_cum_revenue"]:
+                    self.die("m6")
                     break
-            if self.wsl == 25:
-                self.mrr_m[6] = self.mrr
-                self.cust_m[6] = len(self.customers)
+            if self.wsl == int(round(9 * self.wpm)) - 1:
+                self._milestone(9)
             self.week += 1
             if self.wsl >= self.horizon - 1:
-                self.mrr_m[12] = self.mrr
-                self.cust_m[12] = len(self.customers)
+                self._milestone(12)
                 break
         if self.record:
             self._pad_record()
         return self.result()
+
+    def _milestone(self, m):
+        self.mrr_m[m] = self.mrr
+        self.cust_m[m] = len(self.customers)
+        self.ch_snap[m] = {"mrr": dict(self.ch_mrr), "rev": dict(self.ch_rev),
+                           "hours": dict(self.ch_hours), "cash": dict(self.ch_cash)}
+        self.marketing.snapshot(m)
 
     def _record(self, vis):
         ts = self.ts
@@ -644,12 +686,19 @@ class Company:
         ts["outreach_contacts"].append(round(self._wk.get("contacts", 0), 1))
         ts["app_installs"].append(self._wk.get("installs", 0))
         ts["agency_sites"].append(self._wk.get("agency_sites", 0))
+        ts["authority"].append(round(self.marketing.authority, 2))
+        ts["social_followers"].append(round(self.social.total_followers()))
+        for t in self.tier_names:
+            p10, p3, clicks = self.marketing.tier_now.get(t, (0.0, 0.0, 0.0))
+            ts["seo_clicks_" + t].append(round(clicks, 1))
+            ts["top10_share_" + t].append(round(p10, 3))
+            ts["top3_share_" + t].append(round(p3, 3))
 
     def _pad_record(self):
         # weeks after death (or never launched): company closed, cash frozen
         n = len(self.ts["mrr"])
         for _ in range(n, self.horizon):
-            for k in TS_KEYS:
+            for k in self.ts_keys:
                 self.ts[k].append(round(self.cash, 1) if k == "cash" else 0)
 
     def result(self):
@@ -658,7 +707,7 @@ class Company:
         for c in self.customers:
             self.seg_stats[c[0]][4] += c[2]
         # milestones after death stay at 0 (the company is closed)
-        for k in (3, 6, 12):
+        for k in (3, 6, 9, 12):
             self.mrr_m.setdefault(k, 0.0)
             self.cust_m.setdefault(k, 0)
         rev = self.cum_revenue
@@ -673,10 +722,14 @@ class Company:
             "build_weeks": self.launch_week if self.launched else self.week,
             "mrr_m3": round(self.mrr_m.get(3, 0.0), 2),
             "mrr_m6": round(self.mrr_m.get(6, 0.0), 2),
+            "mrr_m9": round(self.mrr_m.get(9, 0.0), 2),
             "mrr_m12": round(self.mrr_m.get(12, 0.0), 2),
             "cust_m3": self.cust_m.get(3, 0),
+            "cust_m6": self.cust_m.get(6, 0),
             "cust_m12": self.cust_m.get(12, 0),
+            "m3_warning": self.m3_warning if self.launched else True,
             "cum_rev_m3": round(self.cum_revenue_m3, 2),
+            "cum_rev_m6": round(self.cum_revenue_m6, 2),
             "cum_revenue": round(rev, 2),
             "cash_min": round(self.cash_min, 2),
             "cash_end": round(self.cash, 2),
@@ -698,6 +751,12 @@ class Company:
             "ledger_in": {k: round(v, 2) for k, v in self.ledger_in.items()},
             "ledger_out": {k: round(v, 2) for k, v in self.ledger_out.items()},
             "adjusted": list(self.in_run_adjustments),
+            "ch_period": {k: list(v) for k, v in self.ch_period.items() if any(v)},
+            "ch_snap": {m: {key: {k: round(v, 1) for k, v in d[key].items() if v} for key in d}
+                        for m, d in self.ch_snap.items()},
+            "seo": self.marketing.seo_result(),
+            "social": self.social.result(),
+            "install": "few_clicks" if self.few_clicks else "snippet",
         }
         if self.record:
             r["ts"] = self.ts
@@ -725,7 +784,7 @@ class CEO:
         out["cs"] = 0.0
         if not co.launched:
             pm = co.s.get("prelaunch_marketing_share", 0.0)
-            mk_keys = ("seo", "geo", "outreach", "launches", "app_store", "agency")
+            mk_keys = MARKETING_KEYS
             tot = sum(self.shares[k] for k in mk_keys)
             if tot <= 0:
                 pm = 0.0
@@ -734,7 +793,8 @@ class CEO:
             out["engineering"] = avail * (1.0 - pm)
             return out
         ads_h = co.cfg["marketing"]["ads"]["management_hours_per_week"] if co.s.get("paid_ads_per_month", 0) > 0 else 0.0
-        avail -= ads_h
+        cm_h = co.cfg["social"]["cm_management_hours_per_week"] if co.social.cm else 0.0
+        avail -= ads_h + cm_h
         csc = co.cfg["customer_success"]
         need = co.cs.need()
         cs = min(max(need, self.cs_min * avail), csc["cs_cap_share"] * avail)
@@ -765,7 +825,7 @@ class CEO:
         if not ir["enabled"] or not co.s.get("in_run_adjust", True):
             return
         via = co.cfg["viability"]
-        behind_pace = co.mrr < via["m3_min_mrr"] * co.wsl / via["m3_week"]
+        behind_pace = co.mrr < via["m6_min_mrr"] * co.wsl / via["m6_week"]
         if (not self.adjusted_traffic and co.wsl >= ir["review_week"]
                 and (co.d_trials < ir["min_trials"] or behind_pace)):
             moved = (self.shares["seo"] + self.shares["geo"]) * ir["shift_share"]
@@ -777,7 +837,7 @@ class CEO:
                     to_launch = min(moved, ir["launch_share"] - self.shares["launches"])
                     self.shares["launches"] += to_launch
                 self.shares["outreach"] += moved - to_launch
-                co.in_run_adjustments.append("w%d: %d trials, behind M3 pace -> moved %.0f%% of hours from SEO/GEO to outreach%s"
+                co.in_run_adjustments.append("w%d: %d trials, behind M6 pace -> moved %.0f%% of hours from SEO/GEO to outreach%s"
                                              % (co.wsl, co.d_trials, moved * 100,
                                                 " and launches" if to_launch else ""))
             self.adjusted_traffic = True
@@ -801,7 +861,12 @@ class Product:
         if co.s.get("style") == "cute_pro":
             factor *= 1 + p["pro_style_factor"]
         self.scope_factor = factor
-        self.build_hours_needed = p["base_build_weeks"] * factor * co.md.build_overrun * co.avail_hours
+        extra_weeks = 0.0
+        if co.s.get("install") == "few_clicks":
+            extra_weeks += co.md.few_clicks_extra_weeks
+        if co.s.get("free_generator"):
+            extra_weeks += co.cfg["marketing"]["generator"]["build_weeks"]
+        self.build_hours_needed = (p["base_build_weeks"] * factor + extra_weeks) * co.md.build_overrun * co.avail_hours
         self.built = 0.0
         self.asr = clamp(p["asr_narrow_start"] - p["asr_breadth_penalty"] * self.breadth, p["asr_floor"], p["asr_max"])
         self.feature_level = 0.0
@@ -809,6 +874,9 @@ class Product:
                               + p["setup_minutes_per_action"] * n_act)
         self.maint_need = (p["maintenance_hours_base"] + p["maintenance_hours_per_platform"] * (n_plat - 1)
                            + (p["maintenance_hours_pro_style"] if co.s.get("style") == "cute_pro" else 0))
+        if co.s.get("install") == "few_clicks":
+            self.setup_minutes = p["few_clicks"]["setup_minutes"]
+            self.maint_need += p["few_clicks"]["extra_maintenance_hours"]
         self.incident_month = False
         self.incidents = 0
 
@@ -862,14 +930,24 @@ class Marketing:
                     for i in range(n)]
         self.seo_split = split("search_share")
         self.geo_split = split("ai_share")
-        # traffic potential scales with the search / AI-query demand of the targeted segments
-        seo = mk["seo"]
-
-        def demand(key):
-            d = sum(co.S[i][key] for i in range(n) if tg[i]) + spill * sum(co.S[i][key] for i in range(n) if not tg[i])
-            return (max(d, 1e-6) / seo["demand_ref_share"]) ** seo["demand_exponent"]
-        self.seo_demand = demand("search_share")
-        self.geo_demand = demand("ai_share")
+        # GEO potential scales with the AI-query demand of the targeted segments
+        geo_d = sum(co.S[i]["ai_share"] for i in range(n) if tg[i]) + spill * sum(co.S[i]["ai_share"] for i in range(n) if not tg[i])
+        self.geo_demand = (max(geo_d, 1e-6) / (1.0 / max(1, n))) ** 0.5
+        # competitive SEO: which part of the analyst's keyword universe our content covers
+        sc = mk["seo_competition"]
+        tsg = [sc["tier_segments"].get(name, 0.0) for name in co.segs]
+        tot = sum(tsg) or 1.0
+        w = [tsg[i] / tot * (1.0 if tg[i] else spill) for i in range(n)]
+        self.seo_covered = sum(w)
+        self.kw_split = [x / self.seo_covered for x in w] if self.seo_covered > 0 else [0.0] * n
+        self.tier_pages = {t: 0.0 for t in sc["tiers"]}
+        self.tier_eff = {t: 0.0 for t in sc["tiers"]}
+        self.tier_now = {}
+        self.first_outrank = {t: None for t in sc["tiers"]}
+        self.snaps = {}
+        self.authority = 0.0
+        self.anchor = sorted((float(k), float(v)) for k, v in sc["authority_anchor"].items())
+        self.focus_rank = sc["rank"]["focus_bonus"] if co.n_targets == 1 else 0.0
         nt = co.n_targets
         self.viral_mix = {co.segs[i]: co.S[i]["search_share"] for i in range(n)}
         self.virals = 0
@@ -885,12 +963,21 @@ class Marketing:
         co = self.co
         mk = co.cfg["marketing"]
         seo, geo = mk["seo"], mk["geo"]
-        new_pages = hours["seo"] / seo["hours_per_page"]
+        sc = mk["seo_competition"]
+        lb = sc["link_building_share"]
+        new_pages = hours["seo"] * (1.0 - lb) / seo["hours_per_page"]
         if new_pages > 0 and self.first_content_week is None:
             self.first_content_week = co.week
         self.pages += new_pages
         self.pages_eff += (self.pages - self.pages_eff) / seo["page_ramp_weeks"]
-        self.backlinks += new_pages * seo["backlinks_per_page"]
+        self.backlinks += new_pages * seo["backlinks_per_page"] + hours["seo"] * lb * sc["links_per_hour"]
+        for t, tier in sc["tiers"].items():
+            self.tier_pages[t] += new_pages * tier["content_share"]
+            self.tier_eff[t] += (self.tier_pages[t] - self.tier_eff[t]) / seo["page_ramp_weeks"]
+        if co.s.get("free_generator") and co.launched:
+            g = mk["generator"]
+            self.backlinks += g["backlinks_per_week"]
+            self.mentions += g["mentions_per_week"]
         cp = hours["geo"] * 0.5 / geo["hours_per_comparison_page"]
         self.comp_pages += cp
         self.mentions += hours["geo"] * 0.5 * geo["mentions_per_hour"] * 2
@@ -914,6 +1001,38 @@ class Marketing:
             self.backlinks += ev["backlinks"]
             self.mentions += ev["mentions"]
             self.launch_idx += 1
+        self.authority = self._authority()
+
+    def _authority(self):
+        """Our Authority Score (0-100): analyst anchor curve x our link effort vs the reference."""
+        co = self.co
+        if self.first_content_week is None:
+            return 0.0
+        sc = co.cfg["marketing"]["seo_competition"]
+        weeks = co.week - self.first_content_week + 1
+        months = weeks / co.wpm
+        pts = self.anchor
+        if months >= pts[-1][0]:
+            (m0, a0), (m1, a1) = pts[-2], pts[-1]
+            anchor = a1 + (a1 - a0) / (m1 - m0) * (months - m1)
+        else:
+            anchor = pts[0][1]
+            for (m0, a0), (m1, a1) in zip(pts, pts[1:]):
+                if m0 <= months <= m1:
+                    anchor = a0 + (a1 - a0) * (months - m0) / (m1 - m0)
+                    break
+        off = sc["effort_offset"]
+        effort = ((self.backlinks + off) / (sc["ref_links_per_week"] * weeks + off)) ** sc["effort_exponent"]
+        effort = clamp(effort, sc["effort_min"], sc["effort_max"])
+        return clamp(anchor * effort * co.md.auth_mult, 0.0, 100.0)
+
+    def snapshot(self, m):
+        self.snaps[m] = {"authority": round(self.authority, 2),
+                         "tiers": {t: [round(v[0], 3), round(v[1], 3), round(v[2], 1)] for t, v in self.tier_now.items()}}
+
+    def seo_result(self):
+        return {"snap": self.snaps, "first_outrank": dict(self.first_outrank), "pages": round(self.pages, 1),
+                "backlinks": round(self.backlinks, 1)}
 
     def visitors(self):
         """Generate web visitors this week, push signups into the funnel, return totals by channel."""
@@ -924,25 +1043,52 @@ class Marketing:
         md = co.md
         out = {}
         # --- SEO
+        v = 0.0
+        sb = 0.0
         if self.first_content_week is not None:
             age = co.week - self.first_content_week
             sb = seo["sandbox_floor"] + (1 - seo["sandbox_floor"]) / (1 + math.exp(-(age - md.sandbox_weeks) / seo["sandbox_width_weeks"]))
-            auth = min(seo["authority_cap"],
-                       seo["authority_floor"] + math.log1p(self.backlinks) / math.log1p(seo["authority_ref_backlinks"]))
-            v = ((self.pages_eff ** seo["page_exponent"]) * seo["visits_per_page_mature"] * sb * auth
-                 * md.seo_yield * self.focus_seo * self.seo_demand)
-        else:
-            v = 0.0
+            sc = mk["seo_competition"]
+            rk = sc["rank"]
+            ctr = sc["ctr"]
+            a = self.authority
+            s = rk["kw_sigma"]
+            t5 = 0.5 * (rk["t3"] + rk["t10"])
+            for t, tier in sc["tiers"].items():
+                need = tier["pages_needed"] * self.seo_covered
+                depth = self.tier_eff[t] / need if need > 0 else 0.0
+                cov = min(1.0, depth)
+                r = (rk["auth_coef"] * math.log((a + 1.0) / (tier["top10_authority"] + 1.0))
+                     - rk["kd_coef"] * (tier["kd"] - rk["kd_ref"]) / 100.0
+                     + rk["depth_coef"] * math.log1p(min(depth, 3.0)) + self.focus_rank + md.rank_noise[t])
+                p3 = norm_cdf((r - rk["t3"]) / s)
+                p10 = norm_cdf((r - rk["t10"]) / s)
+                p20 = norm_cdf((r - rk["t20"]) / s)
+                ctr_eff = p3 * ctr["1_3"] + (p10 - p3) * ctr["4_10"] + (p20 - p10) * ctr["11_20"]
+                clicks = tier["monthly_volume"] / co.wpm * self.seo_covered * cov * ctr_eff * sb * md.seo_yield
+                v += clicks
+                self.tier_now[t] = (p10 * cov, p3 * cov, clicks * co.wpm)
+                if self.first_outrank[t] is None and depth >= 0.3 and r >= t5:
+                    self.first_outrank[t] = co.wsl
+            v += co.social.total_followers() / 1000.0 * sc["brand_visits_per_1k_followers_week"]
         out["seo"] = v
         # --- GEO
-        lam = (geo["citation_k_pages"] * self.comp_eff + geo["citation_k_mentions"] * self.mentions_eff)
-        lam *= 0.6 + 0.4 * min(2.0, math.log1p(self.backlinks) / math.log1p(seo["authority_ref_backlinks"]))
+        lam = (geo["citation_k_pages"] * self.comp_eff + geo["citation_k_mentions"] * self.mentions_eff
+               + geo["citation_k_reviews"] * co.reviews)
+        lam *= 0.6 + 0.4 * min(2.0, self.authority / geo["authority_ref"])
         pc = geo["citation_p_max"] * (1 - math.exp(-lam))
         g = pc * geo["max_referrals_per_week"] * md.geo_yield * self.focus_seo * self.geo_demand
         out["geo"] = g
+        gen_v = 0.0
+        if co.s.get("free_generator"):
+            gcfg = mk["generator"]
+            gen_v = gcfg["visits_per_week_mature"] * min(1.0, (co.wsl + 1) / gcfg["ramp_weeks"]) * sb * md.seo_yield
+        out["generator"] = gen_v
         for i in range(co.nseg):
             if v > 0:
-                co.web_signups(i, "seo", v * self.seo_split[i], 1.0)
+                co.web_signups(i, "seo", v * self.kw_split[i], 1.0)
+            if gen_v > 0:
+                co.web_signups(i, "generator", gen_v * self.seo_split[i], mk["generator"]["signup_mult"])
             if g > 0:
                 co.web_signups(i, "geo", g * self.geo_split[i], geo["signup_mult"])
         # --- launches
@@ -991,7 +1137,8 @@ class Marketing:
         rv = 0.0
         if co.wsl < len(split):
             rv += md.network_visitors * split[co.wsl]
-        rv += len(co.customers) * ref["visitors_per_customer_per_week"]
+        rv += len(co.customers) * ref["visitors_per_customer_per_week"] * (
+            cfg["product"]["few_clicks"]["referral_mult"] if co.few_clicks else 1.0)
         if rv > 0:
             for i in range(co.nseg):
                 co.web_signups(i, "referral", rv * self.seo_split[i], ref["signup_mult"])
@@ -1013,7 +1160,14 @@ class Sales:
     def __init__(self, co):
         self.co = co
         sc = co.s["scope"]["platforms"]
-        self.stores = [p for p in ("shopify", "wordpress") if p in sc] if co.s["hours"].get("app_store", 0) > 0 else []
+        app = co.cfg["sales"]["app_store"]
+        if co.s["hours"].get("app_store", 0) <= 0:
+            self.stores = []
+        elif co.s.get("install") == "few_clicks":
+            # few-clicks ships plugins for every builder: all plugin directories are reachable
+            self.stores = list(app["base_installs_per_week"].keys())
+        else:
+            self.stores = [p for p in ("shopify", "wordpress") if p in sc]
         self.listing_hours = 0.0
         self.listed_week = None
         self.app_ongoing = 0.0
@@ -1054,7 +1208,7 @@ class Sales:
             if rng.random() < frac:
                 n += 1
             self.contacted[i] += n
-            replies = binomial(rng, n, co.md.reply_rate[i] * focus)
+            replies = binomial(rng, n, min(0.5, co.md.reply_rate[i] * focus * co.social.reply_lift()))
             pos = binomial(rng, replies, o["positive_reply_share"])
             if pos <= 0:
                 continue
@@ -1101,6 +1255,7 @@ class Sales:
                 co.seg_stats[i][2] += k - bought
                 self.presold += bought
             co.enqueue_trials(i, "outreach", n)
+        co.social.on_launch()
 
     def _listing(self, h):
         co = self.co
@@ -1142,7 +1297,7 @@ class Sales:
         if self.listed_week is not None and co.week >= self.listed_week and co.launched:
             app = co.cfg["sales"]["app_store"]
             rank = math.sqrt(1 + co.reviews / app["review_k"]) * (1 + app["ongoing_hours_boost"] * self.app_ongoing)
-            q = 0.5 + 0.5 * co.product.asr
+            q = (0.5 + 0.5 * co.product.asr) * (co.cfg["product"]["few_clicks"]["plugin_install_mult"] if co.few_clicks else 1.0)
             tot = 0
             for store in self.stores:
                 lam = app["base_installs_per_week"][store] * rank * q * co.md.app_yield
@@ -1173,6 +1328,105 @@ class Sales:
                 co.cs.extra_need += cfg_l["prep_hours"]  # deal page, codes, buyer support spike
 
 
+class Social:
+    """Social / community: founder posts (build in public) and/or a freelance community manager.
+
+    posts -> impressions (base + per follower, x rare lognormal viral hits) -> followers
+    (compounding, capped) -> site clicks -> only the B2B share (icp_share) can sign up.
+    Followers on LinkedIn + X warm cold outreach (reply-rate lift); viral hits and reach
+    earn mentions (GEO) and a few links (SEO authority); followers drive brand searches.
+    """
+
+    def __init__(self, co):
+        self.co = co
+        c = co.cfg["social"]
+        st = co.s.get("social") or {}
+        self.cm = bool(st.get("cm"))
+        self.cm_cost = float(st.get("cm_cost", c["cm_ref_cost"]))
+        self.cm_scale = (self.cm_cost / c["cm_ref_cost"]) ** 0.3
+        mix = st.get("platform_mix") or {"linkedin": 1.0}
+        tot = sum(mix.get(p, 0.0) for p in c["platforms"]) or 1.0
+        self.mix = {p: mix.get(p, 0.0) / tot for p in c["platforms"]}
+        self.followers = {p: float(pc["start_followers"]) for p, pc in c["platforms"].items()}
+        self.start_lx = self.followers.get("linkedin", 0.0) + self.followers.get("x", 0.0)
+        self.gen_mult = co.cfg["marketing"]["generator"]["social_impression_mult"] if co.s.get("free_generator") else 1.0
+        self.impressions = 0.0
+        self.icp_visits = 0.0
+        self.virals = 0
+        self.waitlist = [0] * co.nseg
+
+    def total_followers(self):
+        return sum(self.followers.values())
+
+    def reply_lift(self):
+        c = self.co.cfg["social"]
+        grown = self.followers.get("linkedin", 0.0) + self.followers.get("x", 0.0) - self.start_lx
+        return 1.0 + c["reply_lift_max"] * clamp(grown / c["reply_lift_followers_ref"], 0.0, 1.0)
+
+    def week(self, h):
+        co = self.co
+        c = co.cfg["social"]
+        rng = co.rng
+        cm_active = self.cm and co.launched
+        co.ch_hours["social"] += h + (c["cm_management_hours_per_week"] if cm_active else 0.0)
+        posts_f = min(h / c["hours_per_post_founder"], c["max_founder_posts_per_week"])
+        posts_cm = c["cm_posts_per_week"] * self.cm_scale if cm_active else 0.0
+        eff = posts_f * c["founder_authenticity"] + posts_cm * c["cm_quality"] * self.cm_scale
+        raw = posts_f + posts_cm
+        ugc = len(co.customers) * c["ugc_impressions_per_customer_week"] if co.few_clicks else 0.0
+        if eff <= 0 and ugc <= 0:
+            return 0.0
+        y = co.md.social_yield * self.gen_mult
+        vis = vis_icp = imp_tot = 0.0
+        mk = co.marketing
+        for p, pc in c["platforms"].items():
+            m = self.mix[p]
+            u = ugc if p == "shorts" else 0.0
+            if m <= 0 and u <= 0:
+                continue
+            f = self.followers[p]
+            imp = eff * m * (pc["base_impressions"] + pc["impressions_per_follower"] * f) * y + u
+            k = poisson(rng, raw * m * pc["viral_prob"])
+            for _ in range(k):
+                imp += pc["base_impressions"] * rng.lognormvariate(math.log(pc["viral_median_mult"]), pc["viral_sigma"]) * y
+                self.virals += 1
+                mk.mentions += c["mentions_per_viral"]
+                mk.backlinks += c["backlinks_per_viral"]
+            cap = pc["follower_cap"]
+            self.followers[p] = min(cap, f + imp * pc["follow_rate"] * max(0.0, 1.0 - f / cap))
+            v = imp * pc["click_rate"]
+            vis += v
+            vis_icp += v * pc["icp_share"]
+            imp_tot += imp
+        self.impressions += imp_tot
+        self.icp_visits += vis_icp
+        mk.mentions += imp_tot / 10000.0 * c["mentions_per_10k_impressions"]
+        split = mk.seo_split
+        if co.launched:
+            for i in range(co.nseg):
+                if split[i] > 0:
+                    co.web_signups(i, "social", vis_icp * split[i], c["signup_mult"])
+        else:
+            # build in public: interested visitors join a waitlist that becomes trials at launch
+            for i in range(co.nseg):
+                if split[i] > 0:
+                    self.waitlist[i] += poisson(rng, vis_icp * split[i] * co.S[i]["visitor_to_signup"] * c["signup_mult"])
+        return vis
+
+    def on_launch(self):
+        co = self.co
+        o = co.cfg["sales"]["outreach"]
+        for i in range(co.nseg):
+            n = binomial(co.rng, self.waitlist[i], o["waitlist_to_trial"])
+            self.waitlist[i] = 0
+            co.enqueue_trials(i, "social", n)
+
+    def result(self):
+        return {"followers": round(self.total_followers()), "impressions": round(self.impressions),
+                "icp_visits": round(self.icp_visits, 1), "virals": self.virals, "cm": self.cm,
+                "cm_cost_total": round(self.co.ledger_out["social_cm"], 1)}
+
+
 class CustomerSuccess:
     """Support load and onboarding quality."""
 
@@ -1188,13 +1442,16 @@ class CustomerSuccess:
     def need(self):
         co = self.co
         c = co.cfg["customer_success"]
+        fc = co.cfg["product"]["few_clicks"]
         n = (len(co.customers) * c["hours_per_paid_customer_per_week"]
              + co.total_free() * c["hours_per_free_user_per_week"]
              + co.ltd_active * c["hours_per_ltd_user_per_week"]
-             + co.trials_active * c["hours_per_trial_per_week"]
+             + co.trials_active * c["hours_per_trial_per_week"] * (fc["trial_support_mult"] if co.few_clicks else 1.0)
+             + co.new_customers_week * (c["onboarding_hours_per_new_customer_few_clicks"] if co.few_clicks
+                                        else c["onboarding_hours_per_new_customer"])
              + self.extra_need)
         if co.s["offer"].get("done_for_you"):
-            n += co.new_customers_week * c["dfy_setup_hours"]
+            n += co.new_customers_week * c["dfy_setup_hours"] * (fc["dfy_hours_mult"] if co.few_clicks else 1.0)
         return n
 
     def week(self, h):
@@ -1260,6 +1517,18 @@ class Finance:
             co.ledger_in["subscriptions"] += sub
             co.cum_revenue += sub
             ads = co.s.get("paid_ads_per_month", 0.0) / wpm
+            for ch, m in co.ch_mrr.items():
+                if m:
+                    co.ch_rev[ch] += m / wpm
+        cm = gen = 0.0
+        if co.launched and co.social.cm:
+            cm = co.social.cm_cost / wpm
+            co.ch_cash["social"] += cm
+        if co.launched and co.s.get("free_generator"):
+            gen = c["generator_cost_per_month"] / wpm
+            co.ch_cash["generator"] += gen
+        out["social_cm"] += cm
+        out["generator"] += gen
         ltd = co.ltd_payouts.pop(co.week, 0.0)
         if ltd:
             cash_in += ltd
@@ -1272,7 +1541,7 @@ class Finance:
         out["llm"] += llm
         out["payment_fees"] += fees
         out["ads"] += ads
-        co.cash += cash_in - (tools + admin + salary + hosting + llm + fees + ads)
+        co.cash += cash_in - (tools + admin + salary + hosting + llm + fees + ads + cm + gen)
         if co.cash < co.cash_min:
             co.cash_min = co.cash
 
@@ -1309,31 +1578,83 @@ def summarize(results, cfg):
             "price_lost_share": round(pl / fp, 4) if fp else 0.0,
             "mrr_end_per_run": round(mrr / n, 1),
         }
+    hv = cfg["team"]["hour_value_eur"]
     channels = {}
+    period_tot = [0, 0, 0]
+    for r in results:
+        for c, v in r["ch_period"].items():
+            for j in range(3):
+                period_tot[j] += v[j]
     for c in CHANNELS:
         paid = sum(r["ch_paid"].get(c, 0) for r in results)
         hours = sum(r["ch_hours"].get(c, 0.0) for r in results)
         cash = sum(r["ch_cash"].get(c, 0.0) for r in results)
         if paid == 0 and hours == 0 and cash == 0:
             continue
+        per = [sum(r["ch_period"].get(c, [0, 0, 0])[j] for r in results) for j in range(3)]
         channels[c] = {
             "paid_per_run": round(paid / n, 2),
+            "hours_per_run": round(hours / n, 1),
+            "cash_per_run": round(cash / n, 1),
             "hours_per_paid": round(hours / paid, 1) if paid else None,
             "cash_per_paid": round(cash / paid, 1) if paid else None,
-            "cac_eur_incl_hours": round((cash + hours * cfg["team"]["hour_value_eur"]) / paid, 1) if paid else None,
+            "cac_eur_incl_hours": round((cash + hours * hv) / paid, 1) if paid else None,
+            "share_of_new_paid": {PERIODS[j]: round(per[j] / period_tot[j], 3) if period_tot[j] else 0.0
+                                  for j in range(3)},
+            "mrr_m6_per_run": round(sum(r["ch_snap"].get(6, {}).get("mrr", {}).get(c, 0.0) for r in results) / n, 1),
+            "mrr_m12_per_run": round(sum(r["ch_snap"].get(12, {}).get("mrr", {}).get(c, 0.0) for r in results) / n, 1),
+            "revenue_m6_per_run": round(sum(r["ch_snap"].get(6, {}).get("rev", {}).get(c, 0.0) for r in results) / n, 1),
+            "revenue_m12_per_run": round(sum(r["ch_snap"].get(12, {}).get("rev", {}).get(c, 0.0) for r in results) / n, 1),
         }
+        for m in (6, 12):
+            rev = sum(r["ch_snap"].get(m, {}).get("rev", {}).get(c, 0.0) for r in results)
+            hrs = sum(r["ch_snap"].get(m, {}).get("hours", {}).get(c, 0.0) for r in results)
+            csh = sum(r["ch_snap"].get(m, {}).get("cash", {}).get(c, 0.0) for r in results)
+            cost = hrs * hv + csh
+            # revenue attributed to the channel by month m / its cost so far (hours valued at hour_value_eur
+            # + cash), over seeds still alive at m (dead companies have no snapshot)
+            channels[c]["payoff_m%d" % m] = round(rev / cost, 3) if cost > 0 else None
+            channels[c]["payoff_cash_only_m%d" % m] = round(rev / csh, 3) if csh > 0 else None
     adj = sum(1 for r in results if r["adjusted"])
+    # SEO competition KPIs
+    tiers = list(cfg["marketing"]["seo_competition"]["tiers"].keys())
+    seo = {"authority": {}, "tiers": {}}
+    for m in (3, 6, 12):
+        vals = [r["seo"]["snap"][m]["authority"] for r in results if m in r["seo"]["snap"]]
+        seo["authority"]["m%d" % m] = pcts(vals) if vals else None
+    for t in tiers:
+        row = {}
+        for m in (6, 12):
+            snaps = [r["seo"]["snap"][m]["tiers"].get(t) for r in results if m in r["seo"]["snap"]]
+            snaps = [x for x in snaps if x]
+            if snaps:
+                row["top10_share_m%d_p50" % m] = round(percentile(sorted(x[0] for x in snaps), 0.5), 3)
+                row["top3_share_m%d_p50" % m] = round(percentile(sorted(x[1] for x in snaps), 0.5), 3)
+                row["clicks_per_month_m%d" % m] = pcts([x[2] for x in snaps])
+        weeks = [r["seo"]["first_outrank"].get(t) for r in results]
+        hit = sorted(w for w in weeks if w is not None)
+        row["outranks_median_competitor_by_m6"] = round(sum(1 for w in hit if w <= 25) / n, 3)
+        row["outranks_median_competitor_by_m12"] = round(len(hit) / n, 3)
+        row["first_outrank_week_p50"] = percentile(hit, 0.5) if hit else None
+        seo["tiers"][t] = row
+    social = {"followers_end": pcts([r["social"]["followers"] for r in results]),
+              "icp_visits_per_run": round(sum(r["social"]["icp_visits"] for r in results) / n, 1),
+              "virals_per_run": round(sum(r["social"]["virals"] for r in results) / n, 2),
+              "cm_cost_per_run": round(sum(r["social"]["cm_cost_total"] for r in results) / n, 1)}
     trials = sum(r["trials"] for r in results)
     paid = sum(r["paid"] for r in results)
     return {
         "n": n,
         "survival": round(len(alive) / n, 4) if n else 0.0,
-        "passed_m3": round(sum(1 for r in results if r["alive"] or (r["death_wsl"] is not None and r["death_wsl"] > 12)) / n, 4),
+        "passed_m6": round(sum(1 for r in results if r["alive"] or (r["death_wsl"] is not None and r["death_wsl"] > 25)) / n, 4),
+        "m3_warning_share": round(sum(1 for r in results if r["m3_warning"]) / n, 4),
         "death_causes": causes,
         "mrr_m3": pcts([r["mrr_m3"] for r in results]),
         "mrr_m6": pcts([r["mrr_m6"] for r in results]),
+        "mrr_m9": pcts([r["mrr_m9"] for r in results]),
         "mrr_m12": pcts([r["mrr_m12"] for r in results]),
         "customers_m3": pcts([r["cust_m3"] for r in results]),
+        "customers_m6": pcts([r["cust_m6"] for r in results]),
         "customers_m12": pcts([r["cust_m12"] for r in results]),
         "cum_revenue": pcts([r["cum_revenue"] for r in results]),
         "cash_min": pcts([r["cash_min"] for r in results]),
@@ -1348,4 +1669,10 @@ def summarize(results, cfg):
         "segments": seg_out,
         "channels": channels,
         "in_run_adjusted_share": round(adj / n, 4),
+        "seo": seo,
+        "social": social,
+        "cash_cost_per_run": round(sum(sum(r["ch_cash"].values()) for r in results) / n, 1),
+        "revenue_mean": round(sum(r["cum_revenue"] for r in results) / n, 1),
+        "mrr_m6_mean": round(sum(r["mrr_m6"] for r in results) / n, 1),
+        "mrr_m12_mean": round(sum(r["mrr_m12"] for r in results) / n, 1),
     }

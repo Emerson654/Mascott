@@ -17,6 +17,8 @@
     "seeds_sensitivity": 600,
     "sensitivity_delta": 0.3,
     "seeds_timeseries": 1000,
+    "seeds_channels": 600,
+    "single_channel_min_share": 0.3,
     "quick": {
       "seeds_iteration": 150,
       "max_iterations": 30,
@@ -27,7 +29,8 @@
       "seeds_search_top": 300,
       "seeds_sensitivity": 100,
       "sensitivity_max_params": 8,
-      "seeds_timeseries": 100
+      "seeds_timeseries": 100,
+      "seeds_channels": 80
     },
     "_source": {
       "weeks_per_month": "52/12",
@@ -38,20 +41,26 @@
       "survival_target": "SPEC default 60%",
       "search_strategies": "SPEC suggests 300 x 150 then top 10 x 1,000; raised to 800 x 200 (5 generations) and top 10 x 2,000 fresh seeds because a full run still takes ~6-10 min on 2 vCPU",
       "seeds_sensitivity": "600 seeds gives ~+/-2pp standard error on a 50% survival rate (common random numbers make +/- comparisons tighter)",
-      "quick": "smoke-test sizes; results are noisy and only for checking the pipeline"
+      "quick": "smoke-test sizes; results are noisy and only for checking the pipeline",
+      "seeds_channels": "SPEC-v2 channel experiment: seeds per variant",
+      "single_channel_min_share": "single-channel test: the kept channel gets max(its own share, this) of hours; removed channels' hours go to engineering"
     }
   },
   "viability": {
     "starting_cash": 5000,
     "m3_week": 13,
-    "m3_min_mrr": 500,
-    "m3_min_cum_revenue": 1000,
+    "m3_warning_mrr": 300,
+    "m6_week": 26,
+    "m6_min_mrr": 1500,
+    "m6_min_cum_revenue": 4000,
     "max_build_weeks": 20,
     "_source": {
       "starting_cash": "idea.md (ASSUMED by CEO): about 5,000 EUR bootstrapped",
-      "m3_week": "SPEC: month 3 = end of week 13 after launch",
-      "m3_min_mrr": "SPEC viability.m3_min_mrr",
-      "m3_min_cum_revenue": "SPEC viability.m3_min_cum_revenue (cash-basis gross billings incl. annual prepay and LTD payouts)",
+      "m3_week": "SPEC: month 3 = end of week 13 after launch (KPI + early warning only in v2)",
+      "m3_warning_mrr": "SPEC-v2: month 3 is no longer a death rule; MRR below this at M3 raises an early-warning flag",
+      "m6_week": "SPEC-v2: month 6 = end of week 26 after launch",
+      "m6_min_mrr": "SPEC-v2 viability.m6_min_mrr (founder: give SEO/GEO time to work)",
+      "m6_min_cum_revenue": "SPEC-v2 viability.m6_min_cum_revenue (cash-basis gross billings incl. annual prepay, presold pilots and LTD payouts)",
       "max_build_weeks": "CEO decision: the founder wants to be on the market fast; more than ~5 months of building without launching counts as build_too_long"
     }
   },
@@ -82,6 +91,7 @@
     ],
     "llm_action_multiplier": 1.4,
     "llm_price_decline_per_year": 0.25,
+    "generator_cost_per_month": 30,
     "_source": {
       "tools_per_month": "estimate: AI coding tools (2 seats ~40), email/domain/analytics/error tracking ~70",
       "hosting_base_per_month": "estimate: small VPS/serverless + DB + CDN for widget script",
@@ -92,7 +102,8 @@
       "app_store_rev_share": "public benchmark: Shopify App Store 0% on the first USD 1M lifetime (15% above); WordPress.org takes nothing. Billing via platform replaces Stripe fees",
       "llm_cost_per_conv": "estimate (triangular min/mode/max per run): 3-8 turns with RAG context on a mid-tier LLM API, 0.005-0.03 EUR per conversation",
       "llm_action_multiplier": "estimate: on-site actions need DOM snapshots + tool calls, ~40% more tokens when actions are enabled",
-      "llm_price_decline_per_year": "estimate: per-token API prices have fallen 20-50%/yr; conservative 25%"
+      "llm_price_decline_per_year": "estimate: per-token API prices have fallen 20-50%/yr; conservative 25%",
+      "generator_cost_per_month": "estimate: image/LLM calls of the free public mascot generator"
     }
   },
   "product": {
@@ -121,6 +132,36 @@
     "unsupported_platform_fit": 0.35,
     "action_fail_conv_penalty": 0.7,
     "action_fail_churn_penalty": 1.2,
+    "few_clicks": {
+      "extra_build_weeks": [
+        2,
+        4
+      ],
+      "extra_maintenance_hours": 1.0,
+      "setup_minutes": 5,
+      "trial_to_paid_mult": 1.15,
+      "unsupported_platform_fit": 0.75,
+      "trial_support_mult": 0.6,
+      "dfy_hours_mult": 0.5,
+      "plugin_install_mult": 1.5,
+      "referral_mult": 1.5,
+      "self_serve_appeal": {
+        "Web agency or freelancer": 1.1,
+        "Small business / showcase site": 1.15
+      },
+      "_source": {
+        "extra_build_weeks": "SPEC-v2: +2-4 build weeks for the wizard, site crawl and plugins (uniform per run, x build overrun)",
+        "extra_maintenance_hours": "estimate: more integrations to keep working",
+        "setup_minutes": "SPEC-v2: working on the site in < 5 minutes",
+        "trial_to_paid_mult": "estimate (SPEC-v2: higher activation and trial->paid)",
+        "unsupported_platform_fit": "estimate: plugins for WordPress/Webflow/Shopify/Wix/Framer/GTM let every segment install it (chat + pointing); actions still follow the scope",
+        "trial_support_mult": "estimate: fewer setup questions during the trial",
+        "dfy_hours_mult": "estimate: done-for-you on top of the wizard takes half the time",
+        "plugin_install_mult": "estimate: ready plugins convert directory visitors better",
+        "referral_mult": "estimate: 'Made with Mascott' badge + shareable mascot pages",
+        "self_serve_appeal": "SPEC-v2: slightly widens appeal to self-serve segments - estimate"
+      }
+    },
     "_source": {
       "base_build_weeks": "estimate: one platform + one action MVP (widget, dashboard, mascot generator, billing) with AI coding tools, 2 founders full-time",
       "per_extra_platform": "estimate: each extra platform (Shopify app, WP plugin, Webflow/Wix, JS SDK) adds ~35% to build",
@@ -137,7 +178,8 @@
       "setup_friction_per_10min": "estimate: each 10 minutes of setup before the first useful answer costs ~3% of trial conversions",
       "unsupported_platform_fit": "estimate: a segment whose platform is not supported can still paste a script tag but gets chat-only, fit x0.35",
       "action_fail_conv_penalty": "estimate: conversion multiplier = 1 - need_actions*(1-asr)*penalty (board Product lens risk #1)",
-      "action_fail_churn_penalty": "estimate: churn multiplier = 1 + need_actions*(1-asr)*penalty"
+      "action_fail_churn_penalty": "estimate: churn multiplier = 1 + need_actions*(1-asr)*penalty",
+      "few_clicks": "SPEC-v2 install lever (see few_clicks._source)"
     }
   },
   "marketing": {
@@ -147,8 +189,6 @@
     "non_target_traffic_share": 0.15,
     "seo": {
       "hours_per_page": 3.0,
-      "visits_per_page_mature": 3.0,
-      "page_exponent": 0.8,
       "page_ramp_weeks": 8,
       "sandbox_weeks": [
         8,
@@ -157,26 +197,106 @@
       "sandbox_width_weeks": 2.5,
       "sandbox_floor": 0.04,
       "backlinks_per_page": 0.03,
-      "authority_ref_backlinks": 60,
-      "authority_floor": 0.35,
-      "authority_cap": 1.5,
-      "demand_ref_share": 0.1667,
-      "demand_exponent": 0.5,
       "focus_seo_bonus": 0.3,
       "yield_sigma": 0.5,
       "_source": {
         "hours_per_page": "estimate: AI-assisted article/comparison page incl. research and editing",
-        "visits_per_page_mature": "public benchmark style: long-tail pages on a young domain average 10-30 visits/month once ranking",
-        "page_exponent": "estimate: diminishing returns (easy keywords first, cannibalisation)",
         "page_ramp_weeks": "estimate: indexing + ranking climb for a page after the sandbox",
         "sandbox_weeks": "SPEC: Google sandbox ~8-16 weeks before meaningful traffic for a new domain (uniform per run)",
-        "sandbox_floor": "estimate: share of mature traffic during the sandbox (brand + ultra-long-tail)",
+        "sandbox_floor": "estimate: share of competitive-model clicks during the sandbox (brand + ultra-long-tail)",
         "backlinks_per_page": "estimate: natural links earned per page published",
-        "authority_ref_backlinks": "estimate: referring domains for authority multiplier ~1",
-        "authority_cap": "estimate: a 1-year-old domain does not out-rank established players",
-        "demand_ref_share": "traffic potential x (sum of targeted segments search_share (SEO) / ai_share (GEO) / ref)^exponent: a niche with half the search demand of an average segment gets ~70% of its traffic",
-        "focus_seo_bonus": "SPEC: one-segment focus gives an SEO bonus (topical authority)",
+        "focus_seo_bonus": "SPEC: one-segment focus gives a GEO/topical bonus (SEO ranking uses seo_competition.rank.focus_bonus)",
         "yield_sigma": "estimate: per-run lognormal uncertainty on SEO yield"
+      }
+    },
+    "seo_competition": {
+      "tiers": {
+        "A": {
+          "monthly_volume": 4400,
+          "kd": 10.8,
+          "top10_authority": 44.0,
+          "pages_needed": 51,
+          "content_share": 0.6
+        },
+        "B": {
+          "monthly_volume": 7290,
+          "kd": 39.0,
+          "top10_authority": 44.5,
+          "pages_needed": 24,
+          "content_share": 0.3
+        },
+        "C": {
+          "monthly_volume": 2720,
+          "kd": 73.3,
+          "top10_authority": 49.5,
+          "pages_needed": 15,
+          "content_share": 0.1
+        }
+      },
+      "tier_segments": {
+        "Indie hacker / solo SaaS founder": 0.25,
+        "Small SaaS startup team": 0.35,
+        "E-commerce store owner (Shopify / WooCommerce)": 0.1,
+        "Web agency or freelancer": 0.1,
+        "Small business / showcase site": 0.1,
+        "Edtech, kids or consumer-app team": 0.1
+      },
+      "ctr": {
+        "1_3": 0.18,
+        "4_10": 0.04,
+        "11_20": 0.008
+      },
+      "authority_anchor": {
+        "0": 0,
+        "3": 5.0,
+        "6": 12.0,
+        "12": 20.0
+      },
+      "authority_sigma": 0.25,
+      "ref_links_per_week": 2.0,
+      "effort_offset": 10,
+      "effort_exponent": 0.35,
+      "effort_min": 0.5,
+      "effort_max": 1.6,
+      "link_building_share": 0.25,
+      "links_per_hour": 0.2,
+      "rank": {
+        "auth_coef": 1.197,
+        "kd_coef": 3.578,
+        "kd_ref": 30,
+        "depth_coef": 0.4,
+        "t3": 0.438,
+        "t10": -0.323,
+        "t20": -0.831,
+        "kw_sigma": 0.7,
+        "focus_bonus": 0.15,
+        "run_sigma": 0.25
+      },
+      "brand_visits_per_1k_followers_week": 1.0,
+      "_source": {
+        "tiers": "founder/seo-competition.json (Semrush API via MCP (40 calls, ~9,800 API units), 2026-10-14) via sim/calibrate_seo.py. monthly_volume = tier total searches/month (us+fr; Semrush undercounts B2B long-tail, see marketing.seo.yield_sigma); kd = tier average KD; top10_authority = median of sampled per-keyword top-10 median Authority Scores; pages_needed = keywords x {'A': 1.5, 'B': 3.0, 'C': 5.0} pages per keyword; content_share = share of new pages written for the tier (estimate)",
+        "tier_segments": "estimate: which segments search these keywords (the analyst's set is built around the small-SaaS beachhead: alternatives, AI onboarding, chatbot, mascot). Clicks are split across segments with these shares; only the targeted segments' share (+ non-target spill) is covered by our content",
+        "ctr": "founder/seo-competition.json (Semrush API via MCP (40 calls, ~9,800 API units), 2026-10-14) via sim/calibrate_seo.py: Assumption, not measured: blended average of public organic CTR curves (pos 1 ~25-30%, pos 3 ~10%) discounted ~25% for AI Overviews and ads on commercial SaaS SERPs; pos 4-10 ~2-6%; page 2 <1%.",
+        "authority_anchor": "founder/seo-competition.json (Semrush API via MCP (40 calls, ~9,800 API units), 2026-10-14) via sim/calibrate_seo.py: New domain starts at AS 0-2. Plan in marketing.md (10 directories W2, G2/Capterra W4, Show HN + 500-flow study W5, generator W6) plausibly yields 30-60 referring domains by M3 (AS ~5), 100-150 by M6 (AS ~10-15; productonboarding.com is AS 16 with 1,511 ref domains, helphero.co AS 22 with 576), 200-300 quality RDs by M12 (AS ~18-22). Semrush AS is logarithmic and weights link quality, so these are estimates.",
+        "authority_sigma": "estimate: per-run lognormal uncertainty on our authority",
+        "ref_links_per_week": "estimate: referring domains/week the anchors assume; our authority = anchor x clamp(((our links + offset)/(ref links + offset))^exponent, min, max)",
+        "link_building_share": "estimate: share of SEO hours spent on links (guest posts, PR, directories) instead of pages",
+        "links_per_hour": "estimate: referring domains earned per link-building hour",
+        "rank": "r = auth_coef*ln((A+1)/(T+1)) - kd_coef*(KD-kd_ref)/100 + depth_coef*ln(1+min(depth,3)) + focus_bonus + per-run noise; keyword-level r ~ N(r, kw_sigma); share in top 3/10/20 = Phi((r-t)/kw_sigma). auth_coef, kd_coef, t3, t10, t20 FITTED by calibrate_seo.py to the analyst's position_share_assumptions at months 6 and 12 (RMSE 0.028 on cumulative shares), assuming full content depth and a focused site; kw_sigma, kd_ref, depth_coef, focus_bonus, run_sigma are estimates. 'Outranks the median competitor' = r >= (t3+t10)/2 with depth >= 0.3",
+        "brand_visits_per_1k_followers_week": "estimate: brand searches per week per 1,000 social followers (counted as organic)",
+        "competitors": "founder/seo-competition.json (Semrush API via MCP (40 calls, ~9,800 API units), 2026-10-14) via sim/calibrate_seo.py: reported in the results, not used in the maths (tier top10_authority is)",
+        "analyst_expected_clicks": "founder/seo-competition.json (Semrush API via MCP (40 calls, ~9,800 API units), 2026-10-14) via sim/calibrate_seo.py: the analyst's own clicks/month estimate (comparison only)"
+      },
+      "competitors": {
+        "median_authority_top10": 43.5,
+        "median_authority_named": 37.0,
+        "max_authority_named": 50,
+        "n_named": 18
+      },
+      "analyst_expected_clicks": {
+        "m3": 25,
+        "m6": 198,
+        "m12": 495
       }
     },
     "geo": {
@@ -185,16 +305,20 @@
       "index_lag_weeks": 6,
       "citation_k_pages": 0.02,
       "citation_k_mentions": 0.025,
+      "citation_k_reviews": 0.02,
+      "authority_ref": 20,
       "citation_p_max": 0.5,
-      "max_referrals_per_week": 80,
+      "max_referrals_per_week": 50,
       "signup_mult": 1.8,
       "yield_sigma": 0.6,
       "_source": {
         "mentions_per_hour": "estimate: directory listings, Reddit/IH answers, review requests per hour",
         "index_lag_weeks": "estimate: AI assistants/AI Overviews pick up new sources with a lag of weeks",
         "citation_p_max": "estimate: even a well-known niche tool is cited in at most ~half of relevant AI answers",
-        "max_referrals_per_week": "estimate (deliberately conservative, very uncertain): AI-referral visitors/week for an average segment at citation p=1, scaled by the targeted segments' ai_share; AI referral traffic is small but high-intent",
-        "signup_mult": "public benchmark style: AI-referred visitors convert ~1.5-2x organic"
+        "max_referrals_per_week": "estimate (very uncertain): AI-referral visitors/week at citation p=1, scaled by the targeted segments' ai_share; set so a focused plan gets ~100-200 AI-referral visitors/month by M6, in line with founder/marketing-assumptions.json geo_citation_referral_visitors_per_month_m6 (100, range 20-400)",
+        "signup_mult": "public benchmark style: AI-referred visitors convert ~1.5-2x organic",
+        "citation_k_reviews": "estimate: reviews (G2/Capterra/app stores) raise AI citation odds",
+        "authority_ref": "estimate: citation odds x (0.6 + 0.4*min(2, our authority / authority_ref))"
       }
     },
     "launches": [
@@ -282,6 +406,24 @@
         "signup_mult": "estimate: viral visitors are curious, low intent"
       }
     },
+    "generator": {
+      "build_weeks": 1.0,
+      "visits_per_week_mature": 120,
+      "ramp_weeks": 12,
+      "signup_mult": 0.3,
+      "backlinks_per_week": 0.4,
+      "mentions_per_week": 0.3,
+      "social_impression_mult": 1.15,
+      "_source": {
+        "build_weeks": "estimate: public no-login version of the mascot generator as a lead magnet (SPEC-v2 lever)",
+        "visits_per_week_mature": "estimate: 'ai mascot generator' style queries + shares once out of the sandbox (Semrush: template.net, dribbble, magnific rank for 'ai mascot'; mascott.ai, AS 7, is #5)",
+        "ramp_weeks": "estimate",
+        "signup_mult": "estimate: generator users are hobbyists/designers; low intent to buy a website agent",
+        "backlinks_per_week": "estimate: free tools earn links",
+        "mentions_per_week": "estimate",
+        "social_impression_mult": "estimate: shareable mascots make posts travel further"
+      }
+    },
     "referral": {
       "network_launch_visitors": [
         100,
@@ -336,7 +478,9 @@
       ],
       "base_installs_per_week": {
         "shopify": 3.0,
-        "wordpress": 2.0
+        "wordpress": 2.0,
+        "webflow": 0.8,
+        "wix": 1.2
       },
       "store_segments": {
         "shopify": {
@@ -345,6 +489,15 @@
         "wordpress": {
           "Small business / showcase site": 0.5,
           "E-commerce store owner (Shopify / WooCommerce)": 0.3,
+          "Web agency or freelancer": 0.2
+        },
+        "webflow": {
+          "Web agency or freelancer": 0.5,
+          "Small SaaS startup team": 0.3,
+          "Small business / showcase site": 0.2
+        },
+        "wix": {
+          "Small business / showcase site": 0.8,
           "Web agency or freelancer": 0.2
         }
       },
@@ -357,7 +510,7 @@
       "_source": {
         "listing_hours": "estimate: listing, screenshots, compliance (Shopify review checklist, WP plugin guidelines)",
         "review_weeks": "public benchmark style: Shopify app review takes ~1-6 weeks incl. resubmissions",
-        "base_installs_per_week": "estimate: a new, unreviewed app in a crowded 'chat/AI assistant' category; rank grows with reviews",
+        "base_installs_per_week": "estimate: a new, unreviewed app in a crowded 'chat/AI assistant' category; rank grows with reviews; Webflow/Wix app markets (reachable only with the few-clicks install) are estimates too",
         "store_segments": "which segments install from each store (WordPress directory: WooCommerce shops, showcase sites, agencies) - estimate",
         "review_k": "estimate: installs multiplier = sqrt(1 + reviews/review_k)",
         "install_to_trial": "estimate: share of installs that complete onboarding into a real trial"
@@ -402,6 +555,8 @@
     "hours_per_ltd_user_per_week": 0.03,
     "hours_per_trial_per_week": 0.25,
     "dfy_setup_hours": 2.0,
+    "onboarding_hours_per_new_customer": 1.0,
+    "onboarding_hours_per_new_customer_few_clicks": 0.3,
     "cs_cap_share": 0.5,
     "onboarding_min": 0.85,
     "onboarding_max": 1.1,
@@ -424,7 +579,9 @@
       "guarantee_trust_boost": "estimate: guarantee closes 40% of the 'no proof yet' gap",
       "guarantee_refund_rate": "estimate: share of new customers who claim the 'lift or refund' guarantee",
       "early_tenure_churn_mult": "public benchmark style: first 2 months churn ~1.3x steady-state",
-      "capped_usage_churn_mult": "estimate: customers hitting a hard quota with no overage are frustrated"
+      "capped_usage_churn_mult": "estimate: customers hitting a hard quota with no overage are frustrated",
+      "onboarding_hours_per_new_customer": "estimate: setup calls/emails per new paying customer with the snippet install",
+      "onboarding_hours_per_new_customer_few_clicks": "estimate (SPEC-v2: fewer support hours per new customer with the wizard)"
     }
   },
   "pricing_behaviour": {
@@ -681,6 +838,84 @@
       }
     }
   },
+  "social": {
+    "hours_per_post_founder": 1.0,
+    "max_founder_posts_per_week": 10,
+    "founder_authenticity": 1.3,
+    "cm_posts_per_week": 8,
+    "cm_quality": 0.8,
+    "cm_ref_cost": 900,
+    "cm_cost_range": [
+      600,
+      1500
+    ],
+    "cm_management_hours_per_week": 1.5,
+    "signup_mult": 0.8,
+    "reply_lift_max": 0.2,
+    "reply_lift_followers_ref": 3000,
+    "mentions_per_viral": 2,
+    "backlinks_per_viral": 0.5,
+    "mentions_per_10k_impressions": 0.5,
+    "ugc_impressions_per_customer_week": 30,
+    "yield_sigma": 0.6,
+    "platforms": {
+      "linkedin": {
+        "start_followers": 500,
+        "base_impressions": 800,
+        "impressions_per_follower": 0.3,
+        "follow_rate": 0.004,
+        "click_rate": 0.004,
+        "icp_share": 0.35,
+        "viral_prob": 0.02,
+        "viral_median_mult": 8,
+        "viral_sigma": 1.0,
+        "follower_cap": 50000
+      },
+      "x": {
+        "start_followers": 300,
+        "base_impressions": 300,
+        "impressions_per_follower": 0.15,
+        "follow_rate": 0.003,
+        "click_rate": 0.003,
+        "icp_share": 0.25,
+        "viral_prob": 0.02,
+        "viral_median_mult": 10,
+        "viral_sigma": 1.2,
+        "follower_cap": 50000
+      },
+      "shorts": {
+        "start_followers": 0,
+        "base_impressions": 500,
+        "impressions_per_follower": 0.1,
+        "follow_rate": 0.004,
+        "click_rate": 0.0005,
+        "icp_share": 0.05,
+        "viral_prob": 0.03,
+        "viral_median_mult": 30,
+        "viral_sigma": 1.5,
+        "follower_cap": 200000
+      }
+    },
+    "_source": {
+      "hours_per_post_founder": "estimate: one LinkedIn/X post or a 15-s mascot clip incl. replying to comments",
+      "max_founder_posts_per_week": "estimate: founders do not post more than ~10 times a week",
+      "founder_authenticity": "estimate: founder / build-in-public posts get ~30% more reach than brand posts",
+      "cm_posts_per_week": "estimate: part-time freelance community manager at cm_ref_cost; volume and quality scale with (cost/cm_ref_cost)^0.3",
+      "cm_quality": "estimate: a CM post reaches ~80% of a founder post",
+      "cm_ref_cost": "SPEC-v2: social.cm_cost_per_month estimate 600-1,500 EUR/month (strategy picks the cost)",
+      "cm_cost_range": "SPEC-v2 range used by the search",
+      "cm_management_hours_per_week": "estimate: founder time to brief and review the CM",
+      "signup_mult": "estimate: social visitors convert ~0.8x organic to signups",
+      "reply_lift_max": "founder/marketing.md: build in public mostly warms outreach; up to +20% cold reply rate at reply_lift_followers_ref LinkedIn+X followers - estimate",
+      "reply_lift_followers_ref": "estimate",
+      "mentions_per_viral": "estimate: a viral post earns mentions (GEO) and a few links (SEO authority)",
+      "backlinks_per_viral": "estimate",
+      "mentions_per_10k_impressions": "estimate",
+      "ugc_impressions_per_customer_week": "estimate (few-clicks install only): shareable mascot pages / 'Made with Mascott' clips posted by customers",
+      "yield_sigma": "estimate: per-run lognormal uncertainty on social reach",
+      "platforms": "estimate per platform: base impressions/post for a small account, extra impressions per follower, follows per impression, site clicks per impression, share of the audience that is the B2B target (icp_share), rare viral hits ~ lognormal multiples of base reach. LinkedIn: B2B, modest reach; X: indie/SaaS crowd; TikTok/Instagram/YouTube Shorts: cute mascot clips travel far but the audience is mostly consumers"
+    }
+  },
   "ceo": {
     "exploration_prob": 0.2,
     "revert_if_drop": 0.04,
@@ -719,15 +954,19 @@
       "segments.*.proof_sensitivity",
       "segments.*.conv_per_month_median",
       "costs.llm_cost_per_conv",
-      "marketing.seo.visits_per_page_mature",
+      "marketing.seo_competition.tiers.*.monthly_volume",
+      "marketing.seo_competition.tiers.*.top10_authority",
+      "marketing.seo_competition.authority_anchor",
       "marketing.seo.sandbox_weeks",
       "marketing.geo.max_referrals_per_week",
       "marketing.launches.*.visitors_median",
+      "social.platforms.*.base_impressions",
+      "social.platforms.*.click_rate",
       "sales.outreach.contacts_per_hour",
       "sales.app_store.base_installs_per_week",
-      "sales.agency.partner_signup_rate",
       "product.base_build_weeks",
       "product.asr_narrow_start",
+      "product.few_clicks.trial_to_paid_mult",
       "customer_success.hours_per_paid_customer_per_week",
       "team.hours_per_week",
       "viability.starting_cash"
