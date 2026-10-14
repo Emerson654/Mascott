@@ -1,0 +1,1176 @@
+{
+ "generated": "2026-10-14",
+ "source": "Semrush API via MCP (40 calls, ~9,800 API units); databases us + fr; volumes = Semrush monthly avg, KD = Semrush Keyword Difficulty %, CPC in USD",
+ "competitors": [
+  {
+   "domain": "intercom.com",
+   "authority_score": 49,
+   "ref_domains": 65995,
+   "organic_keywords": 21632,
+   "organic_traffic_us": 43593,
+   "top10_on_sampled_keywords": "none of the 9 sampled SERPs",
+   "semrush_url": "https://www.semrush.com/analytics/overview/?db=us&q=intercom.com"
+  },
+  {
+   "domain": "tidio.com",
+   "authority_score": 50,
+   "ref_domains": 30390,
+   "organic_keywords": 19386,
+   "organic_traffic_us": 28220,
+   "top10_on_sampled_keywords": "none of the 9 sampled SERPs",
+   "semrush_url": "https://www.semrush.com/analytics/overview/?db=us&q=tidio.com"
+  },
+  {
+   "domain": "crisp.chat",
+   "authority_score": 50,
+   "ref_domains": 18847,
+   "organic_keywords": 6061,
+   "organic_traffic_us": 60450,
+   "top10_on_sampled_keywords": "#3 intercom alternative, #1 tidio alternative",
+   "semrush_url": "https://www.semrush.com/analytics/overview/?db=us&q=crisp.chat"
+  },
+  {
+   "domain": "chatbase.co",
+   "authority_score": 45,
+   "ref_domains": 16984,
+   "organic_keywords": 5282,
+   "organic_traffic_us": 11074,
+   "top10_on_sampled_keywords": "none of the 9 sampled SERPs",
+   "semrush_url": "https://www.semrush.com/analytics/overview/?db=us&q=chatbase.co"
+  },
+  {
+   "domain": "botpress.com",
+   "authority_score": 47,
+   "ref_domains": 10869,
+   "organic_keywords": 10688,
+   "organic_traffic_us": 16266,
+   "top10_on_sampled_keywords": "none of the 9 sampled SERPs",
+   "semrush_url": "https://www.semrush.com/analytics/overview/?db=us&q=botpress.com"
+  },
+  {
+   "domain": "voiceflow.com",
+   "authority_score": 48,
+   "ref_domains": 9461,
+   "organic_keywords": 10590,
+   "organic_traffic_us": 43342,
+   "top10_on_sampled_keywords": "none of the 9 sampled SERPs",
+   "semrush_url": "https://www.semrush.com/analytics/overview/?db=us&q=voiceflow.com"
+  },
+  {
+   "domain": "customgpt.ai",
+   "authority_score": 34,
+   "ref_domains": 7656,
+   "organic_keywords": 5003,
+   "organic_traffic_us": 2829,
+   "top10_on_sampled_keywords": "none of the 9 sampled SERPs",
+   "semrush_url": "https://www.semrush.com/analytics/overview/?db=us&q=customgpt.ai"
+  },
+  {
+   "domain": "userpilot.com",
+   "authority_score": 45,
+   "ref_domains": 10311,
+   "organic_keywords": 15783,
+   "organic_traffic_us": 22480,
+   "top10_on_sampled_keywords": "#1 userpilot alternatives, #3 product tour software, #2 user onboarding software, #7/#9 ai onboarding",
+   "semrush_url": "https://www.semrush.com/analytics/overview/?db=us&q=userpilot.com"
+  },
+  {
+   "domain": "appcues.com",
+   "authority_score": 42,
+   "ref_domains": 8713,
+   "organic_keywords": 5695,
+   "organic_traffic_us": 9045,
+   "top10_on_sampled_keywords": "#3 user onboarding software",
+   "semrush_url": "https://www.semrush.com/analytics/overview/?db=us&q=appcues.com"
+  },
+  {
+   "domain": "userguiding.com",
+   "authority_score": 38,
+   "ref_domains": 8381,
+   "organic_keywords": 10591,
+   "organic_traffic_us": 3016,
+   "top10_on_sampled_keywords": "none of the 9 sampled SERPs",
+   "semrush_url": "https://www.semrush.com/analytics/overview/?db=us&q=userguiding.com"
+  },
+  {
+   "domain": "chameleon.io",
+   "authority_score": 34,
+   "ref_domains": 6248,
+   "organic_keywords": 2929,
+   "organic_traffic_us": 1727,
+   "top10_on_sampled_keywords": "none of the 9 sampled SERPs",
+   "semrush_url": "https://www.semrush.com/analytics/overview/?db=us&q=chameleon.io"
+  },
+  {
+   "domain": "pickaxe.co",
+   "authority_score": 36,
+   "ref_domains": 5582,
+   "organic_keywords": 4583,
+   "organic_traffic_us": 4760,
+   "top10_on_sampled_keywords": "none of the 9 sampled SERPs",
+   "semrush_url": "https://www.semrush.com/analytics/overview/?db=us&q=pickaxe.co"
+  },
+  {
+   "domain": "mascot.bot",
+   "authority_score": 11,
+   "ref_domains": 206,
+   "organic_keywords": 29,
+   "organic_traffic_us": 0,
+   "top10_on_sampled_keywords": "none of the 9 sampled SERPs",
+   "semrush_url": "https://www.semrush.com/analytics/overview/?db=us&q=mascot.bot"
+  },
+  {
+   "domain": "anam.ai",
+   "authority_score": 32,
+   "ref_domains": 3389,
+   "organic_keywords": 163,
+   "organic_traffic_us": 701,
+   "top10_on_sampled_keywords": "none of the 9 sampled SERPs",
+   "semrush_url": "https://www.semrush.com/analytics/overview/?db=us&q=anam.ai"
+  },
+  {
+   "domain": "copilotkit.ai",
+   "authority_score": 34,
+   "ref_domains": 3501,
+   "organic_keywords": 1976,
+   "organic_traffic_us": 4838,
+   "top10_on_sampled_keywords": "none of the 9 sampled SERPs",
+   "semrush_url": "https://www.semrush.com/analytics/overview/?db=us&q=copilotkit.ai"
+  },
+  {
+   "domain": "usetandem.ai",
+   "authority_score": 18,
+   "ref_domains": 3495,
+   "organic_keywords": 53,
+   "organic_traffic_us": 16,
+   "top10_on_sampled_keywords": "none of the 9 sampled SERPs",
+   "semrush_url": "https://www.semrush.com/analytics/overview/?db=us&q=usetandem.ai"
+  },
+  {
+   "domain": "productfruits.com",
+   "authority_score": 35,
+   "ref_domains": 1591,
+   "organic_keywords": 1247,
+   "organic_traffic_us": 2967,
+   "top10_on_sampled_keywords": "#1 product tour software, #5 userpilot alternatives",
+   "semrush_url": "https://www.semrush.com/analytics/overview/?db=us&q=productfruits.com"
+  },
+  {
+   "domain": "mascofast.com",
+   "authority_score": 2,
+   "ref_domains": 212,
+   "organic_keywords": null,
+   "organic_traffic_us": null,
+   "top10_on_sampled_keywords": "none of the 9 sampled SERPs",
+   "semrush_url": "https://www.semrush.com/analytics/overview/?db=us&q=mascofast.com"
+  }
+ ],
+ "keywords": [
+  {
+   "kw": "intercom alternative",
+   "db": "us",
+   "volume": 720,
+   "kd": 13,
+   "cpc_usd": 25.03,
+   "cluster": "alternatives",
+   "tier": "A",
+   "note": "KD 13; an AS-25 site (use-apify.com) holds #8. Top 3 harder (AS 39/100/50).",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=intercom+alternative",
+   "top3_domains": [
+    "ringly.io",
+    "reddit.com",
+    "crisp.chat"
+   ],
+   "top3_authority": [
+    39,
+    100,
+    50
+   ],
+   "top10_min_authority": 25,
+   "top10_median_authority": 44.0,
+   "serp_source": "semrush phrase_organic"
+  },
+  {
+   "kw": "tidio alternative",
+   "db": "us",
+   "volume": 210,
+   "kd": 20,
+   "cpc_usd": 23.1,
+   "cluster": "alternatives",
+   "tier": "A",
+   "note": "worktual.co.uk (AS 23) at #8, boei.help (AS 29) at #6.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=tidio+alternative",
+   "top3_domains": [
+    "crisp.chat",
+    "front.com",
+    "kayako.com"
+   ],
+   "top3_authority": [
+    50,
+    51,
+    50
+   ],
+   "top10_min_authority": 23,
+   "top10_median_authority": 49.0,
+   "serp_source": "semrush phrase_organic"
+  },
+  {
+   "kw": "chatbase alternative",
+   "db": "us",
+   "volume": 70,
+   "kd": 10,
+   "cpc_usd": 8.18,
+   "cluster": "alternatives",
+   "tier": "A",
+   "note": "KD only (SERP not pulled).",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=chatbase+alternative",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "userpilot alternatives",
+   "db": "us",
+   "volume": 260,
+   "kd": 18,
+   "cpc_usd": 40.93,
+   "cluster": "alternatives",
+   "tier": "A",
+   "note": "productonboarding.com (AS 16) holds #2; helphero.co AS 22 #8; kompassify.com AS 19 #10.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=userpilot+alternatives",
+   "top3_domains": [
+    "userpilot.com",
+    "productonboarding.com",
+    "userflow.com"
+   ],
+   "top3_authority": [
+    45,
+    16,
+    36
+   ],
+   "top10_min_authority": 16,
+   "top10_median_authority": 35.5,
+   "serp_source": "semrush phrase_organic"
+  },
+  {
+   "kw": "userpilot alternative",
+   "db": "us",
+   "volume": 50,
+   "kd": 0,
+   "cpc_usd": 40.93,
+   "cluster": "alternatives",
+   "tier": "A",
+   "note": "KD only.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=userpilot+alternative",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "appcues alternatives",
+   "db": "us",
+   "volume": 140,
+   "kd": 3,
+   "cpc_usd": 22.66,
+   "cluster": "alternatives",
+   "tier": "A",
+   "note": "KD only.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=appcues+alternatives",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "appcues alternative",
+   "db": "us",
+   "volume": 70,
+   "kd": 4,
+   "cpc_usd": 22.66,
+   "cluster": "alternatives",
+   "tier": "A",
+   "note": "KD only.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=appcues+alternative",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "userguiding alternatives",
+   "db": "us",
+   "volume": 10,
+   "kd": 0,
+   "cpc_usd": 37.63,
+   "cluster": "alternatives",
+   "tier": "A",
+   "note": "KD only.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=userguiding+alternatives",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "product fruits alternatives",
+   "db": "us",
+   "volume": 30,
+   "kd": 0,
+   "cpc_usd": 6.69,
+   "cluster": "alternatives",
+   "tier": "A",
+   "note": "KD only.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=product+fruits+alternatives",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "intercom fin alternative",
+   "db": "us",
+   "volume": 10,
+   "kd": 0,
+   "cpc_usd": 0.0,
+   "cluster": "alternatives",
+   "tier": "A",
+   "note": "KD only.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=intercom+fin+alternative",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "intercom fin pricing",
+   "db": "us",
+   "volume": 20,
+   "kd": 0,
+   "cpc_usd": 33.6,
+   "cluster": "alternatives",
+   "tier": "A",
+   "note": "KD only; calculator page target.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=intercom+fin+pricing",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "crisp vs intercom",
+   "db": "us",
+   "volume": 70,
+   "kd": 9,
+   "cpc_usd": 16.38,
+   "cluster": "alternatives",
+   "tier": "A",
+   "note": "KD only.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=crisp+vs+intercom",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "product tour software",
+   "db": "us",
+   "volume": 260,
+   "kd": 23,
+   "cpc_usd": 31.52,
+   "cluster": "onboarding-category",
+   "tier": "A",
+   "note": "Weakest top-10 domain AS 30 (howdygo.com); top 3 = productfruits 35 / reddit 100 / userpilot 45.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=product+tour+software",
+   "top3_domains": [
+    "productfruits.com",
+    "reddit.com",
+    "userpilot.com"
+   ],
+   "top3_authority": [
+    35,
+    100,
+    45
+   ],
+   "top10_min_authority": 30,
+   "top10_median_authority": 40.0,
+   "serp_source": "semrush phrase_organic"
+  },
+  {
+   "kw": "interactive walkthrough",
+   "db": "us",
+   "volume": 70,
+   "kd": 5,
+   "cpc_usd": 37.02,
+   "cluster": "onboarding-category",
+   "tier": "A",
+   "note": "KD only.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=interactive+walkthrough",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "interactive product tour",
+   "db": "us",
+   "volume": 90,
+   "kd": 16,
+   "cpc_usd": 23.03,
+   "cluster": "onboarding-category",
+   "tier": "A",
+   "note": "KD only.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=interactive+product+tour",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "in app guidance",
+   "db": "us",
+   "volume": 30,
+   "kd": 16,
+   "cpc_usd": 33.46,
+   "cluster": "onboarding-category",
+   "tier": "A",
+   "note": "KD only.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=in+app+guidance",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "product adoption software",
+   "db": "us",
+   "volume": 210,
+   "kd": 22,
+   "cpc_usd": 0.0,
+   "cluster": "onboarding-category",
+   "tier": "A",
+   "note": "KD only.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=product+adoption+software",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "ai onboarding agent",
+   "db": "us",
+   "volume": 40,
+   "kd": 26,
+   "cpc_usd": 12.72,
+   "cluster": "ai-onboarding",
+   "tier": "A",
+   "note": "KD only; the category we want to own.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=ai+onboarding+agent",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "saas onboarding",
+   "db": "us",
+   "volume": 390,
+   "kd": 28,
+   "cpc_usd": 16.84,
+   "cluster": "onboarding-category",
+   "tier": "A",
+   "note": "KD only; borderline A/B.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=saas+onboarding",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "time to value",
+   "db": "us",
+   "volume": 720,
+   "kd": 28,
+   "cpc_usd": 15.62,
+   "cluster": "onboarding-category",
+   "tier": "A",
+   "note": "KD only; broad informational, borderline A/B, low purchase intent.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=time+to+value",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "saas activation rate",
+   "db": "us",
+   "volume": 20,
+   "kd": 0,
+   "cpc_usd": 0.0,
+   "cluster": "onboarding-category",
+   "tier": "A",
+   "note": "KD only; benchmark page target.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=saas+activation+rate",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "ai agent for website",
+   "db": "us",
+   "volume": 30,
+   "kd": 0,
+   "cpc_usd": 15.82,
+   "cluster": "ai-agent",
+   "tier": "A",
+   "note": "KD only.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=ai+agent+for+website",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "chatbot widget",
+   "db": "us",
+   "volume": 110,
+   "kd": 22,
+   "cpc_usd": 7.7,
+   "cluster": "chatbot",
+   "tier": "A",
+   "note": "KD only.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=chatbot+widget",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "chatbot avatar",
+   "db": "us",
+   "volume": 90,
+   "kd": 24,
+   "cpc_usd": 0.0,
+   "cluster": "mascot",
+   "tier": "A",
+   "note": "KD only.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=chatbot+avatar",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "ai mascot",
+   "db": "us",
+   "volume": 110,
+   "kd": 19,
+   "cpc_usd": 2.62,
+   "cluster": "mascot",
+   "tier": "A",
+   "note": "mascott.ai (AS 7) already at #5; masko.ai (AS 27) #1. Mostly image-generator intent.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=ai+mascot",
+   "top3_domains": [
+    "masko.ai",
+    "template.net",
+    "dribbble.com"
+   ],
+   "top3_authority": [
+    27,
+    73,
+    77
+   ],
+   "top10_min_authority": 7,
+   "top10_median_authority": 69.5,
+   "serp_source": "semrush phrase_organic"
+  },
+  {
+   "kw": "ai mascot generator",
+   "db": "us",
+   "volume": 170,
+   "kd": 21,
+   "cpc_usd": 2.09,
+   "cluster": "mascot",
+   "tier": "A",
+   "note": "KD only; free-tool page target.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=ai+mascot+generator",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "mascot generator",
+   "db": "us",
+   "volume": 260,
+   "kd": 14,
+   "cpc_usd": 1.14,
+   "cluster": "mascot",
+   "tier": "A",
+   "note": "KD only; free-tool page, low buyer intent.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=mascot+generator",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "ai avatar for website",
+   "db": "us",
+   "volume": 10,
+   "kd": 0,
+   "cpc_usd": 0.0,
+   "cluster": "mascot",
+   "tier": "A",
+   "note": "KD only.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=ai+avatar+for+website",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "user onboarding software",
+   "db": "us",
+   "volume": 480,
+   "kd": 32,
+   "cpc_usd": 19.94,
+   "cluster": "onboarding-category",
+   "tier": "B",
+   "note": "KD 32; plgos.com (AS 18) at #9 but Gartner (69) x2, Userpilot, Appcues in top 3.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=user+onboarding+software",
+   "top3_domains": [
+    "userflow.com",
+    "userpilot.com",
+    "appcues.com"
+   ],
+   "top3_authority": [
+    36,
+    45,
+    42
+   ],
+   "top10_min_authority": 18,
+   "top10_median_authority": 42.5,
+   "serp_source": "semrush phrase_organic"
+  },
+  {
+   "kw": "ai onboarding",
+   "db": "us",
+   "volume": 210,
+   "kd": 38,
+   "cpc_usd": 18.01,
+   "cluster": "ai-onboarding",
+   "tier": "B",
+   "note": "SERP dominated by HR/employee onboarding (enboarder, moveworks, leena, aihr): intent mismatch.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=ai+onboarding",
+   "top3_domains": [
+    "reddit.com",
+    "enboarder.com",
+    "linkedin.com"
+   ],
+   "top3_authority": [
+    100,
+    41,
+    100
+   ],
+   "top10_min_authority": 36,
+   "top10_median_authority": 46.5,
+   "serp_source": "semrush phrase_organic"
+  },
+  {
+   "kw": "customer onboarding software",
+   "db": "us",
+   "volume": 1000,
+   "kd": 36,
+   "cpc_usd": 47.12,
+   "cluster": "onboarding-category",
+   "tier": "B",
+   "note": "KD only.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=customer+onboarding+software",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "digital adoption platform",
+   "db": "us",
+   "volume": 1000,
+   "kd": 41,
+   "cpc_usd": 36.32,
+   "cluster": "onboarding-category",
+   "tier": "B",
+   "note": "KD only; WalkMe/Whatfix/Pendo category.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=digital+adoption+platform",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "user onboarding",
+   "db": "us",
+   "volume": 1000,
+   "kd": 47,
+   "cpc_usd": 9.73,
+   "cluster": "onboarding-category",
+   "tier": "B",
+   "note": "KD only; informational.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=user+onboarding",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "onboarding checklist",
+   "db": "us",
+   "volume": 2400,
+   "kd": 43,
+   "cpc_usd": 6.96,
+   "cluster": "onboarding-category",
+   "tier": "B",
+   "note": "KD only; mixed HR + SaaS intent.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=onboarding+checklist",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "talking avatar",
+   "db": "us",
+   "volume": 880,
+   "kd": 37,
+   "cpc_usd": 2.04,
+   "cluster": "mascot",
+   "tier": "B",
+   "note": "KD only; photoreal/video-avatar intent (HeyGen, D-ID); low relevance.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=talking+avatar",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "ai chatbot for website",
+   "db": "us",
+   "volume": 1000,
+   "kd": 74,
+   "cpc_usd": 13.54,
+   "cluster": "chatbot",
+   "tier": "C",
+   "note": "KD 74; Google, HubSpot (79), Zapier (76), Reddit in top 10.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=ai+chatbot+for+website",
+   "top3_domains": [
+    "chatbot.com",
+    "reddit.com",
+    "google.com"
+   ],
+   "top3_authority": [
+    52,
+    100,
+    100
+   ],
+   "top10_min_authority": 28,
+   "top10_median_authority": 49.5,
+   "serp_source": "semrush phrase_organic"
+  },
+  {
+   "kw": "website chatbot",
+   "db": "us",
+   "volume": 720,
+   "kd": 76,
+   "cpc_usd": 13.55,
+   "cluster": "chatbot",
+   "tier": "C",
+   "note": "KD only (76).",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=website+chatbot",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "ai customer service chatbot",
+   "db": "us",
+   "volume": 1000,
+   "kd": 70,
+   "cpc_usd": 134.1,
+   "cluster": "chatbot",
+   "tier": "C",
+   "note": "KD only (70); CPC 134 USD.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=us&q=ai+customer+service+chatbot",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "alternative intercom",
+   "db": "fr",
+   "volume": 50,
+   "kd": 25,
+   "cpc_usd": 8.03,
+   "cluster": "alternatives",
+   "tier": "A",
+   "note": "KD only.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=fr&q=alternative+intercom",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "mascotte site web",
+   "db": "fr",
+   "volume": 20,
+   "kd": 0,
+   "cpc_usd": 0.0,
+   "cluster": "mascot",
+   "tier": "A",
+   "note": "KD only.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=fr&q=mascotte+site+web",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "mascotte ia",
+   "db": "fr",
+   "volume": 20,
+   "kd": 0,
+   "cpc_usd": 0.0,
+   "cluster": "mascot",
+   "tier": "A",
+   "note": "KD only.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=fr&q=mascotte+ia",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "agent ia site web",
+   "db": "fr",
+   "volume": 20,
+   "kd": 0,
+   "cpc_usd": 2.04,
+   "cluster": "ai-agent",
+   "tier": "A",
+   "note": "KD only.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=fr&q=agent+ia+site+web",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "chatbot ia site web",
+   "db": "fr",
+   "volume": 10,
+   "kd": 0,
+   "cpc_usd": 0.0,
+   "cluster": "chatbot",
+   "tier": "A",
+   "note": "KD only.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=fr&q=chatbot+ia+site+web",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "onboarding utilisateur",
+   "db": "fr",
+   "volume": 10,
+   "kd": 0,
+   "cpc_usd": 4.44,
+   "cluster": "onboarding-category",
+   "tier": "A",
+   "note": "KD only.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=fr&q=onboarding+utilisateur",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "chatbot site internet",
+   "db": "fr",
+   "volume": 320,
+   "kd": 38,
+   "cpc_usd": 6.48,
+   "cluster": "chatbot",
+   "tier": "B",
+   "note": "KD only.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=fr&q=chatbot+site+internet",
+   "top3_domains": null,
+   "top10_min_authority": null,
+   "serp_source": "not pulled (KD only)"
+  },
+  {
+   "kw": "logiciel onboarding",
+   "db": "fr",
+   "volume": 590,
+   "kd": 19,
+   "cpc_usd": 14.75,
+   "cluster": "off-intent",
+   "tier": "excluded",
+   "note": "KD 19 and weakest top-10 AS 28, but 10/10 results are HR employee-onboarding software: wrong intent, excluded from tier totals.",
+   "semrush_url": "https://www.semrush.com/analytics/keywordoverview/?db=fr&q=logiciel+onboarding",
+   "top3_domains": [
+    "workelo.eu",
+    "culture-rh.com",
+    "heyteam.com"
+   ],
+   "top3_authority": [
+    33,
+    47,
+    33
+   ],
+   "top10_min_authority": 28,
+   "top10_median_authority": 35.5,
+   "serp_source": "semrush phrase_organic"
+  }
+ ],
+ "tiers": {
+  "A": {
+   "keywords": [
+    "intercom alternative (us)",
+    "tidio alternative (us)",
+    "chatbase alternative (us)",
+    "userpilot alternatives (us)",
+    "userpilot alternative (us)",
+    "appcues alternatives (us)",
+    "appcues alternative (us)",
+    "userguiding alternatives (us)",
+    "product fruits alternatives (us)",
+    "intercom fin alternative (us)",
+    "intercom fin pricing (us)",
+    "crisp vs intercom (us)",
+    "product tour software (us)",
+    "interactive walkthrough (us)",
+    "interactive product tour (us)",
+    "in app guidance (us)",
+    "product adoption software (us)",
+    "ai onboarding agent (us)",
+    "saas onboarding (us)",
+    "time to value (us)",
+    "saas activation rate (us)",
+    "ai agent for website (us)",
+    "chatbot widget (us)",
+    "chatbot avatar (us)",
+    "ai mascot (us)",
+    "ai mascot generator (us)",
+    "mascot generator (us)",
+    "ai avatar for website (us)",
+    "alternative intercom (fr)",
+    "mascotte site web (fr)",
+    "mascotte ia (fr)",
+    "agent ia site web (fr)",
+    "chatbot ia site web (fr)",
+    "onboarding utilisateur (fr)"
+   ],
+   "count": 34,
+   "total_volume": 4400,
+   "total_volume_us": 4270,
+   "total_volume_fr": 130,
+   "avg_kd": 10.8
+  },
+  "B": {
+   "keywords": [
+    "user onboarding software (us)",
+    "ai onboarding (us)",
+    "customer onboarding software (us)",
+    "digital adoption platform (us)",
+    "user onboarding (us)",
+    "onboarding checklist (us)",
+    "talking avatar (us)",
+    "chatbot site internet (fr)"
+   ],
+   "count": 8,
+   "total_volume": 7290,
+   "total_volume_us": 6970,
+   "total_volume_fr": 320,
+   "avg_kd": 39
+  },
+  "C": {
+   "keywords": [
+    "ai chatbot for website (us)",
+    "website chatbot (us)",
+    "ai customer service chatbot (us)"
+   ],
+   "count": 3,
+   "total_volume": 2720,
+   "total_volume_us": 2720,
+   "total_volume_fr": 0,
+   "avg_kd": 73.3
+  },
+  "excluded": {
+   "keywords": [
+    "logiciel onboarding (fr)"
+   ],
+   "total_volume": 590,
+   "reason": "off-intent (HR onboarding)"
+  },
+  "no_volume": [
+   "website mascot (us)",
+   "in-app ai assistant (us)",
+   "ai product tour (us)",
+   "mascotbot (us)",
+   "animated avatar chatbot (us, no row returned)",
+   "ai sales agent website (us, no row returned)",
+   "avatar ia site web (fr, no row)",
+   "visite guidée produit (fr, no row)"
+  ]
+ },
+ "other_serp_domains_authority": {
+  "ringly.io": 39,
+  "reddit.com": 100,
+  "front.com": 51,
+  "outseta.com": 34,
+  "proprofsdesk.com": 49,
+  "kayako.com": 50,
+  "use-apify.com": 25,
+  "gosquared.com": 35,
+  "stonly.com": 39,
+  "productonboarding.com": 16,
+  "userflow.com": 36,
+  "meltingspot.io": 29,
+  "statsig.com": 49,
+  "scribe.com": 50,
+  "helphero.co": 22,
+  "posthog.com": 45,
+  "kompassify.com": 19,
+  "navattic.com": 36,
+  "supademo.com": 39,
+  "howdygo.com": 30,
+  "goconsensus.com": 41,
+  "jimo.ai": 31,
+  "amplitude.com": 57,
+  "youtube.com": 100,
+  "zite.com": 44,
+  "userlist.com": 32,
+  "gartner.com": 69,
+  "alignedup.com": 33,
+  "walkme.com": 43,
+  "plgos.com": 18,
+  "masko.ai": 27,
+  "template.net": 73,
+  "dribbble.com": 77,
+  "venngage.com": 66,
+  "mascott.ai": 7,
+  "magnific.com": 96,
+  "magicshot.ai": 39,
+  "brandingmag.com": 37,
+  "enboarder.com": 41,
+  "linkedin.com": 100,
+  "moveworks.com": 39,
+  "mindstudio.ai": 48,
+  "leena.ai": 36,
+  "aihr.com": 58,
+  "chatbot.com": 52,
+  "google.com": 100,
+  "nextlevel.ai": 28,
+  "hubspot.com": 79,
+  "wonderchat.io": 29,
+  "zapier.com": 76,
+  "kaily.ai": 29,
+  "chatling.ai": 31,
+  "wpbeginner.com": 47,
+  "eesel.ai": 48,
+  "boei.help": 29,
+  "proprofschat.com": 38,
+  "worktual.co.uk": 23,
+  "chatimize.com": 35,
+  "workelo.eu": 33,
+  "culture-rh.com": 47,
+  "heyteam.com": 33,
+  "slack.com": 78,
+  "eurecia.com": 47,
+  "factorial.fr": 41,
+  "foederis.fr": 28,
+  "ispring.fr": 36,
+  "apogea.fr": 35,
+  "sigma-rh.com": 32
+ },
+ "model_inputs": {
+  "winnable_monthly_searches_tierA": 4400,
+  "winnable_monthly_searches_tierB": 7290,
+  "monthly_searches_tierC": 2720,
+  "avg_kd_tierA": 10.8,
+  "avg_kd_tierB": 39,
+  "avg_kd_tierC": 73.3,
+  "median_competitor_authority_top10": 43.5,
+  "median_competitor_authority_top10_basis": "90 top-10 slots across 9 SERPs (8 us + 1 fr)",
+  "median_authority_named_competitors": 37.0,
+  "weakest_domain_in_any_sampled_top10": {
+   "domain": "mascott.ai",
+   "authority": 7,
+   "keyword": "ai mascot",
+   "position": 5
+  },
+  "expected_ctr_pos_1_3": 0.18,
+  "expected_ctr_pos_4_10": 0.04,
+  "expected_ctr_pos_11_20": 0.008,
+  "ctr_rationale": "Assumption, not measured: blended average of public organic CTR curves (pos 1 ~25-30%, pos 3 ~10%) discounted ~25% for AI Overviews and ads on commercial SaaS SERPs; pos 4-10 ~2-6%; page 2 <1%.",
+  "our_authority_month_3_estimate": 5,
+  "our_authority_month_6_estimate": 12,
+  "our_authority_month_12_estimate": 20,
+  "authority_rationale": "New domain starts at AS 0-2. Plan in marketing.md (10 directories W2, G2/Capterra W4, Show HN + 500-flow study W5, generator W6) plausibly yields 30-60 referring domains by M3 (AS ~5), 100-150 by M6 (AS ~10-15; productonboarding.com is AS 16 with 1,511 ref domains, helphero.co AS 22 with 576), 200-300 quality RDs by M12 (AS ~18-22). Semrush AS is logarithmic and weights link quality, so these are estimates.",
+  "position_share_assumptions": {
+   "3": {
+    "A": {
+     "1_3": 0.0,
+     "4_10": 0.1,
+     "11_20": 0.2
+    },
+    "B": {
+     "1_3": 0,
+     "4_10": 0,
+     "11_20": 0.0
+    },
+    "C": {
+     "1_3": 0,
+     "4_10": 0,
+     "11_20": 0
+    }
+   },
+   "6": {
+    "A": {
+     "1_3": 0.15,
+     "4_10": 0.35,
+     "11_20": 0.25
+    },
+    "B": {
+     "1_3": 0,
+     "4_10": 0.0,
+     "11_20": 0.15
+    },
+    "C": {
+     "1_3": 0,
+     "4_10": 0,
+     "11_20": 0
+    }
+   },
+   "12": {
+    "A": {
+     "1_3": 0.35,
+     "4_10": 0.4,
+     "11_20": 0.15
+    },
+    "B": {
+     "1_3": 0.05,
+     "4_10": 0.2,
+     "11_20": 0.3
+    },
+    "C": {
+     "1_3": 0,
+     "4_10": 0,
+     "11_20": 0.05
+    }
+   }
+  },
+  "expected_google_clicks_per_month": {
+   "month_3": {
+    "by_tier": {
+     "A": 25,
+     "B": 0,
+     "C": 0
+    },
+    "total": 25,
+    "range_low_x0.5": 12,
+    "range_high_x2_semrush_undercount": 49
+   },
+   "month_6": {
+    "by_tier": {
+     "A": 189,
+     "B": 9,
+     "C": 0
+    },
+    "total": 198,
+    "range_low_x0.5": 99,
+    "range_high_x2_semrush_undercount": 396
+   },
+   "month_12": {
+    "by_tier": {
+     "A": 353,
+     "B": 141,
+     "C": 1
+    },
+    "total": 495,
+    "range_low_x0.5": 248,
+    "range_high_x2_semrush_undercount": 991
+   }
+  },
+  "volume_caveat": "Semrush volumes for B2B SaaS long-tail are typically undercounted; the many 0-10 volume long-tails (programmatic pages) are not in this sum. High range = x2."
+ }
+}
