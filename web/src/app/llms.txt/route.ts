@@ -9,7 +9,7 @@ export const dynamic = "force-static";
 
 export function GET() {
   const plans = PLANS.map(
-    (p) => `- ${p.name}: ${formatPrice(p.monthly)}/month billed monthly, or ${formatPrice(p.monthly * 10)}/year (2 months free). ${p.conversations.toLocaleString("en-US")} conversations/month, up to ${p.sites} site${p.sites > 1 ? "s" : ""}. ${p.tagline}`,
+    (p) => `  - ${p.name}: ${formatPrice(p.monthly)}/month billed monthly, or ${formatPrice(p.monthly * 10)}/year (2 months free). ${p.conversations.toLocaleString("en-US")} conversations/month, up to ${p.sites} site${p.sites > 1 ? "s" : ""}. ${p.tagline}`,
   ).join("\n");
 
   const body = `# Mascott

@@ -168,7 +168,7 @@ export default function Home() {
       </section>
 
       {/* Final CTA */}
-      <section className="px-4 sm:px-6">
+      <section className="px-4 pb-24 sm:px-6">
         <div className="hero-glow mx-auto max-w-5xl rounded-[2rem] bg-soft px-6 py-16 text-center ring-1 ring-line">
           <h2 className="mx-auto max-w-2xl text-[clamp(2rem,4.5vw,3.25rem)] font-semibold leading-[1.1]">
             Your mascot is one sentence away

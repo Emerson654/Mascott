@@ -8,7 +8,7 @@ const extra = [{ label: "Alternatives", href: "/alternatives" }];
 export function Footer() {
   const links = [...copy.footer.links, ...extra.filter((e) => !copy.footer.links.some((l) => l.href === e.href))];
   return (
-    <footer className="mt-24 border-t border-line bg-soft/60">
+    <footer className="border-t border-line bg-soft/60">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 md:grid-cols-[1.2fr_2fr]">
         <div>
           <Logo />

@@ -67,7 +67,7 @@ CustomGPT.ai Standard is reported at $99 per month and Premium at $499, billed b
 
 Mascott is not a helpdesk. It is an AI guide with a face that lives on your site or in your app, answers from your pages and docs, and **points new users to their next step**, for example by highlighting the button they need. It is priced flat ({{price:starter}} to {{price:scale}} per month), with soft conversation caps and no per-resolution fee.
 
-**Pick Mascott if** trial users sign up and then stall, and you want a guide rather than another chat window. Many teams keep Intercom or Crisp for human support and add Mascott on top: there is nothing to migrate.
+**Pick Mascott if** trial users sign up and then stall, and you want a guide rather than another chat window. You can keep Intercom or Crisp for human support and add Mascott on top: there is nothing to migrate.
 
 **Do not pick Mascott if** you need a shared inbox, ticketing, SLAs or a help center. Mascott is also new (launched 2026) and has no public reviews yet, which matters if you need a proven vendor.
 

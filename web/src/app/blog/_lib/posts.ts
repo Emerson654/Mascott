@@ -17,12 +17,16 @@ export type Post = PostMeta & { body: string; html: string; toc: TocItem[]; word
 
 const DIR = path.join(process.cwd(), "src/content/blog");
 
-/** Prices in posts are tokens ({{price:growth}}, {{guarantee}}) so they follow src/lib/pricing.ts. */
+/** Prices in posts are tokens ({{price:growth}}, {{yearly:growth}}, {{plan:growth}}, {{guarantee}}) so they follow src/lib/pricing.ts. */
 export function fillTokens(s: string): string {
   return s
     .replace(/\{\{price:(\w+)\}\}/g, (m, id: string) => {
       const plan = PLANS.find((p) => p.id === id);
       return plan ? formatPrice(plan.monthly) : m;
+    })
+    .replace(/\{\{yearly:(\w+)\}\}/g, (m, id: string) => {
+      const plan = PLANS.find((p) => p.id === id);
+      return plan ? formatPrice(plan.monthly * 10) : m;
     })
     .replace(/\{\{plan:(\w+)\}\}/g, (m, id: string) => PLANS.find((p) => p.id === id)?.name ?? m)
     .replace(/\{\{guarantee\}\}/g, String(GUARANTEE_DAYS));

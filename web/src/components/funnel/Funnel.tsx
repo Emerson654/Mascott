@@ -1,0 +1,278 @@
+"use client";
+
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { FUNNEL_STORAGE_KEY, RESULT_STORAGE_KEY, type GeneratedMascot, type OnboardingData } from "@/lib/funnel";
+import type { Mood } from "@/lib/mascot-spec";
+import { Mascot } from "@/components/mascot/Mascot";
+import { SpeechBubble } from "@/components/mascot/SpeechBubble";
+import { EMPTY_DATA, STEPS, specFor } from "./options";
+import { StepAudience, StepBehaviour, StepCompany, StepIdea, StepPages, StepRecap, StepStyle } from "./Steps";
+
+const STEP_KEY = `${FUNNEL_STORAGE_KEY}.step`;
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function load(): OnboardingData | null {
+  try {
+    const raw = localStorage.getItem(FUNNEL_STORAGE_KEY);
+    if (!raw) return null;
+    const d = JSON.parse(raw) as Partial<OnboardingData>;
+    return {
+      ...EMPTY_DATA,
+      ...d,
+      company: { ...EMPTY_DATA.company, ...d.company },
+      behaviour: { ...EMPTY_DATA.behaviour, ...d.behaviour },
+      mascot: { ...d.mascot },
+    };
+  } catch {
+    return null;
+  }
+}
+
+function validate(step: number, d: OnboardingData): Record<string, string> {
+  const e: Record<string, string> = {};
+  if (step === 0 && d.prompt.trim().length < 3) e.prompt = "Write a few words about your mascot, even a rough idea works.";
+  if (step === 1) {
+    if (!d.company.name.trim()) e.name = "Add your company or product name.";
+    const u = d.company.url.trim();
+    if (u && !/^(https?:\/\/)?[^\s.]+\.[^\s]{2,}/i.test(u)) e.url = "That doesn't look like a web address. Try yourapp.com.";
+  }
+  if (step === 5 && d.behaviour.handoffEmail.trim() && !EMAIL.test(d.behaviour.handoffEmail.trim()))
+    e.handoffEmail = "Check this email address, or leave it empty.";
+  return e;
+}
+
+const WAIT_LINES = (company: string) => [
+  "Picking my colours…",
+  company ? `Reading up on ${company}…` : "Reading up on your product…",
+  "Practising my first hello…",
+  "Learning where your buttons are…",
+  "Almost there. Fluffing my fur…",
+];
+
+export function Funnel() {
+  const router = useRouter();
+  const params = useSearchParams();
+  const [data, setData] = useState<OnboardingData>(EMPTY_DATA);
+  const [step, setStep] = useState(0);
+  const [ready, setReady] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [busy, setBusy] = useState(false);
+  const [failed, setFailed] = useState(false);
+  const [waitIdx, setWaitIdx] = useState(0);
+  const [mood, setMood] = useState<Mood>("wave");
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const first = useRef(true);
+
+  // Restore saved progress; a ?prompt from the landing page wins over the saved idea.
+  useEffect(() => {
+    const saved = load();
+    const prompt = params.get("prompt")?.slice(0, 400).trim();
+    const next = saved ?? EMPTY_DATA;
+    let s = 0;
+    try {
+      s = Math.min(STEPS.length - 1, Math.max(0, Number(localStorage.getItem(STEP_KEY)) || 0));
+    } catch {}
+    if (prompt) {
+      setData({ ...next, prompt });
+      s = next.prompt === prompt ? s : 1; // fresh idea from the landing: go straight to step 2
+    } else setData(next);
+    setStep(s);
+    setReady(true);
+  }, [params]);
+
+  useEffect(() => {
+    if (!ready) return;
+    try {
+      localStorage.setItem(FUNNEL_STORAGE_KEY, JSON.stringify(data));
+      localStorage.setItem(STEP_KEY, String(step));
+    } catch {}
+  }, [data, step, ready]);
+
+  // Move focus to the step title on change (not on first paint), and let the mascot react.
+  useEffect(() => {
+    if (!ready) return;
+    if (first.current) {
+      first.current = false;
+      return;
+    }
+    headingRef.current?.focus({ preventScroll: true });
+    window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    setMood(step === STEPS.length - 1 ? "happy" : step === 3 ? "point" : "talk");
+    const t = window.setTimeout(() => setMood("idle"), 2400);
+    return () => window.clearTimeout(t);
+  }, [step, ready]);
+
+  const set = useCallback((patch: Partial<OnboardingData>) => {
+    setData((d) => ({ ...d, ...patch }));
+    setErrors({});
+  }, []);
+
+  const goTo = (i: number) => {
+    setErrors({});
+    setStep(Math.max(0, Math.min(STEPS.length - 1, i)));
+  };
+
+  const next = () => {
+    const e = validate(step, data);
+    setErrors(e);
+    if (Object.keys(e).length) {
+      setMood("surprised");
+      return;
+    }
+    goTo(step + 1);
+  };
+
+  async function generate() {
+    setBusy(true);
+    setFailed(false);
+    setMood("think");
+    const timer = window.setInterval(() => setWaitIdx((i) => i + 1), 1600);
+    try {
+      const body: OnboardingData = {
+        ...data,
+        pages: data.pages.map((p) => p.trim()).filter(Boolean),
+        mascot: { ...specFor(data), name: data.mascot.name?.trim() || undefined },
+      };
+      const res = await fetch("/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) throw new Error(String(res.status));
+      const result = (await res.json()) as GeneratedMascot;
+      try {
+        localStorage.setItem(RESULT_STORAGE_KEY, JSON.stringify(result));
+      } catch {}
+      setMood("happy");
+      router.push("/create/result");
+    } catch {
+      setFailed(true);
+      setBusy(false);
+      setMood("surprised");
+    } finally {
+      window.clearInterval(timer);
+    }
+  }
+
+  const s = STEPS[step];
+  const spec = specFor(data);
+  const isLast = step === STEPS.length - 1;
+  const bubble = busy
+    ? WAIT_LINES(data.company.name)[waitIdx % 5]
+    : failed
+      ? "Oops, I tripped on the way. Shall we try that again?"
+      : Object.keys(errors).length
+        ? "Hmm, one thing needs a fix below."
+        : s.comment;
+  const stepProps = { data, set, errors };
+
+  return (
+    <div className="hero-glow min-h-[calc(100dvh-4rem)] px-4 pb-16 pt-6 sm:px-6 sm:pt-10">
+      <div className="mx-auto max-w-5xl">
+        {/* Progress */}
+        <div className="mx-auto max-w-3xl">
+          <div className="flex items-center justify-between text-sm font-semibold text-muted">
+            <span>
+              Step {step + 1} of {STEPS.length}
+            </span>
+            <span className="hidden sm:inline">{s.title}</span>
+          </div>
+          <div
+            className="mt-2 h-2.5 overflow-hidden rounded-full bg-white ring-1 ring-line"
+            role="progressbar"
+            aria-label="Progress"
+            aria-valuemin={1}
+            aria-valuemax={STEPS.length}
+            aria-valuenow={step + 1}
+          >
+            <div
+              className="h-full rounded-full bg-accent transition-[width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+              style={{ width: `${((step + 1) / STEPS.length) * 100}%` }}
+            />
+          </div>
+        </div>
+
+        <div className="mt-8 grid gap-6 md:grid-cols-[17rem_1fr] md:gap-10">
+          {/* Companion */}
+          <aside className="md:sticky md:top-24 md:self-start" aria-label="Your mascot">
+            <div className="flex items-end gap-3 md:flex-col md:items-center md:gap-2">
+              <div className="relative shrink-0">
+                <span aria-hidden className="absolute inset-[8%] -z-10 rounded-full bg-halo1 blur-md" />
+                <div className="md:hidden">
+                  <Mascot spec={spec} mood={mood} size={92} onPoke={() => setMood("happy")} />
+                </div>
+                <div className="hidden md:block">
+                  <Mascot spec={spec} mood={mood} size={200} onPoke={() => setMood("happy")} />
+                </div>
+              </div>
+              <div className="min-w-0 flex-1 md:order-first md:w-full">
+                <SpeechBubble key={bubble} text={bubble} />
+              </div>
+            </div>
+            {data.mascot.name && <p className="mt-2 hidden text-center font-display text-xl font-semibold md:block">{data.mascot.name}</p>}
+          </aside>
+
+          {/* Step card */}
+          <section className="rounded-[1.75rem] bg-white p-5 shadow-[0_24px_60px_-30px_rgb(27_29_58/0.3)] ring-1 ring-line sm:p-8">
+            <h1 ref={headingRef} tabIndex={-1} className="text-[clamp(1.75rem,3.5vw,2.5rem)] font-semibold leading-tight outline-none">
+              {s.title}
+            </h1>
+            <form
+              className="mt-6"
+              noValidate
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (isLast) generate();
+                else next();
+              }}
+            >
+              {!ready ? (
+                <div className="h-40 animate-pulse rounded-2xl bg-soft" />
+              ) : (
+                <div key={step} className="fade-up">
+                  {step === 0 && <StepIdea {...stepProps} />}
+                  {step === 1 && <StepCompany {...stepProps} />}
+                  {step === 2 && <StepAudience {...stepProps} />}
+                  {step === 3 && <StepPages {...stepProps} />}
+                  {step === 4 && <StepStyle {...stepProps} />}
+                  {step === 5 && <StepBehaviour {...stepProps} />}
+                  {step === 6 && <StepRecap {...stepProps} goTo={goTo} />}
+                </div>
+              )}
+
+              {failed && (
+                <p role="alert" className="mt-6 rounded-2xl bg-halo2 px-4 py-3 text-sm font-semibold">
+                  We couldn&rsquo;t generate your mascot just now. Your answers are saved, so you can try again.
+                </p>
+              )}
+
+              <div className="mt-8 flex flex-col-reverse gap-3 border-t border-line pt-6 sm:flex-row sm:items-center sm:justify-between">
+                {step > 0 ? (
+                  <button type="button" onClick={() => goTo(step - 1)} className="btn btn-ghost" disabled={busy}>
+                    Back
+                  </button>
+                ) : (
+                  <span />
+                )}
+                <button type="submit" className="btn btn-primary min-w-48" disabled={busy || !ready} aria-busy={busy}>
+                  {busy ? (
+                    <span className="inline-flex items-center gap-1.5" aria-label="Generating">
+                      <span className="dot h-2 w-2 rounded-full bg-white" />
+                      <span className="dot h-2 w-2 rounded-full bg-white [animation-delay:150ms]" />
+                      <span className="dot h-2 w-2 rounded-full bg-white [animation-delay:300ms]" />
+                    </span>
+                  ) : isLast ? (
+                    failed ? "Try again" : "Generate my mascot"
+                  ) : (
+                    "Continue"
+                  )}
+                </button>
+              </div>
+            </form>
+          </section>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -64,7 +64,7 @@ export function MascotCarousel({ cast, label = "Meet the mascots" }: { cast: Cas
       const a = ((i - rot.current) * 2 * Math.PI) / n;
       const c = Math.cos(a);
       const x = Math.sin(a) * r;
-      const z = (c - 1) * r * 0.9;
+      const z = (c - 1) * r * 1.5; // deeper ring: the front mascot clearly leads
       const y = (1 - c) * -r * 0.07; // back of the ring sits a bit higher: we look down on the arc
       const depth = (c + 1) / 2; // 1 front, 0 back
       el.style.transform = `translate3d(-50%, 0, 0) translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, ${z.toFixed(1)}px)`;
@@ -318,7 +318,7 @@ export function MascotCarousel({ cast, label = "Meet the mascots" }: { cast: Cas
                   style={{ background: halos[i % halos.length] }}
                 />
                 {isActive ? (
-                  <Mascot spec={m.spec} mood={mood} size={size} onPoke={onPoke} />
+                  <Mascot spec={m.spec} mood={mood} size={size} onPoke={onPoke} label={m.name} />
                 ) : (
                   <button
                     type="button"
@@ -327,7 +327,7 @@ export function MascotCarousel({ cast, label = "Meet the mascots" }: { cast: Cas
                     className="block"
                     aria-label={`Show ${m.name}`}
                   >
-                    <Mascot spec={m.spec} mood="idle" size={size} />
+                    <Mascot spec={m.spec} mood="idle" size={size} label={m.name} />
                   </button>
                 )}
               </div>

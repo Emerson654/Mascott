@@ -1,10 +1,26 @@
 import type { GeneratedMascot } from "@/lib/funnel";
-import { clientIp, json, rateLimited, readJson } from "@/lib/server/http";
+import { clientIp, json as baseJson, rateLimited, readJson } from "@/lib/server/http";
 import { complete, type ChatMsg } from "@/lib/server/llm";
 import { cannedReply, clampWords, clean, sanitizeSpec } from "@/lib/server/mascot";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+
+// Public CORS: the widget (public/widget.js) calls this route from customers' sites. No credentials.
+const CORS = { "Access-Control-Allow-Origin": "*" };
+
+function json(data: unknown, status = 200) {
+  const res = baseJson(data, status);
+  res.headers.set("Access-Control-Allow-Origin", "*");
+  return res;
+}
+
+export function OPTIONS() {
+  return new Response(null, {
+    status: 204,
+    headers: { ...CORS, "Access-Control-Allow-Methods": "POST, OPTIONS", "Access-Control-Allow-Headers": "Content-Type", "Access-Control-Max-Age": "86400" },
+  });
+}
 
 const GUARD = `Hard rules (they override everything below): reply in at most 60 words, plain text, no markdown.
 Stay in your mascot role for this website. Never invent prices, features, discounts or promises; if unsure, say so and offer the right page or a human.

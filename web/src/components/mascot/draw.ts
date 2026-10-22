@@ -20,7 +20,8 @@ export function mix(a: string, b: string, t: number): string {
 }
 
 // Mirror a fragment onto the right half of the 200x200 canvas.
-const both = (s: string) => s + `<g transform="matrix(-1 0 0 1 200 0)">${s}</g>`;
+const left = (s: string) => `<g transform="matrix(-1 0 0 1 200 0)">${s}</g>`;
+const both = (s: string) => s + left(s);
 const star = (x: number, y: number, r: number, fill: string, cls = "") =>
   `<path class="${cls}" d="M${x} ${y - r}Q${x} ${y} ${x + r} ${y}Q${x} ${y} ${x} ${y + r}Q${x} ${y} ${x - r} ${y}Q${x} ${y} ${x} ${y - r}Z" fill="${fill}"/>`;
 
@@ -50,12 +51,12 @@ export function mascotSvg(spec: Partial<MascotSpec> | null | undefined, uid = "m
   // ---- species features ----
   if (sp === "cat") {
     ears = both(`<path d="M48 76Q49 42 55 29Q59 23 66 29L92 50Z" ${fillB}/><path d="M57 63Q58 46 61 38L79 51Z" fill="${S}"/>`);
-    back = `<path d="M148 150Q186 150 180 118Q176 100 186 90" fill="none" stroke="${ol}" stroke-width="17" stroke-linecap="round"/><path d="M148 150Q186 150 180 118Q176 100 186 90" fill="none" stroke="${P}" stroke-width="11" stroke-linecap="round"/>`;
+    back = left(`<path d="M148 150Q186 150 180 118Q176 100 186 90" fill="none" stroke="${ol}" stroke-width="17" stroke-linecap="round"/><path d="M148 150Q186 150 180 118Q176 100 186 90" fill="none" stroke="${P}" stroke-width="11" stroke-linecap="round"/>`);
     face = `<path d="M96 112H104L100 117Z" fill="${A}" stroke="${mix(A, INK, 0.3)}" stroke-width="1.5" stroke-linejoin="round"/>` +
       both(`<path d="M58 113L42 109M58 119L42 121" stroke="${ol}" stroke-width="2" stroke-linecap="round" opacity=".55"/>`);
   } else if (sp === "fox") {
     ears = both(`<path d="M44 82Q44 40 51 22Q55 15 62 22L94 48Z" ${fillB}/><path d="M53 66Q54 44 58 34L79 50Z" fill="${S}"/>`);
-    back = `<path d="M146 158Q198 162 192 112Q188 90 172 94Q180 124 148 136Z" ${fillB}/><path d="M172 94Q188 90 192 112Q184 106 177 109Q179 100 172 94Z" fill="${S}" stroke="${ol}" stroke-width="2" stroke-linejoin="round"/>`;
+    back = left(`<path d="M146 158Q198 162 192 112Q188 90 172 94Q180 124 148 136Z" ${fillB}/><path d="M172 94Q188 90 192 112Q184 106 177 109Q179 100 172 94Z" fill="${S}" stroke="${ol}" stroke-width="2" stroke-linejoin="round"/>`);
     face = `<path d="M58 110Q80 102 100 116Q120 102 142 110Q138 142 100 148Q62 142 58 110Z" fill="${S}"/><ellipse cx="100" cy="115" rx="5.5" ry="4" fill="${INK}"/>`;
   } else if (sp === "bear") {
     ears = both(`<circle cx="60" cy="54" r="18" ${fillB}/><circle cx="60" cy="54" r="9" fill="${S}"/>`);
@@ -66,7 +67,7 @@ export function mascotSvg(spec: Partial<MascotSpec> | null | undefined, uid = "m
   } else if (sp === "owl") {
     ears = both(`<path d="M52 66L46 30L82 50Z" ${fillB}/>`);
     face = both(`<circle cx="80" cy="102" r="21" fill="${S}" stroke="${ol}" stroke-width="2"/>`) +
-      `<path d="M93 113H107L100 125Z" fill="#FFB547" stroke="${mix("#FFB547", INK, 0.4)}" stroke-width="2" stroke-linejoin="round"/>`;
+      `<path d="M94 108H106L100 117Z" fill="#FFB547" stroke="${mix("#FFB547", INK, 0.4)}" stroke-width="2" stroke-linejoin="round"/>`;
     belly = both(`<path d="M86 140l5 5 5-5M96 152l4 4 4-4" fill="none" stroke="${mix(S, INK, 0.3)}" stroke-width="2" stroke-linecap="round"/>`);
   } else if (sp === "robot") {
     ears = both(`<rect x="28" y="94" width="14" height="30" rx="6" fill="${dark}" ${sw}/>`) +
@@ -76,7 +77,7 @@ export function mascotSvg(spec: Partial<MascotSpec> | null | undefined, uid = "m
   } else if (sp === "dragon") {
     ears = both(`<path d="M66 52Q58 32 62 18Q72 32 82 46Z" fill="${mix(S, "#fff", 0.3)}" ${sw}/>`);
     back = both(`<path d="M44 104Q8 76 6 100Q18 100 14 112Q28 110 32 124Z" fill="${S}" ${sw}/>`) +
-      `<path d="M148 154Q184 158 186 128" fill="none" stroke="${ol}" stroke-width="17" stroke-linecap="round"/><path d="M148 154Q184 158 186 128" fill="none" stroke="${P}" stroke-width="11" stroke-linecap="round"/><path d="M176 132L186 108L196 134Q186 128 176 132Z" fill="${A}" ${sw}/>`;
+      left(`<path d="M148 154Q184 158 186 128" fill="none" stroke="${ol}" stroke-width="17" stroke-linecap="round"/><path d="M148 154Q184 158 186 128" fill="none" stroke="${P}" stroke-width="11" stroke-linecap="round"/><path d="M176 132L186 108L196 134Q186 128 176 132Z" fill="${A}" ${sw}/>`);
     face = `<circle cx="95" cy="114" r="1.8" fill="${INK}"/><circle cx="105" cy="114" r="1.8" fill="${INK}"/>`;
     belly = `<path d="M74 138H126M70 150H130M78 162H122" stroke="${mix(S, INK, 0.2)}" stroke-width="2" stroke-linecap="round" opacity=".6"/>`;
   } else {
@@ -85,11 +86,11 @@ export function mascotSvg(spec: Partial<MascotSpec> | null | undefined, uid = "m
 
   // ---- eyes ----
   const ex = [80, 120], ey = 102;
-  const er = 9 * k, eh = 11 * k;
+  const er = 10 * k, eh = 12.5 * k;
   let en = "";
   for (const x of ex) {
     if (eyes === "sleepy") {
-      en += `<path d="M${x - er} ${ey}A${er} ${er} 0 0 0 ${x + er} ${ey}Z" fill="${eyeC}"/><path d="M${x - er - 2} ${ey}H${x + er + 2}" stroke="${eyeC}" stroke-width="3" stroke-linecap="round"/><circle cx="${x + 3}" cy="${ey + 3}" r="${2 * k}" fill="#fff"/>`;
+      en += `<path d="M${x - er} ${ey}Q${x} ${ey + er * 1.1} ${x + er} ${ey}" fill="none" stroke="${eyeC}" stroke-width="3.5" stroke-linecap="round"/><path d="M${x + er - 1} ${ey - 1}l4 -3" stroke="${eyeC}" stroke-width="2.5" stroke-linecap="round"/>`;
     } else if (eyes === "sparkle") {
       en += `<ellipse cx="${x}" cy="${ey}" rx="${er + 2}" ry="${eh + 2}" fill="${robot ? eyeC : `url(#${u}e)`}"/><circle cx="${x + 3.5 * k}" cy="${ey - 5 * k}" r="${4.4 * k}" fill="#fff"/>` +
         star(x - 3.5 * k, ey + 4.5 * k, 3.4 * k, "#fff");
@@ -147,7 +148,7 @@ export function mascotSvg(spec: Partial<MascotSpec> | null | undefined, uid = "m
     `<radialGradient id="${u}s"><stop offset="0" stop-color="${INK}" stop-opacity=".22"/><stop offset="1" stop-color="${INK}" stop-opacity="0"/></radialGradient></defs>` +
     `<ellipse class="sh" cx="100" cy="182" rx="58" ry="10" fill="url(#${u}s)"/>` +
     `<g class="pk"><g class="j"><g class="b">` +
-    back + arm(42, "al") + arm(158, "ar") +
+    back + arm(40, "al") + arm(160, "ar") +
     both(`<ellipse cx="80" cy="168" rx="15" ry="9" fill="${dark}" ${sw}/>`) +
     ears +
     `<path d="${body}" ${fillB}/>` +
@@ -176,7 +177,7 @@ export const MASCOT_CSS = `
 .msc[data-mood=talk] .m-t,.msc[data-mood=happy] .m-h,.msc[data-mood=surprised] .m-o,.msc[data-mood=think] .m-k,.msc[data-mood=happy] .eh,
 .msc[data-mood=happy] .x-h,.msc[data-mood=surprised] .x-o,.msc[data-mood=think] .x-k{display:inline}
 .msc[data-mood=talk] .m-s,.msc[data-mood=happy] .m-s,.msc[data-mood=surprised] .m-s,.msc[data-mood=think] .m-s,.msc[data-mood=happy] .en{display:none}
-.msc[data-mood=wave] .ar{transform:rotate(-140deg);animation:msc-wv 1.1s .4s ease-in-out infinite}
+.msc[data-mood=wave] .ar{transform:rotate(-125deg);animation:msc-wv 1.1s .4s ease-in-out infinite}
 .msc[data-mood=point] .ar{transform:rotate(-94deg);animation:msc-pt 1.2s .4s ease-in-out infinite}
 .msc[data-mood=point] .j{transform:rotate(5deg)}
 .msc[data-mood=talk] .m-t{transform-origin:50% 0;animation:msc-tk .3s ease-in-out infinite alternate}
@@ -197,7 +198,7 @@ export const MASCOT_CSS = `
 @keyframes msc-br{50%{transform:scale(.988,1.025)}}
 @keyframes msc-bl{0%,93%,100%{transform:none}96%{transform:scaleY(.1)}}
 @keyframes msc-gl{50%{opacity:.55}}
-@keyframes msc-wv{0%,100%{transform:rotate(-140deg)}50%{transform:rotate(-170deg)}}
+@keyframes msc-wv{0%,100%{transform:rotate(-125deg)}50%{transform:rotate(-150deg)}}
 @keyframes msc-pt{0%,100%{transform:rotate(-94deg)}50%{transform:rotate(-88deg) translateY(2px)}}
 @keyframes msc-tk{from{transform:scaleY(.3)}to{transform:scaleY(1)}}
 @keyframes msc-nod{50%{transform:rotate(-2deg) translateY(-1px)}}
