@@ -18,6 +18,7 @@ export function inline(src: string): string {
       if (part.startsWith("`") && part.endsWith("`") && part.length > 1) return `<code>${esc(part.slice(1, -1))}</code>`;
       return esc(part)
         .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_m, text: string, href: string) => {
+          if (!/^(https?:\/\/|\/|#|mailto:)/i.test(href)) return text; // only safe link schemes
           const external = /^https?:\/\//.test(href);
           return `<a href="${href}"${external ? ' target="_blank" rel="noopener noreferrer"' : ""}>${text}</a>`;
         })
