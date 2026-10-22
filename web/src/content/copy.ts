@@ -1,5 +1,5 @@
 // Owned by Léa (brand). All landing, FAQ, paywall and footer text. Site language: English.
-// Rules: no invented numbers, no fake testimonials. Prices must match src/lib/pricing.ts (49 / 149 EUR a month, -17% yearly).
+// Rules: no invented numbers, no fake testimonials. Prices must match src/lib/pricing.ts (19 / 49 / 149 EUR a month, 2 months free yearly).
 
 export const copy = {
   hero: {
@@ -57,7 +57,7 @@ export const copy = {
         { title: "You stay in control", text: "She answers and points. She never clicks, fills or submits anything for your users. You choose the pages she can talk about, and one switch turns her off." },
         { title: "Built for GDPR", text: "She only reads the pages you give her. Conversations are never sold or used for ads, and you can delete them whenever you like." },
         { title: "Light on your page", text: "The script loads after your page, so your app stays as fast as it is today." },
-        { title: "One flat price", text: "€49 a month, or €149 for bigger teams. The bill stays the same when your traffic spikes." },
+        { title: "One flat price", text: "From €19 a month, €49 for most SaaS teams. A fixed monthly quota of conversations, so the bill never surprises you." },
       ],
     },
   ],
@@ -89,7 +89,7 @@ export const copy = {
     },
     {
       q: "How much does it cost?",
-      a: "€49 a month for one product, €149 a month for larger teams or several products. Pay yearly and save 17%. The price is flat, however many conversations she has.",
+      a: "Starter is €19 a month for one site, Growth €49 a month for most SaaS teams, Scale €149 a month for several products or agencies. Pay yearly and get two months free. Each plan has a fixed monthly conversation quota, so there are no surprise bills.",
     },
     {
       q: "Why is there no free plan?",
