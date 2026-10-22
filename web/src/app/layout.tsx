@@ -4,6 +4,7 @@ import { siteMetadata } from "@/lib/seo";
 import { brand } from "@/content/brand";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
+import { SiteJsonLd } from "@/components/seo/JsonLd";
 
 export const metadata = siteMetadata;
 
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           {children}
         </main>
         <Footer />
+        <SiteJsonLd />
       </body>
     </html>
   );

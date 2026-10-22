@@ -7,6 +7,7 @@ import { PromptBox } from "@/components/landing/PromptBox";
 import { ProductMoment } from "@/components/landing/ProductMoment";
 import { PlanCards } from "@/components/site/PlanCards";
 import { GUARANTEE_DAYS } from "@/lib/pricing";
+import { JsonLd, faqLd } from "@/components/seo/JsonLd";
 
 type Section = (typeof copy.sections)[number];
 const section = (id: string) => copy.sections.find((s) => s.id === id) as Section & Record<string, unknown>;
@@ -149,6 +150,7 @@ export default function Home() {
 
       {/* FAQ */}
       <section id="faq" className="px-4 py-20 sm:px-6">
+        <JsonLd data={faqLd(copy.faq)} />
         <div className="mx-auto max-w-3xl">
           <h2 className="text-center text-[clamp(2rem,4vw,3rem)] font-semibold leading-[1.1]">Questions teams ask us</h2>
           <div className="mt-10 divide-y divide-line border-y border-line">

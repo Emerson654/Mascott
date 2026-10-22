@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { PLANS, GUARANTEE_DAYS, formatPrice } from "@/lib/pricing";
 import { copy } from "@/content/copy";
@@ -7,11 +7,11 @@ import { PlanCards } from "@/components/site/PlanCards";
 import { LeadForm } from "@/components/site/LeadForm";
 import { Mascot } from "@/components/mascot/Mascot";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Pricing",
   description: `Flat monthly prices for your AI mascot, from ${formatPrice(PLANS[0].monthly)} a month. 2 months free when you pay yearly. ${GUARANTEE_DAYS}-day money-back guarantee.`,
-  alternates: { canonical: "/pricing" },
-};
+  path: "/pricing",
+});
 
 // Comparison rows: every plan feature once (minus the "Everything in…" lines); a plan includes
 // a feature if it or a cheaper plan lists it.

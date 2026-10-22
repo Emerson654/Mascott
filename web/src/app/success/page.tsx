@@ -4,7 +4,7 @@ import { brand } from "@/content/brand";
 import { Mascot } from "@/components/mascot/Mascot";
 import { SpeechBubble } from "@/components/mascot/SpeechBubble";
 
-export const metadata: Metadata = { title: "Welcome aboard", robots: { index: false } };
+export const metadata: Metadata = { title: "Welcome aboard", robots: { index: false, follow: false } };
 
 const NEXT_STEPS = [
   { title: "Check your inbox", text: "Your receipt and your install code are on their way from Stripe and from us." },

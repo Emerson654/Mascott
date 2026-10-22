@@ -3,7 +3,7 @@ import { Result } from "@/components/funnel/Result";
 
 export const metadata: Metadata = {
   title: "Your mascot",
-  robots: { index: false },
+  robots: { index: false, follow: false },
 };
 
 export default function ResultPage() {
