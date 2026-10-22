@@ -12,7 +12,7 @@ const src = readFileSync(join(here, "draw.ts"), "utf8");
 const js = ts
   .transpileModule(src, { compilerOptions: { target: ts.ScriptTarget.ES2019, module: ts.ModuleKind.ESNext, removeComments: true } })
   .outputText.replace(/^export /gm, "")
-  .replace(/^\s*$\n/gm, "");
+  .replace(/^\s+/gm, "");
 
 const widget = readFileSync(widgetPath, "utf8");
 const start = "/* @draw:start (generated from src/components/mascot/draw.ts) */";
