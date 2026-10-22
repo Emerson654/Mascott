@@ -4,13 +4,18 @@
 :root {
   --bg: #ffffff;
   --ink: #1b1d3a;
-  --muted: #5f6388;
+  /* Fallbacks; layout.tsx sets these from brand.palette (Léa's source of truth). */
+  --muted: #6b6f93;
   --line: #e8eaf6;
-  --soft: #f6f7ff;
-  --accent: #4c5be8;
-  --g1: #7c8cff;
-  --g2: #ff8fc7;
-  --g3: #ffc46b;
+  --soft: #f6f5ff;
+  --accent: #4f5bf5;
+  --sun: #ffd36e;
+  --g1: #4f5bf5;
+  --g2: #d94e9a;
+  --g3: #e8742a;
+  --halo1: #e9ecff;
+  --halo2: #ffe3f1;
+  --halo3: #fff1de;
   --radius: 1.25rem;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -25,6 +30,10 @@
   --color-g1: var(--g1);
   --color-g2: var(--g2);
   --color-g3: var(--g3);
+  --color-sun: var(--sun);
+  --color-halo1: var(--halo1);
+  --color-halo2: var(--halo2);
+  --color-halo3: var(--halo3);
   --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-fredoka), var(--font-figtree), ui-rounded, system-ui, sans-serif;
 }
@@ -118,9 +127,9 @@ h3 {
 /* Soft luminous backdrop behind the hero. */
 .hero-glow {
   background:
-    radial-gradient(40rem 22rem at 18% 8%, color-mix(in oklab, var(--g1) 18%, transparent), transparent 70%),
-    radial-gradient(36rem 20rem at 85% 12%, color-mix(in oklab, var(--g2) 16%, transparent), transparent 70%),
-    radial-gradient(40rem 24rem at 50% 85%, color-mix(in oklab, var(--g3) 14%, transparent), transparent 70%);
+    radial-gradient(40rem 22rem at 15% 6%, var(--halo1), transparent 70%),
+    radial-gradient(36rem 20rem at 88% 10%, var(--halo2), transparent 70%),
+    radial-gradient(44rem 24rem at 50% 92%, var(--halo3), transparent 70%);
 }
 
 /* Buttons */
