@@ -18,7 +18,6 @@ const EMAIL = /^[^\s@<>"']{1,64}@[^\s@<>"']{1,190}\.[a-zA-Z]{2,24}$/;
 
 export function clean(v: unknown, max: number): string {
   if (typeof v !== "string") return "";
-  // eslint-disable-next-line no-control-regex
   return v.replace(/[\u0000-\u0008\u000B-\u001F\u007F]/g, " ").replace(/\s+/g, " ").trim().slice(0, max);
 }
 

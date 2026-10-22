@@ -5,6 +5,9 @@ import type { Mood } from "@/lib/mascot-spec";
 import type { CastMember } from "@/content/brand";
 import { Mascot } from "@/components/mascot/Mascot";
 import { SpeechBubble } from "@/components/mascot/SpeechBubble";
+import { brand } from "@/content/brand";
+
+const halos = brand.palette.soft;
 
 /**
  * 3D roulette of the cast. Pure CSS 3D (perspective + translate3d), positions driven by one
@@ -309,6 +312,11 @@ export function MascotCarousel({ cast, label = "Meet the mascots" }: { cast: Cas
                 className="absolute bottom-6 left-1/2 flex flex-col items-center will-change-transform"
                 style={{ width: size }}
               >
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute left-1/2 top-[8%] -z-10 aspect-square w-[92%] -translate-x-1/2 rounded-full blur-md"
+                  style={{ background: halos[i % halos.length] }}
+                />
                 {isActive ? (
                   <Mascot spec={m.spec} mood={mood} size={size} onPoke={onPoke} />
                 ) : (

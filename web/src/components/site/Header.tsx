@@ -14,7 +14,7 @@ export function Header() {
           <Link href="/blog" className="hidden rounded-full px-3 py-2 text-sm font-semibold text-muted hover:text-ink sm:inline-block">
             Blog
           </Link>
-          <Link href="/create" className="btn btn-primary !min-h-10 !px-4 text-sm">
+          <Link href="/create" className="btn btn-ghost !min-h-10 !px-4 text-sm">
             {copy.hero.cta}
           </Link>
         </nav>
