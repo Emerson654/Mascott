@@ -16,6 +16,7 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       { source: "/:path*", headers: securityHeaders },
+      { source: "/api/mascot-image", headers: [{ key: "Access-Control-Allow-Origin", value: "*" }] },
       { source: "/widget.js", headers: [{ key: "Cache-Control", value: "public, max-age=3600" }, { key: "Access-Control-Allow-Origin", value: "*" }] },
     ];
   },
