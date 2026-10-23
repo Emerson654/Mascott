@@ -14,7 +14,7 @@ export function hasProvider(): boolean {
 async function gemini(o: Opts, signal: AbortSignal): Promise<string | null> {
   const key = process.env.GEMINI_API_KEY;
   if (!key) return null;
-  const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+  const model = process.env.GEMINI_MODEL || "gemini-flash-lite-latest";
   const res = await fetch(`${GEMINI_URL}/${encodeURIComponent(model)}:generateContent`, {
     method: "POST",
     headers: { "Content-Type": "application/json", "x-goog-api-key": key },
@@ -34,7 +34,7 @@ async function gemini(o: Opts, signal: AbortSignal): Promise<string | null> {
   if (!res.ok) throw new Error(`gemini ${res.status}`);
   const data = await res.json();
   const parts = data?.candidates?.[0]?.content?.parts;
-  const text = Array.isArray(parts) ? parts.map((p: { text?: string }) => p.text || "").join("") : "";
+  const text = Array.isArray(parts) ? parts.filter((p: { thought?: boolean }) => !p.thought).map((p: { text?: string }) => p.text || "").join("") : "";
   return text || null;
 }
 
