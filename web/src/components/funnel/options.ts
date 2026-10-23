@@ -1,15 +1,15 @@
-// Funnel choices and the mascot's comments per step (front-end owned: copy.ts has no funnel text).
+// Funnel choices and the guide's comments per step (front-end owned: copy.ts has no funnel text).
 import type { OnboardingData } from "@/lib/funnel";
-import { DEFAULT_SPEC, SPECIES, type MascotSpec, type Species } from "@/lib/mascot-spec";
 
+// The comments are spoken by Mascott's own little guide, never by the visitor's mascot (that one stays a surprise).
 export const STEPS = [
-  { id: "idea", title: "Your mascot in one sentence", comment: "Hi. Describe me in one sentence and I'll take it from there." },
-  { id: "company", title: "Your company", comment: "Tell me where I'll be working. I'll read your site so I can answer like a teammate." },
-  { id: "audience", title: "Your visitors and goals", comment: "Who am I greeting, and what counts as a win? I'll steer every chat towards it." },
-  { id: "pages", title: "Where should I guide people?", comment: "Give me the key pages or steps. I'll point people to the next one, one at a time." },
-  { id: "style", title: "My look", comment: "Now the fun part. Pick my species, colours and outfit. I'll change as you click." },
-  { id: "behaviour", title: "How I behave", comment: "Set my manners. You stay in control of what I say and do." },
-  { id: "recap", title: "Ready when you are", comment: "Here's everything. Check it over, then let me come to life." },
+  { id: "idea", title: "Your mascot in one sentence", comment: "Hi, I'm the Mascott guide. Give me a rough idea and our designer will take it from there." },
+  { id: "company", title: "Your company", comment: "Where will your mascot work? A few words help it answer like a teammate." },
+  { id: "audience", title: "Your visitors and goals", comment: "Who gets greeted, and what counts as a win? Every chat will steer towards it." },
+  { id: "pages", title: "Where should people be guided?", comment: "List the key pages or steps. Your mascot will point to the next one, one at a time." },
+  { id: "brand", title: "Your brand universe", comment: "No presets here. Show us your world and we design a one-of-a-kind character around it." },
+  { id: "behaviour", title: "Manners", comment: "Set the house rules. You stay in control of what it says and does." },
+  { id: "recap", title: "Ready when you are", comment: "That's everything. No peeking: you'll meet your mascot in a moment." },
 ] as const;
 
 export const AUDIENCES = ["New trial users", "Paying customers", "Website visitors", "Developers", "Internal team"];
@@ -29,19 +29,24 @@ export const ACTIONS: { id: string; label: string }[] = [
   { id: "book_slot", label: "Offer a demo slot" },
 ];
 export const LANGUAGES = ["English", "French", "Spanish", "German", "Italian", "Portuguese", "Dutch"];
-export const EYES = ["round", "sparkle", "sleepy"] as const;
+/** Brand step: provisional text (Léa's copy.ts has no funnel text yet). */
+export const BRAND_TEXT = {
+  intro: "Colours, mood, a logo or a product shot. The more we see, the more it feels like yours. Everything is optional.",
+  colorsLegend: "Brand colours",
+  colorsHint: "Up to 4. Tap a suggestion or pick your own.",
+  vibeLegend: "Vibe",
+  notesLabel: "Anything else?",
+  notesPlaceholder: "Our world is cosy and nordic. Think Studio Ghibli, not corporate. Please avoid robots.",
+  dropTitle: "Drop up to 3 photos",
+  dropHint: "Logo, product, moodboard. JPG or PNG, we shrink them for you.",
+  dropButton: "Choose photos",
+  spotted: "We spotted these colours in your logo",
+  useSpotted: "Use these",
+};
 
-/** Body / belly / accent trios, drawn from the brand pastels. */
-export const COLOURWAYS: { name: string; primary: string; secondary: string; accent: string }[] = [
-  { name: "Periwinkle", primary: "#7C8CFF", secondary: "#E9ECFF", accent: "#FF9EC4" },
-  { name: "Apricot", primary: "#FFB86B", secondary: "#FFF1DE", accent: "#FF8FA3" },
-  { name: "Honey bear", primary: "#C89B7B", secondary: "#F6E6D8", accent: "#FF9EC4" },
-  { name: "Lagoon", primary: "#5CC8C0", secondary: "#E3F7F5", accent: "#FFC46B" },
-  { name: "Bubblegum", primary: "#FFB3D1", secondary: "#FFF0F6", accent: "#7C8CFF" },
-  { name: "Steel", primary: "#9AA6C9", secondary: "#EEF1FA", accent: "#4FD1A5" },
-  { name: "Mint", primary: "#7FD8A6", secondary: "#E6F8EE", accent: "#FF9EC4" },
-  { name: "Lilac", primary: "#B79CFF", secondary: "#F1EBFF", accent: "#FFC46B" },
-];
+export const VIBES = ["Playful", "Warm", "Calm", "Premium", "Techy", "Bold", "Minimal", "Quirky", "Cosy", "Futuristic"];
+export const COLOR_SUGGESTIONS = ["#4F5BF5", "#FF6B6B", "#FFB84D", "#2BB673", "#00A3FF", "#8B5CF6", "#FF7AB6", "#1B1D3A"];
+export const MAX_COLORS = 4;
 
 export const EMPTY_DATA: OnboardingData = {
   prompt: "",
@@ -54,41 +59,5 @@ export const EMPTY_DATA: OnboardingData = {
   actions: ["answer", "point", "open_page"],
   languages: ["English"],
   mascot: {},
+  brand: { colors: [], vibe: [], notes: "", images: [] },
 };
-
-const COLOUR_WORDS: [RegExp, number][] = [
-  [/blue|periwinkle|indigo|purple/i, 0],
-  [/orange|apricot|peach|yellow/i, 1],
-  [/brown|honey|beige/i, 2],
-  [/teal|green|turquoise|aqua/i, 3],
-  [/pink|rose/i, 4],
-  [/grey|gray|silver|steel|metal/i, 5],
-  [/mint/i, 6],
-  [/lilac|lavender|violet/i, 7],
-];
-
-/** Read a species and colour hints out of the visitor's sentence, so the preview feels like it listened. */
-export function guessSpec(prompt: string): Partial<MascotSpec> {
-  const out: Partial<MascotSpec> = {};
-  const words: Record<string, Species> = { kitten: "cat", kitty: "cat", rabbit: "bunny", bot: "robot", teddy: "bear", slime: "blob" };
-  const lower = prompt.toLowerCase();
-  const sp = SPECIES.find((s) => new RegExp(`\\b${s}`).test(lower)) ?? Object.entries(words).find(([w]) => new RegExp(`\\b${w}\\b`).test(lower))?.[1];
-  if (sp) out.species = sp;
-  const c = COLOUR_WORDS.find(([re]) => re.test(prompt));
-  if (c) Object.assign(out, COLOURWAYS[c[1]]);
-  if (/glasses|specs/i.test(prompt)) out.accessory = "glasses";
-  else if (/headphone/i.test(prompt)) out.accessory = "headphones";
-  else if (/scarf/i.test(prompt)) out.accessory = "scarf";
-  else if (/crown/i.test(prompt)) out.accessory = "crown";
-  else if (/\bbow\b/i.test(prompt)) out.accessory = "bow";
-  else if (/\bhat\b/i.test(prompt)) out.accessory = "hat";
-  if (/sleepy|calm|lazy/i.test(prompt)) out.eyes = "sleepy";
-  if (/sober|serious|pro\b|professional|corporate/i.test(prompt)) out.style = "pro";
-  return out;
-}
-
-export function specFor(data: OnboardingData): MascotSpec {
-  const { name: _name, ...chosen } = data.mascot;
-  void _name;
-  return { ...DEFAULT_SPEC, ...guessSpec(data.prompt), ...chosen };
-}

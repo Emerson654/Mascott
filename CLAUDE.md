@@ -1,7 +1,7 @@
 # Mascott (nom provisoire, domaine envisagé : mascotte.io)
 
 SaaS : des mascottes IA mignonnes et personnalisables (prompt ou cases à cocher) qui guident les visiteurs d'un site ou d'un SaaS (répondre, pointer l'étape suivante, actions guidées), installées en quelques clics.
-Cible n°1 (simulations) : petites équipes SaaS B2B (2-20 pers.), onboarding / activation. Prix de départ : 49 € / 149 € par mois, -17 % en annuel, essai sur le vrai site, garantie, pas de plan gratuit (générateur de mascotte gratuit = aimant).
+Cible n°1 (simulations) : petites équipes SaaS B2B (2-20 pers.), onboarding / activation. Prix : Starter 19 € / Growth 49 € / Scale 149 € par mois, 2 mois offerts en annuel, essai sur le vrai site, garantie, pas de plan gratuit (générateur de mascotte gratuit = aimant).
 Sources : `founder/` (board, panels, concurrents, CFO, marketing, SEO Semrush), `sim/` (simulateur, résultats), `report/` (rapports CEO), `docs/roadmap.md` (Gantt).
 
 ## Organisation : une entreprise d'agents IA

@@ -25,8 +25,31 @@ const both = (s: string) => s + left(s);
 const star = (x: number, y: number, r: number, fill: string, cls = "") =>
   `<path class="${cls}" d="M${x} ${y - r}Q${x} ${y} ${x + r} ${y}Q${x} ${y} ${x} ${y + r}Q${x} ${y} ${x - r} ${y}Q${x} ${y} ${x} ${y - r}Z" fill="${fill}"/>`;
 
-const BEAN = "M100 40C142 40 164 74 164 114C164 152 138 172 100 172C62 172 36 152 36 114C36 74 58 40 100 40Z";
 const BOX = "M68 44H132Q160 44 160 72V142Q160 170 132 170H68Q40 170 40 142V72Q40 44 68 44Z";
+// Procedural variety: the colours pick a silhouette [path, arm x, foot y], a coat pattern,
+// belly on/off, limb style and ear size, so two mascots of the same species rarely look alike.
+const BODIES: [string, number, number][] = [
+  ["M100 40C142 40 164 74 164 114C164 152 138 172 100 172C62 172 36 152 36 114C36 74 58 40 100 40Z", 40, 168], // bean
+  ["M100 40C146 40 168 72 168 110C168 150 140 174 100 174C60 174 32 150 32 110C32 72 54 40 100 40Z", 35, 170], // round
+  ["M100 42C134 42 148 68 150 96C152 120 170 132 170 150C170 168 142 174 100 174C58 174 30 168 30 150C30 132 48 120 50 96C52 68 66 42 100 42Z", 37, 170], // pear
+  ["M100 44C150 44 162 56 162 104C162 158 150 172 100 172C50 172 38 158 38 104C38 56 50 44 100 44Z", 38, 168], // soft square
+];
+
+function hash(s: string): number {
+  let h = 5381;
+  for (let i = 0; i < s.length; i++) h = ((h * 33) ^ s.charCodeAt(i)) >>> 0;
+  return h;
+}
+
+// Mood effects (sparkles, "!", thought bubbles). Also used as an overlay on AI artwork.
+export function moodFx(spec: Partial<MascotSpec> | null | undefined): string {
+  const s = spec || {};
+  const A = mix(s.accent || "#FF9EC4", "#000", 0);
+  const ol = mix(mix(s.primary || "#7C8CFF", "#000", 0), INK, 0.5);
+  return `<g class="fx"><g class="x-h">${star(36, 48, 9, A, "tw")}${star(168, 40, 7, "#FFD45C", "tw t2")}${star(176, 76, 5, A, "tw t3")}</g>` +
+    `<g class="x-o"><g class="pop"><rect x="163" y="18" width="8" height="24" rx="4" fill="${A}"/><circle cx="167" cy="51" r="4.5" fill="${A}"/></g></g>` +
+    `<g class="x-k"><circle class="d1" cx="150" cy="44" r="4" fill="#fff" stroke="${ol}" stroke-width="2"/><circle class="d2" cx="164" cy="30" r="6" fill="#fff" stroke="${ol}" stroke-width="2"/><circle class="d3" cx="182" cy="14" r="8" fill="#fff" stroke="${ol}" stroke-width="2"/></g></g>`;
+}
 
 export function mascotSvg(spec: Partial<MascotSpec> | null | undefined, uid = "m"): string {
   const s = spec || {};
@@ -45,6 +68,12 @@ export function mascotSvg(spec: Partial<MascotSpec> | null | undefined, uid = "m
   const sw = `stroke="${ol}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"`;
   const fillB = `fill="url(#${u}g)" ${sw}`;
   const k = pro ? 0.8 : 1; // pro = calmer: smaller eyes, softer cheeks
+  const v = hash(P + S + A + sp + eyes + acc);
+  const [bodyD, armX, footY] = robot ? [BOX, 40, 168] : BODIES[v % 4];
+  const coat = robot ? 0 : (v >> 3) % 4; // 0 plain, 1 spots, 2 stripes, 3 two-tone hood
+  const hasBelly = robot || (v >> 5) % 3 > 0;
+  const nub = (v >> 7) % 2 > 0;
+  const earS = [1, 0.88, 1.12][(v >> 8) % 3];
 
   let back = "", ears = "", face = "", belly = "";
 
@@ -133,30 +162,33 @@ export function mascotSvg(spec: Partial<MascotSpec> | null | undefined, uid = "m
     top = `<path d="M74 50L78 20L91 36L100 14L109 36L122 20L126 50Q100 56 74 50Z" fill="#FFD45C" stroke="${mix("#FFD45C", INK, 0.45)}" stroke-width="3" stroke-linejoin="round"/><circle cx="100" cy="40" r="4" fill="${A}"/><circle cx="84" cy="43" r="2.6" fill="#fff"/><circle cx="116" cy="43" r="2.6" fill="#fff"/>`;
   }
 
-  // ---- mood effects ----
-  const fx =
-    `<g class="x-h">${star(36, 48, 9, A, "tw")}${star(168, 40, 7, "#FFD45C", "tw t2")}${star(176, 76, 5, A, "tw t3")}</g>` +
-    `<g class="x-o"><g class="pop"><rect x="163" y="18" width="8" height="24" rx="4" fill="${A}"/><circle cx="167" cy="51" r="4.5" fill="${A}"/></g></g>` +
-    `<g class="x-k"><circle class="d1" cx="150" cy="44" r="4" fill="#fff" stroke="${ol}" stroke-width="2"/><circle class="d2" cx="164" cy="30" r="6" fill="#fff" stroke="${ol}" stroke-width="2"/><circle class="d3" cx="182" cy="14" r="8" fill="#fff" stroke="${ol}" stroke-width="2"/></g>`;
-
-  const arm = (x: number, cls: string) => `<g class="${cls}"><rect x="${x - 10}" y="104" width="20" height="36" rx="10" fill="${P}" ${sw}/></g>`;
-  const body = robot ? BOX : BEAN;
+  const arm = (x: number, cls: string) => `<g class="${cls}">${nub
+    ? `<ellipse cx="${x}" cy="116" rx="9" ry="14" fill="${P}" ${sw}/>`
+    : `<rect x="${x - 10}" y="104" width="20" height="36" rx="10" fill="${P}" ${sw}/>`}</g>`;
+  const pat = coat === 1
+    ? [[62, 64, 9], [138, 58, 6], [152, 134, 9], [48, 140, 6], [122, 46, 4]].map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${mix(P, S, 0.55)}" opacity=".8"/>`).join("")
+    : coat === 2
+      ? `<path d="M100 40V58M84 42L87 57M116 42L113 57" stroke="${dark}" stroke-width="5" stroke-linecap="round" opacity=".45"/>` +
+        both(`<path d="M30 108H48M30 122H45" stroke="${dark}" stroke-width="5" stroke-linecap="round" opacity=".4"/>`)
+      : coat === 3 ? `<path d="M20 20H180V74Q100 60 20 74Z" fill="${mix(P, INK, 0.14)}"/>` : "";
+  const earT = earS === 1 ? "" : ` transform="translate(100 62) scale(${earS}) translate(-100 -62)"`;
 
   return (
     `<defs><radialGradient id="${u}g" cx=".38" cy=".3" r=".85"><stop offset="0" stop-color="${mix(P, "#fff", 0.45)}"/><stop offset=".55" stop-color="${P}"/><stop offset="1" stop-color="${mix(P, INK, 0.18)}"/></radialGradient>` +
     `<linearGradient id="${u}e" x1="0" y1="0" x2="0" y2="1"><stop offset=".35" stop-color="${INK}"/><stop offset="1" stop-color="${mix(INK, A, 0.6)}"/></linearGradient>` +
-    `<radialGradient id="${u}s"><stop offset="0" stop-color="${INK}" stop-opacity=".22"/><stop offset="1" stop-color="${INK}" stop-opacity="0"/></radialGradient></defs>` +
+    `<clipPath id="${u}c"><path d="${bodyD}"/></clipPath><radialGradient id="${u}s"><stop offset="0" stop-color="${INK}" stop-opacity=".22"/><stop offset="1" stop-color="${INK}" stop-opacity="0"/></radialGradient></defs>` +
     `<ellipse class="sh" cx="100" cy="182" rx="58" ry="10" fill="url(#${u}s)"/>` +
     `<g class="pk"><g class="j"><g class="b">` +
-    back + arm(40, "al") + arm(160, "ar") +
-    both(`<ellipse cx="80" cy="168" rx="15" ry="9" fill="${dark}" ${sw}/>`) +
-    ears +
-    `<path d="${body}" ${fillB}/>` +
-    `<ellipse cx="100" cy="146" rx="${robot ? 34 : 40}" ry="${robot ? 18 : 25}" fill="${S}" opacity="${robot ? 0.9 : 1}"/>` + belly +
+    back + arm(armX, "al") + arm(200 - armX, "ar") +
+    both(`<ellipse cx="80" cy="${footY}" rx="15" ry="9" fill="${dark}" ${sw}/>`) +
+    `<g${earT}>${ears}</g>` +
+    `<path d="${bodyD}" ${fillB}/>` +
+    (pat ? `<g clip-path="url(#${u}c)">${pat}</g>` : "") +
+    (hasBelly ? `<ellipse cx="100" cy="146" rx="${robot ? 34 : 40}" ry="${robot ? 18 : 25}" fill="${S}" opacity="${robot ? 0.9 : 1}"/>` : "") + belly +
     `<ellipse cx="70" cy="62" rx="15" ry="8" transform="rotate(-32 70 62)" fill="#fff" opacity=".35"/>` +
     `<g class="f">${face}${cheeks}<g class="ey"><g class="en">${en}</g><g class="eh">${happyEyes}</g></g>${mouths}</g>` +
     top +
-    `</g></g></g><g class="fx">${fx}</g>`
+    `</g></g></g>` + moodFx(s)
   );
 }
 
@@ -210,5 +242,32 @@ export const MASCOT_CSS = `
 @keyframes msc-fl{50%{transform:translateY(-4px)}}
 @keyframes msc-pa{0%{transform:none}25%{transform:scale(1.14,.82)}55%{transform:scale(.9,1.12) translateY(-6px)}80%{transform:scale(1.04,.97)}100%{transform:none}}
 @keyframes msc-pb{0%{transform:none}25%{transform:scale(1.14,.82)}55%{transform:scale(.9,1.12) translateY(-6px)}80%{transform:scale(1.04,.97)}100%{transform:none}}
-@media (prefers-reduced-motion:reduce){.msc *,.msc.p1 .pk,.msc.p2 .pk{animation:none!important;transition:none!important}}
+.mart{position:relative;display:inline-block;line-height:0;vertical-align:middle}
+.mart>*,.mart .aj,.mart .ab,.mart .aimg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.mart .apk,.mart .aj,.mart .ab{transform-origin:50% 92%}
+.mart .ab{animation:msc-br 3.6s ease-in-out infinite}
+.mart .aj{transition:transform .5s cubic-bezier(.34,1.4,.5,1)}
+.mart .aimg{object-fit:contain;opacity:0;transition:opacity .5s ease;-webkit-mask:radial-gradient(71% 71%,#000 66%,transparent 99%);mask:radial-gradient(71% 71%,#000 66%,transparent 99%)}
+.mart .ash{top:auto;left:20%;bottom:-1%;width:60%;height:9%;background:radial-gradient(closest-side,rgba(43,35,64,.24),transparent);opacity:0;transition:opacity .5s}
+.mart .afb{transition:opacity .5s ease}.mart .afx{display:none;pointer-events:none}
+.mart.ok .aimg,.mart.ok .ash{opacity:1}.mart.ok .afb{opacity:0}.mart.ok .afx{display:block}.mart.er .aimg{display:none}
+.mart.rv.ok .aimg{animation:msc-rv 1.2s cubic-bezier(.2,.75,.25,1) both}.mart.rv.ok .afb{transition-duration:.9s}
+.mart[data-mood=idle] .aj{animation:msc-af 3.6s ease-in-out infinite}.mart[data-mood=idle] .ash{animation:msc-as 3.6s ease-in-out infinite}
+.mart[data-mood=wave] .aj{animation:msc-aw 1.1s ease-in-out infinite}
+.mart[data-mood=talk] .aj{animation:msc-at .42s ease-in-out infinite}
+.mart[data-mood=happy] .aj{animation:msc-ah .8s cubic-bezier(.3,0,.4,1) infinite}.mart[data-mood=happy] .ash{animation:msc-shh .8s cubic-bezier(.3,0,.4,1) infinite}
+.mart[data-mood=surprised] .aj{animation:msc-ao .6s cubic-bezier(.3,0,.4,1) both}
+.mart[data-mood=think] .aj{animation:msc-ak 3.2s ease-in-out infinite}
+.mart[data-mood=point] .aj{transform:rotate(7deg);animation:msc-ap 1.2s .4s ease-in-out infinite}
+.mart.p1 .apk{animation:msc-pa .6s cubic-bezier(.3,0,.3,1)}.mart.p2 .apk{animation:msc-pb .6s cubic-bezier(.3,0,.3,1)}
+@keyframes msc-af{50%{transform:translateY(-5%)}}
+@keyframes msc-as{50%{transform:scale(.82);opacity:.6}}
+@keyframes msc-aw{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(6deg)}}
+@keyframes msc-at{50%{transform:translateY(-3%) scale(.99,1.02)}}
+@keyframes msc-ah{0%,100%{transform:none}15%{transform:scale(1.07,.9)}45%{transform:translateY(-14%) scale(.95,1.06)}72%{transform:none}82%{transform:scale(1.05,.95)}}
+@keyframes msc-ao{0%{transform:none}25%{transform:translateY(3%) scale(1.06,.9)}55%{transform:translateY(-6%) scale(.92,1.1) rotate(-3deg)}80%{transform:scale(1.02,.98)}100%{transform:none}}
+@keyframes msc-ak{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(3deg) translateY(-2%)}}
+@keyframes msc-ap{0%,100%{transform:rotate(7deg)}50%{transform:rotate(9deg) translateX(3%)}}
+@keyframes msc-rv{from{filter:blur(24px) saturate(0);transform:scale(.92);opacity:0}40%{opacity:1}to{filter:none;transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.msc *,.msc.p1 .pk,.msc.p2 .pk,.mart *{animation:none!important;transition:none!important}.mart .aimg{transition:opacity .4s!important}}
 `;

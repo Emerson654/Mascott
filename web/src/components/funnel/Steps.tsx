@@ -1,14 +1,14 @@
 "use client";
 
 import type { OnboardingData } from "@/lib/funnel";
-import { ACCESSORIES, SPECIES, type MascotSpec } from "@/lib/mascot-spec";
 import { copy } from "@/content/copy";
-import { ACTIONS, AUDIENCES, COLOURWAYS, EYES, GOALS, INDUSTRIES, LANGUAGES, TONES, specFor } from "./options";
-import { Mascot } from "@/components/mascot/Mascot";
+import { useRef, useState } from "react";
+import { ACTIONS, AUDIENCES, BRAND_TEXT, COLOR_SUGGESTIONS, GOALS, INDUSTRIES, LANGUAGES, MAX_COLORS, TONES, VIBES } from "./options";
+import { MAX_IMAGES, compressImage, type BrandImage } from "./image";
 
 export type StepProps = {
   data: OnboardingData;
-  set: (patch: Partial<OnboardingData>) => void;
+  set: (patch: Partial<OnboardingData> | ((d: OnboardingData) => Partial<OnboardingData>)) => void;
   errors: Record<string, string>;
 };
 
@@ -227,109 +227,6 @@ export function StepPages({ data, set }: StepProps) {
   );
 }
 
-export function StepStyle({ data, set }: StepProps) {
-  const spec = specFor(data);
-  const m = data.mascot;
-  const upd = (patch: Partial<MascotSpec> & { name?: string }) => set({ mascot: { ...m, ...patch } });
-  return (
-    <div className="space-y-7">
-      <div>
-        <Label htmlFor="f-mname">Name</Label>
-        <input
-          id="f-mname"
-          className="field max-w-xs"
-          maxLength={24}
-          placeholder="Pip"
-          value={m.name ?? ""}
-          onChange={(e) => upd({ name: e.target.value })}
-        />
-      </div>
-      <fieldset>
-        <legend className="mb-2 text-sm font-bold">Species</legend>
-        <div className="grid grid-cols-4 gap-2 sm:grid-cols-8">
-          {SPECIES.map((s) => (
-            <label
-              key={s}
-              className="chip relative !min-h-0 flex-col !gap-0 !rounded-2xl !p-1.5 text-xs"
-              title={cap(s)}
-            >
-              <input type="radio" name="species" checked={spec.species === s} onChange={() => upd({ species: s })} />
-              <Mascot spec={{ ...spec, species: s }} mood="idle" size={52} />
-              {cap(s)}
-            </label>
-          ))}
-        </div>
-      </fieldset>
-      <fieldset>
-        <legend className="mb-2 text-sm font-bold">Colours</legend>
-        <div className="flex flex-wrap items-center gap-2.5">
-          {COLOURWAYS.map((c) => {
-            const on = spec.primary.toLowerCase() === c.primary.toLowerCase();
-            return (
-              <label key={c.name} className="relative cursor-pointer" title={c.name}>
-                <input
-                  type="radio"
-                  name="colour"
-                  className="peer sr-only"
-                  checked={on}
-                  onChange={() => upd({ primary: c.primary, secondary: c.secondary, accent: c.accent })}
-                />
-                <span className="sr-only">{c.name}</span>
-                <span
-                  aria-hidden
-                  className={`block h-11 w-11 rounded-full ring-offset-2 transition-transform peer-focus-visible:ring-4 peer-focus-visible:ring-accent ${
-                    on ? "scale-110 ring-[3px] ring-ink" : "ring-1 ring-line hover:scale-105"
-                  }`}
-                  style={{ background: `linear-gradient(135deg, ${c.primary} 55%, ${c.secondary} 55% 78%, ${c.accent} 78%)` }}
-                />
-              </label>
-            );
-          })}
-          <label className="ml-1 inline-flex items-center gap-2 text-sm font-semibold text-muted">
-            Custom
-            <input
-              type="color"
-              value={spec.primary}
-              onChange={(e) => upd({ primary: e.target.value })}
-              className="h-11 w-11 cursor-pointer rounded-full border-0 bg-transparent p-0"
-              aria-label="Custom body colour"
-            />
-          </label>
-        </div>
-      </fieldset>
-      <div className="grid gap-7 sm:grid-cols-2">
-        <ChipGroup
-          legend="Eyes"
-          name="eyes"
-          type="radio"
-          options={EYES.map((e) => ({ id: e, label: cap(e) }))}
-          value={[spec.eyes]}
-          onToggle={(e) => upd({ eyes: e as MascotSpec["eyes"] })}
-        />
-        <ChipGroup
-          legend="Style"
-          name="mstyle"
-          type="radio"
-          options={[
-            { id: "cute", label: "Cute" },
-            { id: "pro", label: "Pro" },
-          ]}
-          value={[spec.style]}
-          onToggle={(s) => upd({ style: s as MascotSpec["style"] })}
-        />
-      </div>
-      <ChipGroup
-        legend="Accessory"
-        name="accessory"
-        type="radio"
-        options={ACCESSORIES.map((a) => ({ id: a, label: cap(a) }))}
-        value={[spec.accessory]}
-        onToggle={(a) => upd({ accessory: a as MascotSpec["accessory"] })}
-      />
-    </div>
-  );
-}
-
 function Switch({ id, label, hint, checked, onChange }: { id: string; label: string; hint: string; checked: boolean; onChange: (v: boolean) => void }) {
   return (
     <div className="flex items-start justify-between gap-4 rounded-2xl bg-soft/70 p-4">
@@ -415,14 +312,15 @@ export function StepBehaviour({ data, set, errors }: StepProps) {
 }
 
 export function StepRecap({ data, goTo }: StepProps & { goTo: (i: number) => void }) {
-  const spec = specFor(data);
+  const b = data.brand;
+  const photos = b.images.length ? `${b.images.length} photo${b.images.length > 1 ? "s" : ""}` : "";
   const rows: { label: string; value: string; step: number }[] = [
     { label: "Idea", value: data.prompt, step: 0 },
     { label: "Company", value: [data.company.name, data.company.url, data.company.industry].filter(Boolean).join(" · "), step: 1 },
     { label: "Visitors", value: data.audience, step: 2 },
     { label: "Goals", value: data.goals.join(", "), step: 2 },
     { label: "Key steps", value: data.pages.filter(Boolean).join(" → "), step: 3 },
-    { label: "Look", value: [data.mascot.name, cap(spec.species), spec.style, spec.accessory !== "none" ? spec.accessory : ""].filter(Boolean).join(" · "), step: 4 },
+    { label: "Brand", value: [b.vibe.join(", "), photos, b.notes ? "notes" : ""].filter(Boolean).join(" · "), step: 4 },
     { label: "Tone", value: cap(data.tone), step: 5 },
     { label: "Allowed to", value: data.actions.map((a) => ACTIONS.find((x) => x.id === a)?.label ?? a).join(", "), step: 5 },
     { label: "Languages", value: data.languages.join(", "), step: 5 },
@@ -432,12 +330,260 @@ export function StepRecap({ data, goTo }: StepProps & { goTo: (i: number) => voi
       {rows.map((r) => (
         <div key={r.label} className="flex items-start gap-4 bg-white px-4 py-3">
           <dt className="w-24 shrink-0 text-sm font-bold text-muted">{r.label}</dt>
-          <dd className="min-w-0 flex-1 break-words">{r.value || <span className="text-muted">Not set</span>}</dd>
+          <dd className="min-w-0 flex-1 break-words">
+            {r.label === "Brand" && b.colors.length > 0 && (
+              <span className="mr-2 inline-flex -space-x-1 align-middle" aria-hidden>
+                {b.colors.map((c) => (
+                  <span key={c} className="h-5 w-5 rounded-full ring-2 ring-white" style={{ background: c }} />
+                ))}
+              </span>
+            )}
+            {r.value || (r.label === "Brand" && b.colors.length ? null : <span className="text-muted">Not set</span>)}
+          </dd>
           <button type="button" onClick={() => goTo(r.step)} className="text-sm font-semibold text-accent underline" aria-label={`Edit ${r.label}`}>
             Edit
           </button>
         </div>
       ))}
     </dl>
+  );
+}
+
+type Brand = OnboardingData["brand"];
+const setBrand = (set: StepProps["set"], fn: (b: Brand) => Partial<Brand>) => set((d) => ({ brand: { ...d.brand, ...fn(d.brand) } }));
+
+export function StepBrand({ data, set }: StepProps) {
+  const t = BRAND_TEXT;
+  const b = data.brand;
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [over, setOver] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState("");
+
+  const addColor = (c: string) => setBrand(set, (x) => (x.colors.length >= MAX_COLORS || x.colors.includes(c) ? {} : { colors: [...x.colors, c] }));
+  const nextSuggestion = COLOR_SUGGESTIONS.find((c) => !b.colors.includes(c)) ?? "#4F5BF5";
+
+  async function addFiles(files: FileList | null) {
+    const list = Array.from(files ?? []);
+    if (!list.length) return;
+    const room = MAX_IMAGES - b.images.length;
+    if (room <= 0) return setErr("That's 3 photos already. Remove one to add another.");
+    setErr("");
+    setBusy(true);
+    const out: BrandImage[] = [];
+    for (const f of list.slice(0, room)) {
+      try {
+        out.push(await compressImage(f));
+      } catch {
+        setErr(`We couldn't use ${f.name}. Try a JPG or PNG.`);
+      }
+    }
+    if (list.length > room) setErr(`Only ${MAX_IMAGES} photos fit. We kept the first ${room}.`);
+    setBrand(set, (x) => ({ images: [...x.images, ...out].slice(0, MAX_IMAGES) }));
+    setBusy(false);
+  }
+
+  return (
+    <div className="space-y-8">
+      <p className="text-muted">{t.intro}</p>
+
+      {/* Colours */}
+      <fieldset>
+        <legend className="text-sm font-bold text-ink">{t.colorsLegend}</legend>
+        <p className="mb-3 text-sm text-muted">{t.colorsHint}</p>
+        <div className="flex flex-wrap items-center gap-3">
+          {b.colors.map((c, i) => (
+            <div key={i} className="group relative">
+              <label
+                className="block h-14 w-14 cursor-pointer rounded-2xl shadow-[inset_0_0_0_1px_rgb(27_29_58/0.12),0_6px_14px_-8px_rgb(27_29_58/0.5)] transition-transform hover:scale-105 has-[:focus-visible]:outline has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-accent"
+                style={{ background: c }}
+              >
+                <input
+                  type="color"
+                  value={c}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    setBrand(set, (x) => ({ colors: x.colors.map((y, j) => (j === i ? v : y)) }));
+                  }}
+                  className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                  aria-label={`Brand colour ${i + 1}, ${c}. Change it`}
+                />
+              </label>
+              <button
+                type="button"
+                onClick={() => setBrand(set, (x) => ({ colors: x.colors.filter((_, j) => j !== i) }))}
+                className="absolute -right-2 -top-2 flex h-7 w-7 items-center justify-center rounded-full bg-white text-ink shadow ring-1 ring-line hover:bg-soft"
+                aria-label={`Remove colour ${c}`}
+              >
+                <Cross size={10} />
+              </button>
+            </div>
+          ))}
+          {b.colors.length < MAX_COLORS && (
+            <button
+              type="button"
+              onClick={() => addColor(nextSuggestion)}
+              className="flex h-14 w-14 items-center justify-center rounded-2xl border-2 border-dashed border-line text-2xl text-muted transition hover:border-g1 hover:text-ink"
+              aria-label="Add a colour"
+            >
+              +
+            </button>
+          )}
+        </div>
+        {b.colors.length < MAX_COLORS && (
+          <div className="mt-4 flex flex-wrap items-center gap-2" aria-label="Suggestions">
+            <span className="mr-1 text-xs font-semibold uppercase tracking-wide text-muted">Suggestions</span>
+            {COLOR_SUGGESTIONS.filter((c) => !b.colors.includes(c)).map((c) => (
+              <button
+                key={c}
+                type="button"
+                onClick={() => addColor(c)}
+                className="h-11 w-11 rounded-full p-1.5 transition-transform hover:scale-110"
+                aria-label={`Add ${c}`}
+              >
+                <span aria-hidden className="block h-full w-full rounded-full ring-1 ring-black/10" style={{ background: c }} />
+              </button>
+            ))}
+          </div>
+        )}
+      </fieldset>
+
+      <ChipGroup
+        legend={t.vibeLegend}
+        name="vibe"
+        options={VIBES.map((v) => ({ id: v.toLowerCase(), label: v }))}
+        value={b.vibe}
+        onToggle={(v) => setBrand(set, (x) => ({ vibe: toggle(x.vibe, v) }))}
+      />
+
+      {/* Photos */}
+      <div>
+        <p className="mb-2 text-sm font-bold text-ink">
+          Photos <span className="font-normal text-muted">(optional)</span>
+        </p>
+        {b.images.length < MAX_IMAGES && (
+          <div
+            onDragOver={(e) => {
+              e.preventDefault();
+              setOver(true);
+            }}
+            onDragLeave={() => setOver(false)}
+            onDrop={(e) => {
+              e.preventDefault();
+              setOver(false);
+              addFiles(e.dataTransfer.files);
+            }}
+            className={`flex flex-col items-center gap-2 rounded-2xl border-2 border-dashed px-4 py-7 text-center transition-colors ${
+              over ? "border-g1 bg-halo1" : "border-line bg-soft/60"
+            }`}
+          >
+            <span aria-hidden className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-accent shadow-sm ring-1 ring-line">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="4" width="18" height="16" rx="3" />
+                <circle cx="9" cy="10" r="2" />
+                <path d="M21 16l-5-5-9 9" />
+              </svg>
+            </span>
+            <p className="font-semibold">{t.dropTitle}</p>
+            <p className="max-w-sm text-sm text-muted">{t.dropHint}</p>
+            <button type="button" onClick={() => fileRef.current?.click()} className="btn btn-ghost mt-1 !min-h-11 text-sm" disabled={busy}>
+              {busy ? "Shrinking…" : t.dropButton}
+            </button>
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/*"
+              multiple
+              hidden
+              onChange={(e) => {
+                addFiles(e.target.files);
+                e.target.value = "";
+              }}
+            />
+          </div>
+        )}
+        {err && (
+          <p role="alert" className="mt-2 text-sm font-semibold text-[#b4235a]">
+            {err}
+          </p>
+        )}
+        {b.images.length > 0 && (
+          <ul className="mt-3 grid grid-cols-3 gap-3">
+            {b.images.map((img) => (
+              <li key={img.name} className="relative aspect-square overflow-hidden rounded-2xl bg-soft ring-1 ring-line">
+                {/* eslint-disable-next-line @next/next/no-img-element -- local data URL */}
+                <img src={img.dataUrl} alt={img.name} className="h-full w-full object-cover" />
+                <button
+                  type="button"
+                  onClick={() => setBrand(set, (x) => ({ images: x.images.filter((y) => y.name !== img.name) }))}
+                  className="absolute right-1.5 top-1.5 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-ink shadow backdrop-blur hover:bg-white"
+                  aria-label={`Remove ${img.name}`}
+                >
+                  <Cross size={12} />
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      <div>
+        <Label htmlFor="f-notes" optional>
+          {t.notesLabel}
+        </Label>
+        <textarea
+          id="f-notes"
+          className="field min-h-24 resize-y"
+          maxLength={600}
+          placeholder={t.notesPlaceholder}
+          value={b.notes}
+          onChange={(e) => {
+            const v = e.target.value;
+            setBrand(set, () => ({ notes: v }));
+          }}
+        />
+      </div>
+
+      <SpottedPalette data={data} set={set} />
+    </div>
+  );
+}
+
+let dismissedPalette = ""; // survives step remounts; ponytail: per tab, fine for a hint
+
+/** Non-blocking suggestion: the palette /api/brand-scan read from the uploads. */
+export function SpottedPalette({ data, set }: Pick<StepProps, "data" | "set">) {
+  const palette = (data.brand.scan?.palette ?? []).filter((c) => /^#[0-9a-f]{6}$/i.test(c)).slice(0, MAX_COLORS);
+  const [hidden, setHidden] = useState(dismissedPalette === palette.join());
+  const same = palette.every((c) => data.brand.colors.some((x) => x.toLowerCase() === c.toLowerCase()));
+  if (hidden || !palette.length || same) return null;
+  return (
+    <div role="status" className="fade-up flex flex-wrap items-center gap-3 rounded-2xl bg-halo1/70 p-3 pl-4 ring-1 ring-line">
+      <span className="flex -space-x-1.5" aria-hidden>
+        {palette.map((c) => (
+          <span key={c} className="h-7 w-7 rounded-full ring-2 ring-white" style={{ background: c }} />
+        ))}
+      </span>
+      <p className="min-w-0 flex-1 text-sm font-semibold">{BRAND_TEXT.spotted}</p>
+      <div className="flex gap-1">
+        <button type="button" className="btn btn-primary !min-h-10 !px-4 text-sm" onClick={() => setBrand(set, () => ({ colors: palette }))}>
+          {BRAND_TEXT.useSpotted}
+        </button>
+        <button type="button" className="flex h-10 w-10 items-center justify-center rounded-full text-muted hover:bg-white" aria-label="Dismiss" onClick={() => {
+            dismissedPalette = palette.join();
+            setHidden(true);
+          }}>
+          <Cross size={12} />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function Cross({ size }: { size: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" aria-hidden>
+      <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" />
+    </svg>
   );
 }

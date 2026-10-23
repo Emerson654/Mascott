@@ -1,7 +1,7 @@
 // Input sanitising, the deterministic mascot generator (no-key fallback), the agent system prompt
 // and the canned chat replies. Type-only imports so `node --test` can load this file directly.
 import type { Accessory, Eyes, MascotSpec, Species } from "../mascot-spec";
-import type { GeneratedMascot, OnboardingData } from "../funnel";
+import type { BrandScan, GeneratedMascot, OnboardingData } from "../funnel";
 
 // ponytail: duplicated from mascot-spec.ts (value imports would break the node test runner);
 // `satisfies` catches invalid entries, keep in sync if a species is added.
@@ -82,6 +82,7 @@ export function sanitizeOnboarding(v: unknown): OnboardingData {
     actions: cleanList(o.actions, 5, 20).filter((a) => ACTIONS.includes(a)),
     languages: cleanList(o.languages, 6, 30),
     mascot: { ...sanitizeSpec(m), ...(name ? { name } : {}) },
+    brand: sanitizeBrand(o.brand),
   };
 }
 
@@ -198,20 +199,33 @@ export function buildSystemPrompt(d: OnboardingData, name: string, species: Spec
   ].filter(Boolean).join("\n");
 }
 
-/** Deterministic, good-looking mascot from the prompt and funnel data. Same input, same output. */
-export function generateFallback(d: OnboardingData): GeneratedMascot {
+/** A generated mascot plus the image prompt the route signs into `spec.imageUrl` (never sent to the client as-is). */
+export type Draft = GeneratedMascot & { artPrompt: string };
+
+/** Deterministic, good-looking mascot from the prompt and funnel data. Same input + variant, same output. */
+export function generateFallback(d: OnboardingData, variant = 0): Draft {
   const text = `${d.prompt} ${d.company.name} ${d.company.industry} ${d.company.description} ${d.audience}`.toLowerCase();
   const promptText = d.prompt.toLowerCase();
   const seed = hash(text + d.tone);
-  const species: Species =
-    d.mascot.species ?? firstMatch(promptText, SPECIES_WORDS) ?? firstMatch(text, SPECIES_WORDS) ?? firstMatch(text, THEME_WORDS) ?? SPECIES_LIST[seed % SPECIES_LIST.length];
-  const palette = PALETTES[firstMatch(promptText, COLOR_WORDS) ?? firstMatch(text, COLOR_WORDS) ?? SPECIES_PALETTE[species]];
+  const namedAnimal = firstMatch(promptText, SPECIES_WORDS);
+  let species: Species =
+    d.mascot.species ?? namedAnimal ?? firstMatch(text, SPECIES_WORDS) ?? firstMatch(text, THEME_WORDS) ?? SPECIES_LIST[seed % SPECIES_LIST.length];
   const tone = TONE_STYLE[d.tone];
+  const brandColors = d.brand.colors.length ? d.brand.colors : d.brand.scan?.palette ?? [];
+  const named = PALETTES[firstMatch(promptText, COLOR_WORDS) ?? firstMatch(text, COLOR_WORDS) ?? SPECIES_PALETTE[species]];
+  const palette: [string, string, string] = brandColors.length
+    ? [brandColors[0], mix(brandColors[0], "#FFFFFF", 0.85), brandColors[1] ?? named[2]]
+    : named;
+  const art = pickDirection(d, seed + variant, namedAnimal, species);
+  if (art.id === "orb" && !d.mascot.species) species = "blob";
+  if (art.id === "robot" && !d.mascot.species) species = "robot";
   const accessory: Accessory =
     firstMatch<Accessory>(promptText, [
       [/glasses|lunettes|nerd|smart/, "glasses"], [/scarf|winter|cozy/, "scarf"], [/hat|chapeau|cap/, "hat"],
       [/headphone|music|audio|podcast/, "headphones"], [/bow|ribbon|noeud/, "bow"], [/crown|king|queen|royal|premium/, "crown"],
     ]) ?? (d.tone === "expert" ? "glasses" : d.tone === "professional" ? "none" : (["none", "scarf", "bow", "headphones"] as const)[seed % 4]);
+  const subject = art.subject === "animal" ? animalSubject(species) : art.subject === "object" ? objectFor(text) : art.subjectText;
+  const concept = `${subject} as a ${art.label}`;
   const spec: MascotSpec = {
     species,
     primary: palette[0],
@@ -221,6 +235,7 @@ export function generateFallback(d: OnboardingData): GeneratedMascot {
     accessory,
     style: tone.style,
     ...stripName(d.mascot),
+    concept,
   };
   const name = d.mascot.name || NAMES[species][seed % NAMES[species].length];
   const company = d.company.name || "our site";
@@ -231,7 +246,19 @@ export function generateFallback(d: OnboardingData): GeneratedMascot {
     { q: "Where should I start?", a: `Start with ${firstPage}. I'll point at each step so you never get lost.` },
     { q: "Can I talk to a human?", a: d.behaviour.handoffEmail ? `Of course! I'll pass you to the team at ${d.behaviour.handoffEmail}.` : "Of course! The team is reachable from the contact page, I'll take you there." },
   ];
-  return { name, spec, greeting, personality: tone.personality, sampleDialog, systemPrompt: buildSystemPrompt(d, name, species), source: "fallback" };
+  const colors = (brandColors.length ? brandColors : palette).slice(0, 4);
+  const artPrompt = buildArtPrompt(subject, art.render, colors, palette[1], d.tone, seed);
+  const vibe = d.brand.vibe[0] || d.tone;
+  const thoughts = [
+    `Reading ${d.company.name ? `${d.company.name}'s` : "the"} palette… ${colors.slice(0, 3).map(colorName).join(", ")}`,
+    d.audience ? `${clampWords(d.audience, 10).replace(/…$/, "")} will see it first, it has to feel ${vibe} and easy` : `First impression matters: it has to feel ${vibe} and easy to trust`,
+    d.brand.scan?.motifs.length ? `Borrowing a motif from the brand: ${d.brand.scan.motifs[0]}` : d.brand.notes ? `Keeping the notes in mind: ${clampWords(d.brand.notes, 10)}` : `Looking for a shape that says ${d.company.industry || "your product"} at a glance`,
+    `Trying ${concept}…`,
+    `Giving ${name} ${TONE_FACE[d.tone]}`,
+    "Softening the edges so it still reads at 48 px…",
+    "Final pass: centered, plain background, no text.",
+  ].map((t) => clean(t, 140));
+  return { name, spec, greeting, personality: tone.personality, sampleDialog, systemPrompt: buildSystemPrompt(d, name, species), source: "fallback", thoughts, artPrompt };
 }
 
 function stripName(m: OnboardingData["mascot"]): Partial<MascotSpec> {
@@ -240,11 +267,12 @@ function stripName(m: OnboardingData["mascot"]): Partial<MascotSpec> {
 }
 
 /** Overlays valid AI fields on the deterministic result; user-chosen mascot fields always win. */
-export function mergeAi(d: OnboardingData, ai: unknown): GeneratedMascot {
-  const base = generateFallback(d);
+export function mergeAi(d: OnboardingData, ai: unknown, variant = 0): Draft {
+  const base = generateFallback(d, variant);
   if (!ai || typeof ai !== "object") return base;
   const o = ai as Record<string, unknown>;
-  const spec: MascotSpec = { ...base.spec, ...sanitizeSpec(o), ...stripName(d.mascot) };
+  const concept = clean(o.concept, 160);
+  const spec: MascotSpec = { ...base.spec, ...sanitizeSpec(o), ...stripName(d.mascot), concept: concept || base.spec.concept };
   const name = d.mascot.name || clean(o.name, 24) || base.name;
   const dialog = Array.isArray(o.sampleDialog)
     ? o.sampleDialog
@@ -253,7 +281,11 @@ export function mergeAi(d: OnboardingData, ai: unknown): GeneratedMascot {
         .slice(0, 3)
     : [];
   const sys = typeof o.systemPrompt === "string" ? o.systemPrompt.replace(/\r/g, "").trim().slice(0, 6000) : "";
-  const usedAny = !!(clean(o.greeting, 10) || dialog.length || sys.length >= 200);
+  const thoughts = cleanList(o.thoughts, 7, 140);
+  let artPrompt = clean(o.artPrompt, MAX_ART_PROMPT);
+  if (artPrompt.length < 60) artPrompt = base.artPrompt;
+  else if (!/no text/i.test(artPrompt)) artPrompt = `${artPrompt.slice(0, MAX_ART_PROMPT - ART_GUARD.length - 1)} ${ART_GUARD}`;
+  const usedAny = !!(clean(o.greeting, 10) || dialog.length || sys.length >= 200 || artPrompt !== base.artPrompt);
   return {
     name,
     spec,
@@ -262,6 +294,188 @@ export function mergeAi(d: OnboardingData, ai: unknown): GeneratedMascot {
     sampleDialog: dialog.length === 3 ? dialog : base.sampleDialog,
     systemPrompt: sys.length >= 200 ? sys : buildSystemPrompt(d, name, spec.species),
     source: usedAny ? "ai" : "fallback",
+    thoughts: thoughts.length >= 4 ? thoughts : base.thoughts,
+    artPrompt,
+  };
+}
+
+// ---------- art direction (image prompt for /api/mascot-image) ----------
+
+export const MAX_ART_PROMPT = 900;
+const ART_GUARD = "Full body, centered, plain soft background, no text, no logo, high quality mascot character.";
+
+type Direction = { id: string; label: string; subject: "animal" | "object" | "fixed"; subjectText: string; render: string };
+// Inspired by modern AI companions: glossy toys, soft orbs, plush, clay, object-characters, robots, plant spirits, paper-craft.
+const DIRECTIONS: Direction[] = [
+  { id: "glossy", label: "glossy 3D toy", subject: "animal", subjectText: "", render: "glossy 3D vinyl toy, soft studio lighting, gentle rim light, smooth rounded shapes, Pixar-like charm" },
+  { id: "orb", label: "soft-gradient orb", subject: "fixed", subjectText: "a small floating orb companion", render: "minimal soft-gradient orb, smooth frosted-glass sphere with a gentle inner glow, tiny simple face, airy and calm" },
+  { id: "plush", label: "handmade plush", subject: "animal", subjectText: "", render: "handmade plush toy, soft felt and fleece texture, visible stitching, cozy and huggable" },
+  { id: "clay", label: "clay figure", subject: "animal", subjectText: "", render: "claymation plasticine figure, subtle fingerprint texture, warm soft lighting, stop-motion look" },
+  { id: "object", label: "3D object-character", subject: "object", subjectText: "", render: "glossy 3D object-character with tiny arms and legs, rounded edges, soft lighting" },
+  { id: "robot", label: "companion robot", subject: "fixed", subjectText: "a small round robot", render: "cute companion robot, rounded glossy shell, soft glowing screen face, friendly antenna" },
+  { id: "botanical", label: "botanical sprite", subject: "fixed", subjectText: "a little sprout creature with leaf ears", render: "tiny botanical spirit, soft 3D render, fresh petals and leaves, gentle and light" },
+  { id: "paper", label: "paper-craft figure", subject: "animal", subjectText: "", render: "paper-craft origami character, folded paper texture, crisp creases, soft shadows" },
+];
+const VIBE_DIRECTIONS: [RegExp, string[]][] = [
+  [/\b(premium|elegant|luxury|minimal|calm|serene|clean)\b/, ["orb", "glossy"]],
+  [/\b(playful|fun|bold|energetic|cheeky)\b/, ["plush", "clay", "glossy"]],
+  [/\b(tech|techy|futuristic|ai|data|dev|developer|api|automation)\b/, ["robot", "orb"]],
+  [/\b(warm|cozy|friendly|human|caring|kind)\b/, ["plush", "clay"]],
+  [/\b(nature|eco|organic|green|fresh|garden|plant|wellness)\b/, ["botanical", "paper"]],
+  [/\b(creative|artsy|craft|handmade|design|studio)\b/, ["paper", "clay"]],
+];
+const MATERIAL_WORDS: [RegExp, string][] = [
+  [/\b(orb|sphere|bubble)\b/, "orb"], [/\b(plush|felt|fluffy|soft toy)\b/, "plush"], [/\b(clay|plasticine)\b/, "clay"],
+  [/\b(robot|bot|droid)\b/, "robot"], [/\b(paper|origami)\b/, "paper"], [/\b(plant|sprout|leaf|flower)\b/, "botanical"], [/\b(3d|glossy|vinyl)\b/, "glossy"],
+];
+const OBJECTS: [RegExp, string][] = [
+  [/\b(invoice|invoicing|billing|accounting|bookkeeping|finance|fintech|payment|tax)\b/, "a little paper invoice with a folded corner"],
+  [/\b(calendar|booking|schedule|scheduling|appointment|planning)\b/, "a small desk calendar"],
+  [/\b(email|newsletter|mail|inbox|marketing)\b/, "a paper envelope"],
+  [/\b(shop|ecommerce|e-commerce|store|retail|cart)\b/, "a small shopping bag"],
+  [/\b(api|dev|developer|code|software|devtools)\b/, "a tiny laptop"],
+  [/\b(learn|course|school|education|training|docs|documentation)\b/, "a small open book"],
+  [/\b(security|cyber|privacy|compliance)\b/, "a rounded shield"],
+  [/\b(analytics|data|dashboard|metrics|reporting)\b/, "a little bar-chart block"],
+  [/\b(travel|trip|hotel)\b/, "a tiny suitcase"],
+  [/\b(food|restaurant|coffee|cafe)\b/, "a coffee cup"],
+  [/\b(health|care|clinic|medical)\b/, "a heart-shaped cushion"],
+  [/\b(hr|recruit|hiring|people|team)\b/, "a friendly name badge"],
+];
+const TONE_FACE: Record<OnboardingData["tone"], string> = {
+  playful: "a big joyful smile and sparkly eyes", friendly: "a warm, gentle smile",
+  professional: "a calm, confident smile", expert: "a clever, knowing little smile",
+};
+const POSES = ["waving one hand", "giving a little wave", "pointing to the side helpfully", "tilting its head with curiosity", "hopping happily"];
+
+function pickDirection(d: OnboardingData, n: number, namedAnimal: Species | undefined, species: Species): Direction {
+  const by = (id: string) => DIRECTIONS.find((x) => x.id === id)!;
+  const forced = firstMatch(d.prompt.toLowerCase(), MATERIAL_WORDS);
+  if (forced && !(namedAnimal && namedAnimal !== "robot" && forced === "robot")) return by(forced);
+  if (namedAnimal) return by(namedAnimal === "robot" ? "robot" : ["glossy", "plush", "clay", "paper"][n % 4]);
+  const ctx = `${d.brand.vibe.join(" ")} ${d.brand.notes} ${d.brand.scan?.mood ?? ""} ${d.company.industry} ${d.company.description}`.toLowerCase();
+  const ids = new Set<string>();
+  for (const [re, list] of VIBE_DIRECTIONS) if (re.test(ctx)) list.forEach((x) => ids.add(x));
+  if (firstMatch(`${d.company.industry} ${d.company.description} ${d.prompt}`.toLowerCase(), OBJECTS)) ids.add("object");
+  if (species === "robot") ids.add("robot");
+  const list = ids.size ? [...ids].map(by) : DIRECTIONS;
+  return list[n % list.length];
+}
+
+function animalSubject(s: Species): string {
+  return s === "blob" ? "a round jelly blob creature" : s === "robot" ? "a small round robot" : `a little ${s}`;
+}
+
+function objectFor(text: string): string {
+  return firstMatch(text, OBJECTS) ?? "a round speech bubble";
+}
+
+function buildArtPrompt(subject: string, render: string, colors: string[], bg: string, tone: OnboardingData["tone"], seed: number): string {
+  return clean(
+    `Cute mascot character: ${subject}, ${render}. Colour palette ${colors.join(", ")} (main colour ${colors[0]}). ` +
+      `${TONE_FACE[tone]}, ${POSES[seed % POSES.length]}. Simple readable silhouette, big friendly eyes. ` +
+      `${ART_GUARD.replace("plain soft background", `plain soft background in ${bg}`)}`,
+    MAX_ART_PROMPT,
+  );
+}
+
+/** Image prompt for a fixed demo mascot (landing cast) when no hand-written prompt exists. */
+export function artPromptFromSpec(spec: MascotSpec): string {
+  const acc = spec.accessory !== "none" ? ` wearing ${spec.accessory === "glasses" || spec.accessory === "headphones" ? "" : "a "}${spec.accessory}` : "";
+  return buildArtPrompt(`${animalSubject(spec.species)}${acc}`, DIRECTIONS[0].render, [spec.primary, spec.accent], spec.secondary, spec.style === "pro" ? "friendly" : "playful", 0);
+}
+
+// ---------- colours ----------
+
+function rgb(hex: string): [number, number, number] {
+  const n = parseInt(hex.slice(1), 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+
+export function mix(a: string, b: string, t: number): string {
+  const [x, y] = [rgb(a), rgb(b)];
+  return "#" + x.map((v, i) => Math.round(v + (y[i] - v) * t).toString(16).padStart(2, "0")).join("").toUpperCase();
+}
+
+/** Rough human name for a hex colour ("warm orange", "deep navy"), used in the "thinking" lines. */
+export function colorName(hex: string): string {
+  const [r, g, b] = rgb(hex).map((v) => v / 255);
+  const max = Math.max(r, g, b), min = Math.min(r, g, b), l = (max + min) / 2, c = max - min;
+  if (c < 0.08) return l > 0.85 ? "soft white" : l < 0.2 ? "near black" : "cool grey";
+  let h = max === r ? ((g - b) / c) % 6 : max === g ? (b - r) / c + 2 : (r - g) / c + 4;
+  h = (h * 60 + 360) % 360;
+  const hue = h < 15 || h >= 345 ? "red" : h < 40 ? "orange" : h < 65 ? "yellow" : h < 160 ? "green" : h < 195 ? "teal" : h < 245 ? "blue" : h < 290 ? "violet" : "pink";
+  const shade = l < 0.3 ? (hue === "blue" ? "deep navy" : `deep ${hue}`) : l > 0.78 ? `pastel ${hue}` : h >= 15 && h < 65 ? `warm ${hue}` : `bright ${hue}`;
+  return shade;
+}
+
+// ---------- brand universe (uploads, scan) ----------
+
+export const MAX_IMAGE_BYTES = 450_000;
+const DATA_URL = /^data:(image\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/]+={0,2})$/;
+const MAGIC: Record<string, (b: string) => boolean> = {
+  "image/jpeg": (b) => b.startsWith("\xFF\xD8\xFF"),
+  "image/png": (b) => b.startsWith("\x89PNG"),
+  "image/webp": (b) => b.startsWith("RIFF") && b.slice(8, 12) === "WEBP",
+};
+
+/** Keeps up to 3 real JPEG/PNG/WebP data URLs of at most MAX_IMAGE_BYTES each (type checked by magic bytes). */
+export function cleanImages(v: unknown): { name: string; dataUrl: string }[] {
+  if (!Array.isArray(v)) return [];
+  const out: { name: string; dataUrl: string }[] = [];
+  for (const x of v.slice(0, 3)) {
+    const o = (x && typeof x === "object" ? x : {}) as Record<string, unknown>;
+    const m = typeof o.dataUrl === "string" && o.dataUrl.length < 700_000 ? DATA_URL.exec(o.dataUrl) : null;
+    if (!m) continue;
+    const bytes = Math.floor((m[2].length * 3) / 4) - (m[2].endsWith("==") ? 2 : m[2].endsWith("=") ? 1 : 0);
+    if (bytes > MAX_IMAGE_BYTES || bytes < 16) continue;
+    let head = "";
+    try { head = atob(m[2].slice(0, 16)); } catch { continue; }
+    if (!MAGIC[m[1]](head)) continue;
+    out.push({ name: clean(o.name, 80) || "image", dataUrl: o.dataUrl as string });
+  }
+  return out;
+}
+
+/** Splits validated data URLs into Gemini inline parts. */
+export function toInline(images: { dataUrl: string }[]): { mime: string; data: string }[] {
+  return images.map((i) => DATA_URL.exec(i.dataUrl)).filter((m): m is RegExpExecArray => !!m).map((m) => ({ mime: m[1], data: m[2] }));
+}
+
+function hexList(v: unknown, max: number): string[] {
+  if (!Array.isArray(v)) return [];
+  return [...new Set(v.filter(isHex).map((x) => x.toUpperCase()))].slice(0, max);
+}
+
+export function sanitizeScan(v: unknown): BrandScan | undefined {
+  if (!v || typeof v !== "object") return undefined;
+  const o = v as Record<string, unknown>;
+  const scan = { palette: hexList(o.palette, 6), mood: clean(o.mood, 200), motifs: cleanList(o.motifs, 6, 60), audience: clean(o.audience, 200) };
+  return scan.palette.length || scan.mood ? scan : undefined;
+}
+
+export function sanitizeBrand(v: unknown): OnboardingData["brand"] {
+  const o = (v && typeof v === "object" ? v : {}) as Record<string, unknown>;
+  const scan = sanitizeScan(o.scan);
+  return { colors: hexList(o.colors, 4), vibe: cleanList(o.vibe, 6, 30), notes: clean(o.notes, 600), images: cleanImages(o.images), ...(scan ? { scan } : {}) };
+}
+
+const STOP = new Set("about after also and are because been being brand but can colors colours could does each from have into just like more most much need only other our ours over should some such than that the their them then there these they this those very want were what when which while will with without would your yours make feel look".split(" "));
+
+/** Scan without AI: palette from the given colours (topped up from colour words or a default), generic mood/motifs from the notes. */
+export function fallbackScan(input: { colors?: string[]; notes?: string; company?: { name?: string; industry?: string; description?: string } }): BrandScan {
+  const notes = clean(input.notes, 600);
+  const palette = hexList(input.colors ?? [], 6);
+  const named = PALETTES[firstMatch(notes.toLowerCase(), COLOR_WORDS) ?? "indigo"];
+  if (palette[0]) palette.push(mix(palette[0], "#FFFFFF", 0.85), mix(palette[0], "#1B1D3A", 0.5));
+  for (const c of named) if (palette.length < 3) palette.push(c);
+  const motifs = [...new Set(notes.toLowerCase().match(/[a-z][a-z-]{4,}/g) ?? [])].filter((w) => !STOP.has(w)).slice(0, 4);
+  const c = input.company ?? {};
+  return {
+    palette: [...new Set(palette)].slice(0, 6),
+    mood: notes ? clean(`Inspired by: ${clampWords(notes, 20)}`, 200) : "Friendly, clean and modern.",
+    motifs: motifs.length ? motifs : ["soft rounded shapes", "clean lines"],
+    audience: clean(c.industry ? `People looking for ${c.industry}${c.name ? ` at ${c.name}` : ""}` : c.name ? `Visitors of ${c.name}` : "Website visitors", 200),
   };
 }
 

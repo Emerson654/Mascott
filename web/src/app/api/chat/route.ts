@@ -41,6 +41,7 @@ export async function POST(req: Request) {
       : [],
     systemPrompt: typeof m.systemPrompt === "string" ? m.systemPrompt.slice(0, 6000) : "",
     source: "fallback",
+    thoughts: [],
   };
   const messages: ChatMsg[] = (Array.isArray(body.messages) ? body.messages : [])
     .slice(-12)

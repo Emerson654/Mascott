@@ -2,7 +2,8 @@
 // Every call shares one deadline; any error or timeout returns null so callers can fall back.
 
 export type ChatMsg = { role: "user" | "assistant"; content: string };
-type Opts = { system: string; messages: ChatMsg[]; schema?: object; maxTokens: number; timeoutMs: number };
+/** images: inline JPEG/PNG/WebP (base64) attached to the last user message; Gemini only, xAI ignores them. */
+type Opts = { system: string; messages: ChatMsg[]; schema?: object; maxTokens: number; timeoutMs: number; images?: { mime: string; data: string }[] };
 
 const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models";
 const XAI_URL = "https://api.x.ai/v1/chat/completions";
@@ -21,7 +22,13 @@ async function gemini(o: Opts, signal: AbortSignal): Promise<string | null> {
     signal,
     body: JSON.stringify({
       systemInstruction: { parts: [{ text: o.system }] },
-      contents: o.messages.map((m) => ({ role: m.role === "assistant" ? "model" : "user", parts: [{ text: m.content }] })),
+      contents: o.messages.map((m, i) => ({
+        role: m.role === "assistant" ? "model" : "user",
+        parts: [
+          ...(i === o.messages.length - 1 && m.role === "user" ? (o.images ?? []).map((im) => ({ inlineData: { mimeType: im.mime, data: im.data } })) : []),
+          { text: m.content },
+        ],
+      })),
       generationConfig: {
         temperature: o.schema ? 0.9 : 0.6,
         maxOutputTokens: o.maxTokens,

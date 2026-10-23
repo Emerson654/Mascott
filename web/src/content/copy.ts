@@ -36,7 +36,7 @@ export const copy = {
       bullets: [
         { title: "Answers from your content", text: "Give her your site and docs URL. She reads them and replies with what's actually there." },
         { title: "Points to the next step", text: "\"Import contacts? It's this button.\" She highlights it on the page." },
-        { title: "Looks like your brand", text: "Cute or sober, your colours, your name. You pick the species, the outfit and the tone." },
+        { title: "Looks like your brand", text: "Share your colours, logo or a few product shots. The AI designs a one-of-a-kind character around them: a plush fox, a glowing orb, a smiling invoice." },
       ],
     },
     {
@@ -96,6 +96,34 @@ export const copy = {
       a: "Creating a mascot is free, and so is seeing her on your own site. We'd rather keep the paid product focused and well supported. The 30-day money-back guarantee covers the rest: if it's not for you, one email and you're refunded.",
     },
   ],
+
+  // v2 funnel (CONTRACTS.md "v2"): the visitor never picks a species. The AI designs the mascot from the brand universe.
+  brandUniverse: {
+    title: "Your brand universe",
+    help: "Show us your world and we design a mascot that belongs in it. Colours, a logo, a screenshot, a few words: everything helps, nothing is required.",
+    notesLabel: "Anything we should know?",
+    notesPlaceholder: "Our users are accountants who hate clutter. We like calm greens, rounded shapes and a little dry humour.",
+    uploadLabel: "Drop your logo, product shots or moodboard (up to 3)",
+    uploadHint: "PNG, JPG or WebP. We only use them to design your mascot.",
+    vibesLabel: "Pick the vibes that fit",
+    vibes: ["Playful", "Calm", "Premium", "Techy", "Warm", "Bold", "Minimal", "Natural", "Cozy", "Futuristic"],
+    cta: "Design my mascot",
+  },
+
+  generation: {
+    title: "Designing your mascot",
+    subtitle: "Reading your colours and your product, sketching a few ideas, then picking the one that fits you best.",
+  },
+
+  reveal: {
+    title: "Meet {name}",
+    subtitle: "Designed for your brand. Nobody else has this one.",
+  },
+
+  paywallDirect: {
+    title: "Put {name} on your site",
+    subtitle: "{name} is ready and already knows your product. Paste one line of code and your next sign-up gets a guide. 30-day money-back guarantee.",
+  },
 
   paywall: {
     title: "She's ready. Put her to work.",
