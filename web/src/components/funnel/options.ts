@@ -1,5 +1,6 @@
 // Funnel choices and the guide's comments per step (front-end owned: copy.ts has no funnel text).
 import type { OnboardingData } from "@/lib/funnel";
+import { copy } from "@/content/copy";
 
 // The comments are spoken by Mascott's own little guide, never by the visitor's mascot (that one stays a surprise).
 export const STEPS = [
@@ -7,7 +8,7 @@ export const STEPS = [
   { id: "company", title: "Your company", comment: "Where will your mascot work? A few words help it answer like a teammate." },
   { id: "audience", title: "Your visitors and goals", comment: "Who gets greeted, and what counts as a win? Every chat will steer towards it." },
   { id: "pages", title: "Where should people be guided?", comment: "List the key pages or steps. Your mascot will point to the next one, one at a time." },
-  { id: "brand", title: "Your brand universe", comment: "No presets here. Show us your world and we design a one-of-a-kind character around it." },
+  { id: "brand", title: copy.brandUniverse.title, comment: "No presets here. Show us your world and we design a one-of-a-kind character around it." },
   { id: "behaviour", title: "Manners", comment: "Set the house rules. You stay in control of what it says and does." },
   { id: "recap", title: "Ready when you are", comment: "That's everything. No peeking: you'll meet your mascot in a moment." },
 ] as const;
@@ -29,22 +30,23 @@ export const ACTIONS: { id: string; label: string }[] = [
   { id: "book_slot", label: "Offer a demo slot" },
 ];
 export const LANGUAGES = ["English", "French", "Spanish", "German", "Italian", "Portuguese", "Dutch"];
-/** Brand step: provisional text (Léa's copy.ts has no funnel text yet). */
+const bu = copy.brandUniverse;
+/** Brand step text: Léa's copy.ts, plus a few UI labels owned here. */
 export const BRAND_TEXT = {
-  intro: "Colours, mood, a logo or a product shot. The more we see, the more it feels like yours. Everything is optional.",
+  intro: bu.help,
   colorsLegend: "Brand colours",
   colorsHint: "Up to 4. Tap a suggestion or pick your own.",
-  vibeLegend: "Vibe",
-  notesLabel: "Anything else?",
-  notesPlaceholder: "Our world is cosy and nordic. Think Studio Ghibli, not corporate. Please avoid robots.",
-  dropTitle: "Drop up to 3 photos",
-  dropHint: "Logo, product, moodboard. JPG or PNG, we shrink them for you.",
+  vibeLegend: bu.vibesLabel,
+  notesLabel: bu.notesLabel,
+  notesPlaceholder: bu.notesPlaceholder,
+  dropTitle: bu.uploadLabel,
+  dropHint: bu.uploadHint,
   dropButton: "Choose photos",
   spotted: "We spotted these colours in your logo",
   useSpotted: "Use these",
 };
 
-export const VIBES = ["Playful", "Warm", "Calm", "Premium", "Techy", "Bold", "Minimal", "Quirky", "Cosy", "Futuristic"];
+export const VIBES = bu.vibes;
 export const COLOR_SUGGESTIONS = ["#4F5BF5", "#FF6B6B", "#FFB84D", "#2BB673", "#00A3FF", "#8B5CF6", "#FF7AB6", "#1B1D3A"];
 export const MAX_COLORS = 4;
 

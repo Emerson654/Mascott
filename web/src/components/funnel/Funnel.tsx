@@ -3,10 +3,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FUNNEL_STORAGE_KEY, RESULT_STORAGE_KEY, type BrandScan, type GeneratedMascot, type OnboardingData } from "@/lib/funnel";
-import type { Mood } from "@/lib/mascot-spec";
-import { brand } from "@/content/brand";
+import { DEFAULT_SPEC, type Mood } from "@/lib/mascot-spec";
 import { Mascot } from "@/components/mascot/Mascot";
 import { SpeechBubble } from "@/components/mascot/SpeechBubble";
+import { copy } from "@/content/copy";
 import { EMPTY_DATA, STEPS } from "./options";
 import { SpottedPalette, StepAudience, StepBehaviour, StepBrand, StepCompany, StepIdea, StepPages, StepRecap } from "./Steps";
 import { Thinking } from "./Thinking";
@@ -16,7 +16,7 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const BRAND_STEP = STEPS.findIndex((s) => s.id === "brand");
 const BEHAVIOUR_STEP = STEPS.findIndex((s) => s.id === "behaviour");
 /** Mascott's own little guide: the brand mascot, never the visitor's (theirs stays a surprise). */
-const GUIDE_SPEC = brand.cast[0].spec;
+const GUIDE_SPEC = DEFAULT_SPEC; // same blob as the site logo
 
 function load(): OnboardingData | null {
   try {
@@ -282,7 +282,7 @@ export function Funnel() {
                 <span />
               )}
               <button type="submit" className="btn btn-primary min-w-48" disabled={busy || !ready}>
-                {isLast ? (failed ? "Try again" : "Generate my mascot") : "Continue"}
+                {isLast ? (failed ? "Try again" : copy.brandUniverse.cta) : "Continue"}
               </button>
             </div>
           </form>

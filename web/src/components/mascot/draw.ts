@@ -70,10 +70,10 @@ export function mascotSvg(spec: Partial<MascotSpec> | null | undefined, uid = "m
   const k = pro ? 0.8 : 1; // pro = calmer: smaller eyes, softer cheeks
   const v = hash(P + S + A + sp + eyes + acc);
   const [bodyD, armX, footY] = robot ? [BOX, 40, 168] : BODIES[v % 4];
-  const coat = robot ? 0 : (v >> 3) % 4; // 0 plain, 1 spots, 2 stripes, 3 two-tone hood
-  const hasBelly = robot || (v >> 5) % 3 > 0;
-  const nub = (v >> 7) % 2 > 0;
-  const earS = [1, 0.88, 1.12][(v >> 8) % 3];
+  const coat = robot ? 0 : (v >>> 3) % 4; // 0 plain, 1 spots, 2 stripes, 3 two-tone hood
+  const hasBelly = robot || (v >>> 5) % 3 > 0;
+  const nub = (v >>> 7) % 2 > 0;
+  const earS = [1, 0.88, 1.12][(v >>> 8) % 3];
 
   let back = "", ears = "", face = "", belly = "";
 
@@ -192,6 +192,53 @@ export function mascotSvg(spec: Partial<MascotSpec> | null | undefined, uid = "m
   );
 }
 
+// AI artwork usually sits on a plain studio background. Flood-fill it away from the edges
+// (soft, colour-decontaminated edge) so the character floats like a sticker. Returns a PNG
+// data URL, or null when the background is not plain, already transparent, or the canvas
+// is cross-origin tainted; the caller then keeps the original image with a soft mask.
+export function cutout(img: HTMLImageElement): string | null {
+  try {
+    const sc = Math.min(1, 512 / Math.max(img.naturalWidth, img.naturalHeight));
+    const w = Math.round(img.naturalWidth * sc), h = Math.round(img.naturalHeight * sc);
+    const c = document.createElement("canvas");
+    c.width = w; c.height = h;
+    const g = c.getContext("2d");
+    if (!g || !w || !h) return null;
+    g.drawImage(img, 0, 0, w, h);
+    const im = g.getImageData(0, 0, w, h), d = im.data;
+    const corners = [0, w - 1, (h - 1) * w, h * w - 1].map((q) => q * 4);
+    if (corners.some((q) => d[q + 3] < 250)) return null;
+    const bg = [0, 1, 2].map((k) => corners.reduce((t, q) => t + d[q + k], 0) / 4);
+    const dist = (q: number) => Math.hypot(d[q] - bg[0], d[q + 1] - bg[1], d[q + 2] - bg[2]);
+    if (corners.some((q) => dist(q) > 24)) return null;
+    const seen = new Uint8Array(w * h), stack: number[] = [];
+    for (let x = 0; x < w; x++) stack.push(x, (h - 1) * w + x);
+    for (let y = 0; y < h; y++) stack.push(y * w, y * w + w - 1);
+    let n = 0;
+    while (stack.length) {
+      const i = stack.pop() as number, q = i * 4;
+      if (seen[i]) continue;
+      seen[i] = 1;
+      const e = dist(q);
+      if (e > 48) continue; // reached the character
+      const a = e < 20 ? 0 : (e - 20) / 28;
+      for (let k = 0; k < 3; k++) d[q + k] = a ? Math.max(0, Math.min(255, (d[q + k] - bg[k] * (1 - a)) / a)) : d[q + k];
+      d[q + 3] = Math.round(a * 255);
+      n++;
+      const x = i % w;
+      if (x > 0) stack.push(i - 1);
+      if (x < w - 1) stack.push(i + 1);
+      if (i >= w) stack.push(i - w);
+      if (i < w * (h - 1)) stack.push(i + w);
+    }
+    if (n < w * h * 0.05 || n > w * h * 0.95) return null;
+    g.putImageData(im, 0, 0);
+    return c.toDataURL("image/png");
+  } catch {
+    return null;
+  }
+}
+
 // Shared animation sheet. Poses are static transforms; loops run on top after a short
 // delay so the pose change transitions smoothly first. Reduced motion keeps poses only.
 export const MASCOT_CSS = `
@@ -247,7 +294,8 @@ export const MASCOT_CSS = `
 .mart .apk,.mart .aj,.mart .ab{transform-origin:50% 92%}
 .mart .ab{animation:msc-br 3.6s ease-in-out infinite}
 .mart .aj{transition:transform .5s cubic-bezier(.34,1.4,.5,1)}
-.mart .aimg{object-fit:contain;opacity:0;transition:opacity .5s ease;-webkit-mask:radial-gradient(71% 71%,#000 66%,transparent 99%);mask:radial-gradient(71% 71%,#000 66%,transparent 99%)}
+.mart .aimg{object-fit:contain;opacity:0;transition:opacity .5s ease;-webkit-mask:radial-gradient(closest-side,#000 74%,transparent);mask:radial-gradient(closest-side,#000 74%,transparent)}
+.mart.cut .aimg{-webkit-mask:none;mask:none}
 .mart .ash{top:auto;left:20%;bottom:-1%;width:60%;height:9%;background:radial-gradient(closest-side,rgba(43,35,64,.24),transparent);opacity:0;transition:opacity .5s}
 .mart .afb{transition:opacity .5s ease}.mart .afx{display:none;pointer-events:none}
 .mart.ok .aimg,.mart.ok .ash{opacity:1}.mart.ok .afb{opacity:0}.mart.ok .afx{display:block}.mart.er .aimg{display:none}

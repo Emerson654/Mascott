@@ -8,6 +8,7 @@ import { ProductMoment } from "@/components/landing/ProductMoment";
 import { PlanCards } from "@/components/site/PlanCards";
 import { GUARANTEE_DAYS } from "@/lib/pricing";
 import { JsonLd, faqLd } from "@/components/seo/JsonLd";
+import { getCastWithArt } from "@/lib/server/cast-art";
 
 type Section = (typeof copy.sections)[number];
 const section = (id: string) => copy.sections.find((s) => s.id === id) as Section & Record<string, unknown>;
@@ -37,7 +38,7 @@ export default function Home() {
         </div>
 
         <div className="mt-6">
-          <MascotCarousel cast={brand.cast} />
+          <MascotCarousel cast={getCastWithArt()} />
         </div>
 
         <div className="mt-8">

@@ -108,7 +108,7 @@ const SPECIES_WORDS: [RegExp, Species][] = [
 // Industry / theme keywords when no animal is named.
 const THEME_WORDS: [RegExp, Species][] = [
   [/\b(api|dev|developer|code|data|ai|ml|devops|cloud|infra|automation|tech|software|iot)\b/, "robot"],
-  [/\b(finance|fintech|bank|accounting|invoice|legal|law|insurance|education|school|course|learn|research|analytics)\b/, "owl"],
+  [/\b(finance|fintech|bank|accounting|invoice|invoicing|billing|legal|law|insurance|education|school|course|learn|research|analytics)\b/, "owl"],
   [/\b(security|cyber|gaming|game|crypto|web3|energy|sport|fitness)\b/, "dragon"],
   [/\b(hr|people|recruit|hiring|wellness|health|care|kids|community|social|dating)\b/, "bunny"],
   [/\b(design|creative|marketing|agency|growth|seo|content|media|startup)\b/, "fox"],
@@ -255,7 +255,7 @@ export function generateFallback(d: OnboardingData, variant = 0): Draft {
     d.brand.scan?.motifs.length ? `Borrowing a motif from the brand: ${d.brand.scan.motifs[0]}` : d.brand.notes ? `Keeping the notes in mind: ${clampWords(d.brand.notes, 10)}` : `Looking for a shape that says ${d.company.industry || "your product"} at a glance`,
     `Trying ${concept}…`,
     `Giving ${name} ${TONE_FACE[d.tone]}`,
-    "Softening the edges so it still reads at 48 px…",
+    "Softening the edges so it still reads at 64 px…",
     "Final pass: centered, plain background, no text.",
   ].map((t) => clean(t, 140));
   return { name, spec, greeting, personality: tone.personality, sampleDialog, systemPrompt: buildSystemPrompt(d, name, species), source: "fallback", thoughts, artPrompt };
@@ -281,7 +281,7 @@ export function mergeAi(d: OnboardingData, ai: unknown, variant = 0): Draft {
         .slice(0, 3)
     : [];
   const sys = typeof o.systemPrompt === "string" ? o.systemPrompt.replace(/\r/g, "").trim().slice(0, 6000) : "";
-  const thoughts = cleanList(o.thoughts, 7, 140);
+  const thoughts = cleanList(o.thoughts, 7, 140).filter((t) => !/\b(nudge|hint|suggest\w*|prompt)\b/i.test(t));
   let artPrompt = clean(o.artPrompt, MAX_ART_PROMPT);
   if (artPrompt.length < 60) artPrompt = base.artPrompt;
   else if (!/no text/i.test(artPrompt)) artPrompt = `${artPrompt.slice(0, MAX_ART_PROMPT - ART_GUARD.length - 1)} ${ART_GUARD}`;
@@ -302,31 +302,38 @@ export function mergeAi(d: OnboardingData, ai: unknown, variant = 0): Draft {
 // ---------- art direction (image prompt for /api/mascot-image) ----------
 
 export const MAX_ART_PROMPT = 900;
-const ART_GUARD = "Full body, centered, plain soft background, no text, no logo, high quality mascot character.";
+const ART_GUARD = "Full body, centered, plain soft pastel background, no text, no logo, high quality mascot character, soft studio lighting.";
 
 type Direction = { id: string; label: string; subject: "animal" | "object" | "fixed"; subjectText: string; render: string };
-// Inspired by modern AI companions: glossy toys, soft orbs, plush, clay, object-characters, robots, plant spirits, paper-craft.
+// The ten directions of docs/brand.md section 9.1 (Léa). Material and shape only, never "in the style of".
 const DIRECTIONS: Direction[] = [
-  { id: "glossy", label: "glossy 3D toy", subject: "animal", subjectText: "", render: "glossy 3D vinyl toy, soft studio lighting, gentle rim light, smooth rounded shapes, Pixar-like charm" },
-  { id: "orb", label: "soft-gradient orb", subject: "fixed", subjectText: "a small floating orb companion", render: "minimal soft-gradient orb, smooth frosted-glass sphere with a gentle inner glow, tiny simple face, airy and calm" },
-  { id: "plush", label: "handmade plush", subject: "animal", subjectText: "", render: "handmade plush toy, soft felt and fleece texture, visible stitching, cozy and huggable" },
-  { id: "clay", label: "clay figure", subject: "animal", subjectText: "", render: "claymation plasticine figure, subtle fingerprint texture, warm soft lighting, stop-motion look" },
-  { id: "object", label: "3D object-character", subject: "object", subjectText: "", render: "glossy 3D object-character with tiny arms and legs, rounded edges, soft lighting" },
-  { id: "robot", label: "companion robot", subject: "fixed", subjectText: "a small round robot", render: "cute companion robot, rounded glossy shell, soft glowing screen face, friendly antenna" },
-  { id: "botanical", label: "botanical sprite", subject: "fixed", subjectText: "a little sprout creature with leaf ears", render: "tiny botanical spirit, soft 3D render, fresh petals and leaves, gentle and light" },
-  { id: "paper", label: "paper-craft figure", subject: "animal", subjectText: "", render: "paper-craft origami character, folded paper texture, crisp creases, soft shadows" },
+  { id: "glossy", label: "glossy 3D toy", subject: "animal", subjectText: "", render: "glossy 3D render, smooth vinyl toy, big head, short limbs, soft subsurface glow, soft contact shadow" },
+  { id: "plush", label: "felt plush", subject: "animal", subjectText: "", render: "wool felt plush toy, visible blanket-stitch seams, fuzzy fibres, soft matte, handmade, bead eyes" },
+  { id: "clay", label: "claymation figure", subject: "animal", subjectText: "", render: "plasticine claymation character, fingerprints, handcrafted stop-motion look" },
+  { id: "orb", label: "gradient orb", subject: "fixed", subjectText: "a small floating orb companion", render: "floating frosted glass orb, soft inner gradient, gentle glow, minimal face with two arc eyes and a smile, no limbs, serene" },
+  { id: "object", label: "object character", subject: "object", subjectText: "", render: "cute object character with a friendly face, stubby arms, glossy 3D toy" },
+  { id: "robot", label: "rounded robot", subject: "fixed", subjectText: "a small rounded capsule robot", render: "soft-touch matte vinyl, dark face screen with glowing eyes, chubby proportions" },
+  { id: "plant", label: "plant creature", subject: "fixed", subjectText: "a cute sprout creature in a tiny terracotta pot", render: "plant creature, sprout body, glossy leaves, soft 3D render" },
+  { id: "animal", label: "soft 3D animal", subject: "animal", subjectText: "", render: "chubby rounded body, short limbs, big head, soft 3D render" },
+  { id: "paper", label: "paper cut-out", subject: "animal", subjectText: "", render: "layered paper craft character, cut paper, subtle depth shadows, matte" },
+  { id: "crochet", label: "crochet amigurumi", subject: "animal", subjectText: "", render: "amigurumi crochet character, visible yarn loops, soft wool, handmade" },
 ];
+// "Use it when" column of section 9.1.
 const VIBE_DIRECTIONS: [RegExp, string[]][] = [
-  [/\b(premium|elegant|luxury|minimal|calm|serene|clean)\b/, ["orb", "glossy"]],
-  [/\b(playful|fun|bold|energetic|cheeky)\b/, ["plush", "clay", "glossy"]],
-  [/\b(tech|techy|futuristic|ai|data|dev|developer|api|automation)\b/, ["robot", "orb"]],
-  [/\b(warm|cozy|friendly|human|caring|kind)\b/, ["plush", "clay"]],
-  [/\b(nature|eco|organic|green|fresh|garden|plant|wellness)\b/, ["botanical", "paper"]],
-  [/\b(creative|artsy|craft|handmade|design|studio)\b/, ["paper", "clay"]],
+  [/\b(premium|elegant|luxury|minimal|calm|serene|clean|futuristic)\b/, ["orb", "paper"]],
+  [/\b(playful|fun|bold|energetic|cheeky)\b/, ["glossy", "clay"]],
+  [/\b(tech|techy|ai|dev|developer|api|automation|no-code|nocode|it|security)\b/, ["robot", "orb"]],
+  [/\b(warm|cozy|friendly|human|caring|kind|community|family|hr)\b/, ["plush", "animal", "crochet"]],
+  [/\b(nature|natural|eco|organic|green|fresh|garden|plant|wellness|wellbeing|sustainab\w*|language)\b/, ["plant", "clay"]],
+  [/\b(creative|artsy|craft|handmade|agency|analytics|kids)\b/, ["clay", "crochet"]],
+  [/\b(legal|law|publishing|editorial|docs|documentation|accounting)\b/, ["paper"]],
+  [/\b(finance|fintech|bank|wellbeing)\b/, ["orb"]],
+  [/\b(retail|shop|crafts|local)\b/, ["crochet"]],
 ];
 const MATERIAL_WORDS: [RegExp, string][] = [
-  [/\b(orb|sphere|bubble)\b/, "orb"], [/\b(plush|felt|fluffy|soft toy)\b/, "plush"], [/\b(clay|plasticine)\b/, "clay"],
-  [/\b(robot|bot|droid)\b/, "robot"], [/\b(paper|origami)\b/, "paper"], [/\b(plant|sprout|leaf|flower)\b/, "botanical"], [/\b(3d|glossy|vinyl)\b/, "glossy"],
+  [/\b(orb|sphere|bubble)\b/, "orb"], [/\b(plush|felt|fluffy|soft toy)\b/, "plush"], [/\b(clay|plasticine|claymation)\b/, "clay"],
+  [/\b(robot|bot|droid)\b/, "robot"], [/\b(paper|origami)\b/, "paper"], [/\b(plant|sprout|leaf|flower)\b/, "plant"],
+  [/\b(crochet|knitted|amigurumi|yarn)\b/, "crochet"], [/\b(3d|glossy|vinyl)\b/, "glossy"],
 ];
 const OBJECTS: [RegExp, string][] = [
   [/\b(invoice|invoicing|billing|accounting|bookkeeping|finance|fintech|payment|tax)\b/, "a little paper invoice with a folded corner"],
@@ -346,24 +353,25 @@ const TONE_FACE: Record<OnboardingData["tone"], string> = {
   playful: "a big joyful smile and sparkly eyes", friendly: "a warm, gentle smile",
   professional: "a calm, confident smile", expert: "a clever, knowing little smile",
 };
-const POSES = ["waving one hand", "giving a little wave", "pointing to the side helpfully", "tilting its head with curiosity", "hopping happily"];
+const POSES = ["waving one hand", "pointing to the side helpfully", "giving a little wave", "pointing to the side with a tiny hand"];
 
 function pickDirection(d: OnboardingData, n: number, namedAnimal: Species | undefined, species: Species): Direction {
   const by = (id: string) => DIRECTIONS.find((x) => x.id === id)!;
   const forced = firstMatch(d.prompt.toLowerCase(), MATERIAL_WORDS);
   if (forced && !(namedAnimal && namedAnimal !== "robot" && forced === "robot")) return by(forced);
-  if (namedAnimal) return by(namedAnimal === "robot" ? "robot" : ["glossy", "plush", "clay", "paper"][n % 4]);
+  if (namedAnimal) return by(namedAnimal === "robot" ? "robot" : ["animal", "glossy", "plush", "clay", "paper", "crochet"][n % 6]);
   const ctx = `${d.brand.vibe.join(" ")} ${d.brand.notes} ${d.brand.scan?.mood ?? ""} ${d.company.industry} ${d.company.description}`.toLowerCase();
   const ids = new Set<string>();
+  // Section 9.1: an obvious product object is the strongest option, so it gets two tickets.
+  if (firstMatch(`${d.company.industry} ${d.company.description} ${d.prompt}`.toLowerCase(), OBJECTS)) ids.add("object").add("object2");
   for (const [re, list] of VIBE_DIRECTIONS) if (re.test(ctx)) list.forEach((x) => ids.add(x));
-  if (firstMatch(`${d.company.industry} ${d.company.description} ${d.prompt}`.toLowerCase(), OBJECTS)) ids.add("object");
   if (species === "robot") ids.add("robot");
-  const list = ids.size ? [...ids].map(by) : DIRECTIONS;
+  const list = ids.size ? [...ids].map((x) => by(x.replace(/\d$/, ""))) : DIRECTIONS;
   return list[n % list.length];
 }
 
 function animalSubject(s: Species): string {
-  return s === "blob" ? "a round jelly blob creature" : s === "robot" ? "a small round robot" : `a little ${s}`;
+  return s === "blob" ? "a round jelly blob creature" : s === "robot" ? "a small rounded capsule robot" : `a little chubby ${s}`;
 }
 
 function objectFor(text: string): string {
@@ -373,8 +381,8 @@ function objectFor(text: string): string {
 function buildArtPrompt(subject: string, render: string, colors: string[], bg: string, tone: OnboardingData["tone"], seed: number): string {
   return clean(
     `Cute mascot character: ${subject}, ${render}. Colour palette ${colors.join(", ")} (main colour ${colors[0]}). ` +
-      `${TONE_FACE[tone]}, ${POSES[seed % POSES.length]}. Simple readable silhouette, big friendly eyes. ` +
-      `${ART_GUARD.replace("plain soft background", `plain soft background in ${bg}`)}`,
+      `${TONE_FACE[tone]}, ${POSES[seed % POSES.length]}. Big head, short limbs, one simple silhouette readable at 64 px, big friendly eyes. ` +
+      `${ART_GUARD.replace("plain soft pastel background", `plain soft pastel background ${bg}`)}`,
     MAX_ART_PROMPT,
   );
 }

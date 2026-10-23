@@ -508,7 +508,7 @@ export function StepBrand({ data, set }: StepProps) {
           </p>
         )}
         {b.images.length > 0 && (
-          <ul className="mt-3 grid grid-cols-3 gap-3">
+          <ul className="mt-3 grid max-w-md grid-cols-3 gap-3">
             {b.images.map((img) => (
               <li key={img.name} className="relative aspect-square overflow-hidden rounded-2xl bg-soft ring-1 ring-line">
                 {/* eslint-disable-next-line @next/next/no-img-element -- local data URL */}

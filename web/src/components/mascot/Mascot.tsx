@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useId, useRef, useState } from "react";
 import type { MascotSpec, Mood } from "@/lib/mascot-spec";
-import { MASCOT_CSS, mascotSvg, moodFx } from "./draw";
+import { MASCOT_CSS, cutout, mascotSvg, moodFx } from "./draw";
 
 export interface MascotProps {
   spec: MascotSpec;
@@ -27,14 +27,19 @@ export function Mascot({ spec, mood = "idle", size = 160, onPoke, className, lab
 
   // Artwork load state, keyed by URL so a new image starts over without an effect.
   const url = spec.imageUrl;
-  const [art, setArt] = useState<{ url?: string; ok: boolean }>({ ok: false });
+  const [art, setArt] = useState<{ url?: string; ok: boolean; cut?: string | null }>({ ok: false });
   const img = useRef<HTMLImageElement>(null);
+  const loaded = (el: HTMLImageElement) => {
+    if (!el.src.startsWith("data:")) setArt({ url, ok: el.naturalWidth > 0, cut: el.naturalWidth > 0 ? cutout(el) : null });
+  };
   useEffect(() => {
     // The image may have finished before hydration attached onLoad/onError.
     const el = img.current;
-    if (url && el?.complete) setArt({ url, ok: el.naturalWidth > 0 });
+    if (url && el?.complete) loaded(el);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only on a new URL
   }, [url]);
-  const state = url && art.url === url ? (art.ok ? " ok" : " er") : "";
+  const mine = url && art.url === url;
+  const state = mine ? (art.ok ? (art.cut ? " ok cut" : " ok") : " er") : "";
 
   const m = reaction ?? mood;
   const pk = poke ? ` p${(poke % 2) + 1}` : "";
@@ -66,13 +71,13 @@ export function Mascot({ spec, mood = "idle", size = 160, onPoke, className, lab
               ref={img}
               key={url}
               className="aimg"
-              src={url}
-              alt={state === " er" ? "" : name}
+              src={(mine && art.cut) || url}
+              alt={art.ok || !mine ? name : ""}
               width={size}
               height={size}
               decoding="async"
               draggable={false}
-              onLoad={() => setArt({ url, ok: true })}
+              onLoad={(e) => loaded(e.currentTarget)}
               onError={() => setArt({ url, ok: false })}
             />
           </span>

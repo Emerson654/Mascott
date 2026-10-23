@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { GeneratedMascot } from "@/lib/funnel";
 import { Mascot } from "@/components/mascot/Mascot";
+import { copy } from "@/content/copy";
 
 /**
  * Full-screen "image model thinking" sequence: a bubbling field in the brand colours, the
@@ -128,6 +129,7 @@ export function Thinking({
 
       {!revealed ? (
         <div className="relative w-full max-w-xl">
+          <p className="mb-1 text-xs font-bold uppercase tracking-[0.14em] text-muted">{copy.generation.title}</p>
           <h2 ref={headingRef} id="think-title" tabIndex={-1} className="think-shimmer font-display text-lg font-semibold tracking-wide outline-none">
             {waitingOnArt ? "Rendering…" : "Thinking…"}
           </h2>
@@ -137,7 +139,7 @@ export function Thinking({
               <li
                 key={`${idx}-${i}`}
                 className="text-[clamp(1rem,2.4vw,1.15rem)] leading-snug text-ink transition-opacity duration-500"
-                style={{ opacity: 0.18 + (0.22 * (i + 1)) / past.length, filter: `blur(${(past.length - i) * 0.4}px)` }}
+                style={{ opacity: 0.2 + (0.4 * (i + 1)) / past.length, filter: `blur(${(past.length - i - 1) * 0.6}px)` }}
               >
                 {p}
               </li>
@@ -167,8 +169,9 @@ export function Thinking({
               <Mascot spec={final.spec} mood="wave" size={240} label={final.name} reveal />
             </div>
             <h2 id="think-title" className="reveal-name mt-6 text-[clamp(2.25rem,7vw,4rem)] font-semibold leading-none" aria-live="polite">
-              Meet {final.name}
+              {copy.reveal.title.replace("{name}", final.name)}
             </h2>
+            <p className="reveal-name mt-3 max-w-sm text-muted">{copy.reveal.subtitle}</p>
           </div>
         )
       )}

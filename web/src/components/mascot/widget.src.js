@@ -225,7 +225,12 @@
       btn.innerHTML = '<span class="mart" data-mood="wave"><span class="ash"></span>' + sv(" afb", mascotSvg(spec, "mw")) +
         '<span class="apk"><span class="aj"><span class="ab"><img class="aimg" alt=""></span></span></span>' + sv(" afx", moodFx(spec)) + "</span>";
       var art = btn.firstChild, im = art.querySelector("img");
-      im.onload = function () { art.classList.add("ok"); };
+      im.onload = function () {
+        var c = cutout(im);
+        im.onload = null;
+        if (c) { im.src = c; art.classList.add("cut"); }
+        art.classList.add("ok");
+      };
       im.onerror = function () { art.classList.add("er"); };
       im.src = src;
     } else btn.innerHTML = sv("", mascotSvg(spec, "mw"));

@@ -29,7 +29,7 @@ const featureRows = (() => {
 const priceFaq = copy.faq.filter((f) => /cost|free plan|activation|switch/i.test(f.q));
 
 export default function PricingPage() {
-  const guide = brand.cast.find((c) => c.id === "bramble") ?? brand.cast[0];
+  const guide = brand.cast.find((c) => c.id === "tally") ?? brand.cast[0];
   return (
     <>
       <section className="hero-glow px-4 pb-16 pt-14 sm:px-6">
