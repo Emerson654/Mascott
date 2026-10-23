@@ -27,3 +27,12 @@ Stack: Next.js 15 App Router, TypeScript, Tailwind v4, deployed on Vercel. Site 
 
 ## Pages
 `/` landing (rotating gradient word, 3D mascot carousel with speech bubbles and poke reactions, prompt box → `/create?prompt=`), `/create` multi-step funnel, `/create/result` generated mascot live + chat demo + paywall, `/pricing`, `/success`, `/blog`, `/blog/[slug]`, `/alternatives/[slug]`, `/widget-demo`.
+
+## v2 (generation overhaul, 2026-10-23)
+Founder feedback: the visitor must NOT see or pick their mascot during the funnel (no live preview, no species/colour presets). The AI designs a unique mascot around the brand universe (colours, vibe, notes, uploaded photos). At the end: a "thinking" sequence like an image model, then the reveal, then directly the paywall (no chat demo in between). Mascots must be diverse (not one template), inspired by modern AI companions (Meta AI's Muse-like characters, OpenAI-style minimal orbs, Grok-style companion characters): glossy 3D, plush, clay, soft-gradient orbs, object-characters...
+- Types: `MascotSpec.imageUrl?`, `MascotSpec.concept?`, `OnboardingData.brand` (+ `BrandScan`), `GeneratedMascot.thoughts`.
+- `POST /api/brand-scan` body `{ images: {name,dataUrl}[], notes?: string, company?: {name,industry,description} }` → `BrandScan` (Gemini vision; fallback: palette from client-picked colours).
+- `POST /api/generate` (unchanged path) now also returns `thoughts` and sets `spec.imageUrl` + `spec.concept`. The art prompt is written by the LLM as a creative director; species/colours remain a coherent SVG fallback.
+- `GET /api/mascot-image?d=<base64url JSON {prompt, seed}>&s=<hmac>` → image bytes. Provider chain: Gemini image (if `GEMINI_IMAGE_MODEL` set and billing works) → Pollinations (free, no key) → 302 to nothing / 404 so the client shows the SVG fallback. HMAC with `MASCOT_IMAGE_SECRET` so nobody can use us as a free image proxy. Cache-Control: public, immutable, 1 year.
+- `<Mascot spec>`: if `spec.imageUrl` is set, renders the artwork (with the shared animation set applied as CSS transforms: idle float/breathe, wave tilt, happy bounce, surprised squash, think sway, point lean) and falls back to the SVG on error.
+- Landing cast: each `CastMember.spec` gets an `imageUrl` (built by `castImageUrl(prompt, seed)` helper from Yanis) so the carousel shows diverse artwork, SVG while loading.

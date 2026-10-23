@@ -12,6 +12,21 @@ export interface OnboardingData {
   actions: string[];              // "answer", "point", "open_page", "fill_form", "book_slot"
   languages: string[];
   mascot: Partial<MascotSpec> & { name?: string };
+  /** Brand universe: what the AI designs the mascot around (no preset picking). */
+  brand: {
+    colors: string[];           // hex, up to 4 (picked or detected)
+    vibe: string[];             // e.g. "playful", "premium", "techy", "warm"
+    notes: string;              // free text: universe, references, things to avoid
+    images: { name: string; dataUrl: string }[]; // up to 3 uploads, client-compressed JPEG <= 1024px, <= 400 KB each
+    scan?: BrandScan;           // filled by POST /api/brand-scan
+  };
+}
+
+export interface BrandScan {
+  palette: string[];             // hex
+  mood: string;                  // one sentence
+  motifs: string[];              // shapes / objects / textures seen in the brand
+  audience: string;
 }
 
 export interface GeneratedMascot {
@@ -22,6 +37,8 @@ export interface GeneratedMascot {
   sampleDialog: { q: string; a: string }[];
   systemPrompt: string;           // the agent prompt that would run on the customer's site
   source: "ai" | "fallback";
+  /** 5-7 short "creative director" thoughts shown while the artwork renders (like an image model thinking). */
+  thoughts: string[];
 }
 
 export const FUNNEL_STORAGE_KEY = "mascott.funnel.v1";

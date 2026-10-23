@@ -12,6 +12,10 @@ export interface MascotSpec {
   eyes: Eyes;
   accessory: Accessory;
   style: "cute" | "pro";
+  /** AI-generated artwork (signed URL from /api/mascot-image). When set, it is the mascot; the SVG drawing is the fallback. */
+  imageUrl?: string;
+  /** One-line art concept chosen by the AI ("a glossy coral orb with a tiny leaf"), used for alt text. */
+  concept?: string;
 }
 
 export const SPECIES: Species[] = ["blob", "cat", "bear", "bunny", "fox", "owl", "robot", "dragon"];
