@@ -5,7 +5,8 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 
 export const MAX_PROMPT = 900;
 const DEV_SECRET = "mascott-dev-only-image-secret"; // not a secret: only used outside production
-const POLLINATIONS = "https://image.pollinations.ai/prompt";
+// Legacy anonymous endpoint first, then the newer gateway (uses POLLINATIONS_API_KEY when set).
+const POLLINATIONS = ["https://image.pollinations.ai/prompt", "https://gen.pollinations.ai/image"];
 const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models";
 const MAX_BYTES = 8_000_000;
 
@@ -73,17 +74,27 @@ async function geminiImage(prompt: string, signal: AbortSignal): Promise<Img | n
 }
 
 async function pollinations(prompt: string, seed: number, signal: AbortSignal): Promise<Img | null> {
-  const url = `${POLLINATIONS}/${encodeURIComponent(prompt)}?width=768&height=768&seed=${seed}&nologo=true&model=flux`;
-  const res = await fetch(url, { signal });
-  const type = (res.headers.get("content-type") || "").split(";")[0].trim();
-  if (!res.ok || !/^image\/(png|jpeg|webp)$/.test(type)) throw new Error(`pollinations ${res.status} ${type}`);
-  const bytes = await res.arrayBuffer();
-  if (bytes.byteLength < 100 || bytes.byteLength > MAX_BYTES) throw new Error(`pollinations size ${bytes.byteLength}`);
-  return { bytes, type, provider: "pollinations" };
+  const key = process.env.POLLINATIONS_API_KEY;
+  let last = "no endpoint";
+  for (const base of POLLINATIONS) {
+    const url = `${base}/${encodeURIComponent(prompt)}?width=768&height=768&seed=${seed}&nologo=true&model=flux`;
+    try {
+      const res = await fetch(url, { signal, headers: key ? { Authorization: `Bearer ${key}` } : {} });
+      const type = (res.headers.get("content-type") || "").split(";")[0].trim();
+      if (!res.ok || !/^image\/(png|jpeg|webp)$/.test(type)) { last = `${base} ${res.status} ${type}`; continue; }
+      const bytes = await res.arrayBuffer();
+      if (bytes.byteLength < 100 || bytes.byteLength > MAX_BYTES) { last = `${base} size ${bytes.byteLength}`; continue; }
+      return { bytes, type, provider: "pollinations" };
+    } catch (e) {
+      if (signal.aborted) throw e;
+      last = `${base} ${e instanceof Error ? e.message : "error"}`;
+    }
+  }
+  throw new Error(`pollinations: ${last}`);
 }
 
 /** Gemini image (only if GEMINI_IMAGE_MODEL is set) then Pollinations. Null if every provider fails. */
-export async function renderImage(prompt: string, seed: number, timeoutMs = 25_000): Promise<Img | null> {
+export async function renderImage(prompt: string, seed: number, timeoutMs = 50_000): Promise<Img | null> {
   for (const [name, run] of [["gemini", () => geminiImage(prompt, AbortSignal.timeout(timeoutMs))], ["pollinations", () => pollinations(prompt, seed, AbortSignal.timeout(timeoutMs))]] as const) {
     try {
       const out = await run();
