@@ -70,14 +70,14 @@ export function Result() {
               <span aria-hidden className="absolute inset-[6%] -z-10 rounded-full bg-halo1 blur-xl" />
               <span aria-hidden className="absolute inset-[22%] -right-[10%] -z-10 rounded-full bg-halo2 blur-2xl" />
               <div className="lg:hidden">
-                <Mascot spec={m.spec} mood={mood} size={200} label={m.name} onPoke={() => setMood("happy")} />
+                <Mascot spec={m.spec} mood={mood} size={170} label={m.name} onPoke={() => setMood("happy")} />
               </div>
               <div className="hidden lg:block">
                 <Mascot spec={m.spec} mood={mood} size={340} label={m.name} onPoke={() => setMood("happy")} />
               </div>
             </div>
             <p className="mt-2 font-display text-[clamp(2rem,5vw,3rem)] font-semibold leading-none">{m.name}</p>
-            <p className="mt-2 max-w-sm text-sm leading-relaxed text-muted lg:text-base">{m.personality}</p>
+            <p className="mt-2 hidden max-w-sm text-sm leading-relaxed text-muted sm:block lg:text-base">{m.personality}</p>
           </div>
 
           {/* Put it live */}
