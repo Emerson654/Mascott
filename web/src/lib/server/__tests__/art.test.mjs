@@ -42,7 +42,7 @@ test("renderImage: Pollinations bytes, rejects non-image, null when all fail", a
     const img = await renderImage("cute orb", 9);
     assert.equal(img.type, "image/jpeg");
     assert.equal(img.provider, "pollinations");
-    assert.match(called, /^https:\/\/image\.pollinations\.ai\/prompt\/cute%20orb\?width=768&height=768&seed=9&nologo=true&model=flux$/);
+    assert.match(called, /^https:\/\/image\.pollinations\.ai\/prompt\/cute%20orb\?width=768&height=768&seed=9&nologo=true$/);
     globalThis.fetch = async () => new Response("<html>rate limited</html>", { headers: { "content-type": "text/html" } });
     assert.equal(await renderImage("cute orb", 9), null);
     globalThis.fetch = async () => { throw new Error("network"); };

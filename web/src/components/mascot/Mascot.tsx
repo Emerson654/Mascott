@@ -1,5 +1,17 @@
 "use client";
 import { useEffect, useId, useRef, useState } from "react";
+
+/** The free image provider's URL for a signed /api/mascot-image URL (prompt and seed are in its `d` payload). */
+function directArt(signed: string): string | undefined {
+  try {
+    const d = new URL(signed, "http://x").searchParams.get("d");
+    if (!d) return;
+    const o = JSON.parse(atob(d.replace(/-/g, "+").replace(/_/g, "/")));
+    return `https://image.pollinations.ai/prompt/${encodeURIComponent(o.prompt)}?width=768&height=768&seed=${o.seed}&nologo=true`;
+  } catch {
+    return;
+  }
+}
 import type { MascotSpec, Mood } from "@/lib/mascot-spec";
 import { MASCOT_CSS, cutout, mascotSvg, moodFx } from "./draw";
 
@@ -27,10 +39,13 @@ export function Mascot({ spec, mood = "idle", size = 160, onPoke, className, lab
 
   // Artwork load state, keyed by URL so a new image starts over without an effect.
   const url = spec.imageUrl;
-  const [art, setArt] = useState<{ url?: string; ok: boolean; cut?: string | null }>({ ok: false });
+  const [art, setArt] = useState<{ url?: string; ok: boolean; cut?: string | null; alt?: string }>({ ok: false });
   const img = useRef<HTMLImageElement>(null);
   const loaded = (el: HTMLImageElement) => {
-    if (!el.src.startsWith("data:")) setArt({ url, ok: el.naturalWidth > 0, cut: el.naturalWidth > 0 ? cutout(el) : null });
+    if (el.src.startsWith("data:")) return;
+    const ok = el.naturalWidth > 0;
+    // A failed load seen before hydration gets the same browser-side retry as onError.
+    setArt((a) => ({ url, ok, cut: ok ? cutout(el) : null, alt: a.url === url ? a.alt : ok ? undefined : url && directArt(url) }));
   };
   useEffect(() => {
     // The image may have finished before hydration attached onLoad/onError.
@@ -71,14 +86,18 @@ export function Mascot({ spec, mood = "idle", size = 160, onPoke, className, lab
               ref={img}
               key={url}
               className="aimg"
-              src={(mine && art.cut) || url}
+              src={(mine && (art.cut || art.alt)) || url}
+              crossOrigin={mine && art.alt ? "anonymous" : undefined}
               alt={art.ok || !mine ? name : ""}
               width={size}
               height={size}
               decoding="async"
               draggable={false}
               onLoad={(e) => loaded(e.currentTarget)}
-              onError={() => setArt({ url, ok: false })}
+              onError={() => {
+                // Our server hit the provider's shared free quota: retry once from the visitor's own browser (own quota).
+                setArt((a) => ({ url, ok: false, cut: null, alt: a.url === url ? a.alt : directArt(url) }));
+              }}
             />
           </span>
         </span>
