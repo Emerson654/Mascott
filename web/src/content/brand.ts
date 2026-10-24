@@ -91,11 +91,11 @@ export const brand = {
       id: "lumi",
       name: "Lumi",
       role: "Calm guide for Stillpond, a meditation app",
-      seed: 73519,
+      seed: 73541,
       artPrompt:
-        "Minimal mascot for a meditation and wellbeing app: a perfectly round floating orb made of soft frosted glass, filled with a slow gradient " +
+        "Cute kawaii cartoon mascot (not a human) for a meditation and wellbeing app: a perfectly round floating orb made of soft frosted glass, filled with a slow gradient " +
         "from lilac #B9A7FF at the top to peach #FFC6A8 at the bottom, with a gentle inner glow and a faint pearly rim light. " +
-        "Minimal face only: two small closed curved eyes like peaceful arcs and a tiny soft smile, in deep plum #4A3B6B. No limbs, no accessories. " +
+        "Simple cartoon face drawn on the orb: two small closed curved eyes like peaceful arcs and a tiny soft smile, in deep plum #4A3B6B. No limbs, no accessories. " +
         "A thin soft halo ring of light floats around the orb. Pose: hovering calmly, tilted a few degrees, a soft blurred reflection below it. " +
         "Full body, centered, plain very pale lavender background #F3EFFF, no text, no logo, high quality 3D render, soft diffused studio lighting, " +
         "dreamy and serene, clean simple silhouette.",

@@ -198,13 +198,15 @@ export function mascotSvg(spec: Partial<MascotSpec> | null | undefined, uid = "m
 // is cross-origin tainted; the caller then keeps the original image with a soft mask.
 export function cutout(img: HTMLImageElement): string | null {
   try {
-    const sc = Math.min(1, 512 / Math.max(img.naturalWidth, img.naturalHeight));
-    const w = Math.round(img.naturalWidth * sc), h = Math.round(img.naturalHeight * sc);
+    // Keep the top-centred 90% square: drops the free image tier's corner watermark before keying the background.
+    const sw = img.naturalWidth * 0.9, sh = img.naturalHeight * 0.9, sx = img.naturalWidth * 0.05, sy = img.naturalHeight * 0.01;
+    const sc = Math.min(1, 512 / Math.max(sw, sh));
+    const w = Math.round(sw * sc), h = Math.round(sh * sc);
     const c = document.createElement("canvas");
     c.width = w; c.height = h;
     const g = c.getContext("2d");
     if (!g || !w || !h) return null;
-    g.drawImage(img, 0, 0, w, h);
+    g.drawImage(img, sx, sy, sw, sh, 0, 0, w, h);
     const im = g.getImageData(0, 0, w, h), d = im.data;
     const corners = [0, w - 1, (h - 1) * w, h * w - 1].map((q) => q * 4);
     if (corners.some((q) => d[q + 3] < 250)) return null;
