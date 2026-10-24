@@ -19,3 +19,9 @@ Suis `docs/seo-launch.md` (écrit par Camille) : Google Search Console (soumettr
 
 ## 5. Recevoir les leads
 Optionnel : `LEAD_WEBHOOK_URL` (Slack / Make / Zapier) ou `RESEND_API_KEY` + `LEAD_NOTIFY_EMAIL` pour recevoir par email les inscriptions et les ventes.
+
+## Optionnel : images IA plus belles et plus fiables (5 min, gratuit)
+Aujourd'hui les mascottes générées passent par l'offre gratuite anonyme de Pollinations (1 image / 45 s par IP, petit logo masqué par le site).
+Pour la qualité « flux » sans filigrane ni file d'attente : créer un compte sur https://enter.pollinations.ai, copier la clé,
+puis l'ajouter dans Vercel → projet mascott → Settings → Environment Variables : `POLLINATIONS_API_KEY` (cocher Sensitive), et redéployer.
+Le code l'utilise automatiquement.
